@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff6ed" >
+    <title>미식쉐드 | 오늘의 식사 코칭</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+  </head>
+  <body data-page="home">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈">
+          <img src="assets/figma/logo.svg" alt="미식쉐드" >
+        </a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a class="active" href="index.html">홈</a>
+          <a href="#coaching">메뉴입력</a>
+          <a href="#" data-coming-soon>결과</a>
+          <a href="#" data-coming-soon>개인화</a>
+          <a href="#" data-coming-soon>타이머</a>
+        </nav>
+        <a class="profile-button" href="login.html" aria-label="로그인">
+          <img src="assets/figma/profile.png" alt="" >
+        </a>
+      </div>
+    </header>
+
+    <main class="home-main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <p>오늘 점심,</p>
+          <h1 id="hero-title"><span>순서만 바꿔도</span><i aria-hidden="true"></i><span>오후가 달라져요</span></h1>
+        </div>
+      </section>
+
+      <section class="feedback-card" aria-labelledby="feedback-title">
+        <div>
+          <h2 id="feedback-title">어제 오후 컨디션은 어떠셨나요?</h2>
+          <p>전날 코칭을 완료한 기록이 있어요. 아래 표정을 탭하면 1초 만에 기록돼요.</p>
+        </div>
+        <div class="feedback-options" role="group" aria-label="어제 오후 컨디션 선택">
+          <button type="button" aria-label="매우 피곤함"><img src="assets/figma/feedback-1.png" alt="" ></button>
+          <button type="button" aria-label="피곤함"><img src="assets/figma/feedback-2.png" alt="" ></button>
+          <button type="button" aria-label="보통"><img src="assets/figma/feedback-3.png" alt="" ></button>
+          <button type="button" aria-label="좋음"><img src="assets/figma/feedback-4.png" alt="" ></button>
+          <button type="button" aria-label="매우 좋음"><img src="assets/figma/feedback-5.png" alt="" ></button>
+        </div>
+        <button class="text-button" type="button" data-skip-feedback>건너뛰고 오늘 코칭 시작하기</button>
+      </section>
+
+      <section id="coaching" class="coaching-section" aria-labelledby="coaching-title">
+        <h2 id="coaching-title">오늘 점심 코칭 시작하기</h2>
+        <div class="coaching-grid">
+          <article class="action-card">
+            <div class="action-visual" aria-hidden="true"></div>
+            <h3>사진으로 메뉴 인식</h3>
+            <p>메뉴판 / 배달 앱 화면 / 음식 사진 중 무엇이든 한 장이면 됩니다.</p>
+          </article>
+          <article class="action-card">
+            <div class="action-visual" aria-hidden="true"></div>
+            <h3>메뉴 직접 선택</h3>
+            <p>밥류 / 면류 / 분식류 등 50개 메뉴에서 바로 고를 수 있어요.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

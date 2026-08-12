@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff6ed" >
+    <title>정보 입력 | 미식쉐드</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+  </head>
+  <body data-page="signup-info">
+    <header class="site-header compact-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈">
+          <img src="assets/figma/logo.svg" alt="미식쉐드" >
+        </a>
+        <a class="profile-button" href="login.html" aria-label="로그인">
+          <img src="assets/figma/profile.png" alt="" >
+        </a>
+      </div>
+    </header>
+
+    <main class="signup-main info-page">
+      <section class="signup-panel" aria-labelledby="info-title">
+        <ol class="steps">
+          <li class="complete"><span>✓</span>본인인증</li>
+          <li class="active"><span>2</span>정보입력</li>
+          <li><span>3</span>가입완료</li>
+        </ol>
+
+        <div class="signup-heading compact">
+          <h1 id="info-title">기본정보 입력</h1>
+          <span>가입에 필요한 정보를 입력해 주세요.</span>
+        </div>
+
+        <div class="form-layout">
+          <div class="field-group">
+            <label for="name">이름 <b>*</b></label>
+            <input id="name" type="text" autocomplete="name" >
+          </div>
+          <div class="field-group">
+            <label for="signup-email">이메일 <b>*</b></label>
+            <input id="signup-email" type="email" autocomplete="email" >
+          </div>
+          <div class="field-group">
+            <label for="signup-password">비밀번호 <b>*</b></label>
+            <input id="signup-password" type="password" autocomplete="new-password" placeholder="영문, 숫자, 특수문자 중 2가지 이상 조합 (최소 8자 이상)" >
+          </div>
+          <div class="field-group">
+            <label for="signup-password-confirm">비밀번호 확인 <b>*</b></label>
+            <input id="signup-password-confirm" type="password" autocomplete="new-password" placeholder="동일한 비밀번호를 입력하세요" >
+          </div>
+          <div class="field-group">
+            <label for="birth-date">생년월일 <b>*</b></label>
+            <input id="birth-date" type="text" inputmode="numeric" placeholder="YYYYMMDD" >
+          </div>
+          <div class="field-group">
+            <label for="phone-number">휴대폰 번호 <b>*</b></label>
+            <input id="phone-number" type="tel" inputmode="numeric" placeholder="'-'를 제외하고 숫자만 입력하세요" >
+          </div>
+
+          <section class="guide-section" aria-labelledby="guide-title">
+            <h2 id="guide-title">안내</h2>
+            <label class="check-row guide-check">
+              <input type="checkbox" >
+              <span>건강 관련 코칭 및 피드백 기록이 본 계정에 안전하게 저장·관리됩니다.</span>
+            </label>
+          </section>
+
+          <section class="agreement-section" aria-labelledby="agreement-title">
+            <h2 id="agreement-title">약관동의</h2>
+            <label class="agreement-all check-row">
+              <input id="agree-all" type="checkbox" >
+              <span>모든 약관을 확인하고 전체 동의합니다.</span>
+            </label>
+            <div class="agreement-list">
+              <div class="check-row">
+                <input id="terms-agreed" class="required-agreement" type="checkbox" required >
+                <label for="terms-agreed"><b>[필수]</b> 이용약관</label>
+                <button type="button" data-coming-soon>보기 ›</button>
+              </div>
+              <div class="check-row">
+                <input id="privacy-agreed" class="required-agreement" type="checkbox" required >
+                <label for="privacy-agreed"><b>[필수]</b> 개인정보 수집·이용 동의</label>
+                <button type="button" data-coming-soon>보기 ›</button>
+              </div>
+              <div class="check-row">
+                <input id="marketing-agreed" type="checkbox" >
+                <label for="marketing-agreed">[선택] 마케팅 정보 수신 동의</label>
+                <button type="button" data-coming-soon>보기 ›</button>
+              </div>
+            </div>
+            <p class="field-error" data-error-for="agreements"></p>
+          </section>
+
+          <a class="primary-button form-submit" href="signup-complete.html">작성 완료</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
