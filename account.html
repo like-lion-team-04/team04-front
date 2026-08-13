@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff6ed" >
+    <title>계정 및 사용자 데이터 | 미식쉐드</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+    <link rel="stylesheet" href="assets/css/menu.css" >
+  </head>
+  <body data-page="account">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="#">결과</a><a href="#">개인화</a><a href="#">타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
+      </div>
+    </header>
+    <main class="account-main">
+      <section class="account-greeting">
+        <p>안녕하세요</p>
+        <h1><span data-account-field="name">이지원</span>님, 오늘도 미식쉐드가 응원해요!</h1>
+      </section>
+      <section class="account-card" aria-label="회원 정보">
+        <div class="account-avatar-wrap">
+          <img class="account-avatar" src="assets/menu/account-embed-1.png" alt="이지원 프로필" >
+          <span class="account-camera" aria-hidden="true"></span>
+        </div>
+        <div class="account-details">
+          <h2 data-account-field="name">이지원</h2>
+          <p data-account-field="email">jiwon.lee@gmail.com</p>
+          <span class="member-badge">일반 회원</span>
+        </div>
+      </section>
+      <h2 class="account-status-title">나의 현황</h2>
+      <section class="account-status-box" aria-label="활동 현황">
+        <a class="account-stat coaching" href="#">
+          <span class="account-stat-label">코칭 기록</span><strong class="account-stat-value">12</strong><span class="account-stat-arrow">›</span>
+        </a>
+        <a class="account-stat feedback" href="#">
+          <span class="account-stat-label">피드백 기록</span><strong class="account-stat-value">48</strong><span class="account-stat-arrow">›</span>
+        </a>
+      </section>
+    </main>
+    <script src="assets/js/api-contract.js"></script>
+  </body>
+</html>
