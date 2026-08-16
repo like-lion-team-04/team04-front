@@ -3,26 +3,40 @@
   <head>
     <meta charset="UTF-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
-    <meta name="theme-color" content="#ffffff" >
-    <title>메뉴 입력 | 미식쉐드</title>
+    <meta name="theme-color" content="#fff6ed" >
+    <title>미식쉐드 | 메뉴 입력</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
     <link rel="stylesheet" href="assets/css/menu.css" >
   </head>
-  <body data-page="menu-input">
-    <main class="menu-choice-main">
-      <p class="menu-page-label">메뉴입력</p>
-      <section class="menu-choice-grid" aria-label="메뉴 입력 방법 선택">
-        <article class="menu-choice-card photo">
-          <h1>사진으로 빠르게<br>인식하기</h1>
+  <body data-page="menu-home">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a>
+          <a class="active" href="menu-input.html">메뉴 입력</a>
+          <a href="#" data-coming-soon>결과</a>
+          <a href="#" data-coming-soon>개인화</a>
+          <a href="#" data-coming-soon>타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
+      </div>
+    </header>
+
+    <main class="menu-main menu-choice-page">
+      <h1>메뉴 입력</h1>
+      <div class="input-route-grid">
+        <section class="route-card route-card-photo">
+          <h2>사진으로 빠르게<br>인식하기</h2>
           <p>메뉴판 / 배달 앱 화면 / 음식 사진 중<br>무엇이든 한 장이면 됩니다.</p>
-          <a class="choice-link" href="photo-input.html">사진 입력하기</a>
-        </article>
-        <article class="menu-choice-card manual">
-          <h1>메뉴 직접<br>선택하기</h1>
+          <a class="route-button route-button-blue" href="photo-recognition.html">사진 입력하기 <span aria-hidden="true">›</span></a>
+        </section>
+        <section class="route-card route-card-manual">
+          <h2>메뉴 직접<br>선택하기</h2>
           <p>사진 없이 바로 메뉴를 검색해서 선택할 수 있어요.<br>재방문이거나 사진이 없을 때 편리해요.</p>
-          <a class="choice-link" href="menu-select.html">직접 선택하기</a>
-        </article>
-      </section>
+          <a class="route-button route-button-dark" href="direct-select.html">직접 선택하기 <span aria-hidden="true">›</span></a>
+        </section>
+      </div>
     </main>
   </body>
 </html>
