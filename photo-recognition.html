@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff6ed" >
+    <title>미식쉐드 | 사진 인식</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+    <link rel="stylesheet" href="assets/css/menu.css" >
+    <script src="assets/js/menu-flow.js" defer></script>
+  </head>
+  <body data-page="photo-recognition">
+    <header class="site-header" data-app-header>
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a>
+          <a class="active" href="menu-input.html">메뉴입력</a>
+          <a href="#" data-coming-soon>결과</a>
+          <a href="#" data-coming-soon>개인화</a>
+          <a href="#" data-coming-soon>타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
+      </div>
+    </header>
+
+    <main class="recognition-app" data-recognition-app>
+      <section class="recognition-view upload-view is-active" data-view="upload" aria-labelledby="upload-title">
+        <h1 id="upload-title">사진 입력</h1>
+        <div class="upload-layout">
+          <section class="upload-panel">
+            <input class="sr-only" id="food-photo" type="file" accept="image/jpeg,image/png,image/webp" >
+            <label class="drop-zone" for="food-photo" data-drop-zone>
+              <img class="upload-preview" data-upload-preview alt="" hidden >
+              <span class="add-photo" data-add-photo><b aria-hidden="true">+</b><em>사진 추가</em></span>
+            </label>
+            <p>· 메뉴판 / 배달 앱 화면 / 음식 사진 중 무엇이든 한 장이면 됩니다.</p>
+            <p>· JPG, PNG / 10MB 이하</p>
+            <p class="upload-error" data-upload-error role="alert"></p>
+          </section>
+
+          <aside class="upload-guide">
+            <h2>이런 사진을 올려보세요</h2>
+            <div class="example-grid">
+              <figure><img src="assets/recognition/menu-board.jpg" alt="식당 메뉴판 예시" ><figcaption>식당 메뉴판</figcaption></figure>
+              <figure><img src="assets/recognition/delivery-screen.png" alt="배달앱 주문 화면 예시" ><figcaption>배달앱 주문 화면</figcaption></figure>
+              <figure><img src="assets/recognition/food-photo.jpg" alt="실제 음식 사진 예시" ><figcaption>실제 음식 사진</figcaption></figure>
+            </div>
+            <div class="guide-divider"></div>
+            <h2>잘 인식되려면</h2>
+            <ul>
+              <li>글씨나 음식이 또렷하게 나온 사진이 좋아요.</li>
+              <li>여러 음식이 나와도 괜찮아요. 실제 주문한 항목만 골라드려요.</li>
+              <li>조명이 어둡거나 흔들린 경우 인식이 어려울 수 있어요.</li>
+            </ul>
+          </aside>
+        </div>
+        <button class="screen-primary" type="button" data-start-recognition disabled>인식 결과 확인</button>
+      </section>
+
+      <section class="recognition-view processing-view" data-view="processing" aria-labelledby="processing-title" aria-live="polite">
+        <h1 id="processing-title">음식을 인식하는 중이에요</h1>
+        <p>잠시만 기다려주세요</p>
+        <div class="progress-ring" data-progress-ring style="--progress: 0deg"><span data-progress>0%</span></div>
+      </section>
+
+      <section class="recognition-view result-view" data-view="result" aria-labelledby="result-title">
+        <h1 id="result-title">인식한 메뉴</h1>
+        <p class="result-description">AI가 인식한 결과예요. 확인 후 필요 시 수정할 수 있어요.</p>
+        <div class="result-tabs" role="tablist" aria-label="인식 결과 분류">
+          <button class="is-active" type="button" role="tab" aria-selected="true" data-result-tab="recognized">인식한 메뉴 (5)</button>
+          <button type="button" role="tab" aria-selected="false" data-result-tab="low">낮은 신뢰도 메뉴(2)</button>
+        </div>
+        <div class="food-list" data-food-list></div>
+        <button class="add-food-button" type="button" data-add-food><span aria-hidden="true">＋</span> 항목 직접 추가</button>
+        <button class="screen-primary result-confirm" type="button" data-confirm-result>확인</button>
+      </section>
+    </main>
+
+    <div class="food-modal" data-food-modal hidden>
+      <button class="modal-backdrop" type="button" data-close-modal aria-label="검색 창 닫기"></button>
+      <section class="food-picker" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+        <h2 class="sr-only" id="picker-title">메뉴 검색 및 선택</h2>
+        <label class="picker-search"><span aria-hidden="true"></span><input type="search" value="제육볶음" aria-label="메뉴 검색" data-food-search ></label>
+        <div class="picker-categories" role="group" aria-label="메뉴 분류">
+          <button class="is-active" type="button">전체</button><button type="button">밥류</button><button type="button">면류</button><button type="button">분식류</button><button type="button">덮밥류</button><button type="button">빵류</button>
+        </div>
+        <p class="picker-summary">검색결과　 전체</p>
+        <div class="picker-list" data-picker-list></div>
+        <button class="screen-primary picker-complete" type="button" data-picker-complete disabled>선택 완료</button>
+      </section>
+    </div>
+  </body>
+</html>

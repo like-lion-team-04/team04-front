@@ -1,0 +1,63 @@
+.account-main {
+  width: min(calc(100% - 48px), 1202px);
+  margin: 0 auto;
+  padding: 75px 0 100px;
+}
+.account-greeting p, .account-greeting h1 { margin: 0; }
+.account-greeting p { font-size: 17px; }
+.account-greeting h1 { margin-top: 24px; font-size: 27px; line-height: 1.3; }
+.account-card {
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  gap: 70px;
+  margin-top: 51px;
+  padding: 46px 49px;
+  border: 1px solid var(--line-dark);
+  border-radius: 8px;
+}
+.account-avatar-wrap { position: relative; width: 138px; height: 138px; flex: 0 0 138px; }
+.account-avatar { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+.account-camera {
+  position: absolute;
+  right: -2px;
+  bottom: 8px;
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #bbb;
+}
+.account-camera::before { width: 15px; height: 10px; border-radius: 2px; background: white; content: ""; }
+.account-camera::after { position: absolute; width: 5px; height: 5px; border: 2px solid #bbb; border-radius: 50%; background: white; content: ""; }
+.account-details h2, .account-details p { margin: 0; }
+.account-details h2 { font-size: 27px; }
+.account-details p { margin-top: 16px; color: var(--muted); font-size: 12px; }
+.member-badge { display: inline-block; margin-top: 24px; padding: 4px 9px; border-radius: 3px; background: #eee; color: var(--ink); font-size: 10px; }
+.account-status-title { margin: 65px 0 31px; font-size: 26px; }
+.account-status-box { min-height: 485px; display: flex; justify-content: flex-end; padding: 40px 43px; border: 1px solid var(--line-dark); border-radius: 8px; }
+.account-stat { width: 247px; height: 142px; display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 25px 31px; color: white; }
+.account-stat.coaching { background: var(--blue); color: #343434; }
+.account-stat.feedback { margin-left: 32px; background: var(--ink); }
+.account-stat-label { grid-column: 1 / -1; align-self: end; font-size: 12px; }
+.account-stat-value { align-self: start; font-size: 31px; font-weight: 600; }
+.account-stat-arrow { align-self: start; font-size: 40px; font-weight: 200; line-height: .8; }
+
+@media (max-width: 820px) {
+  .account-main { width: calc(100% - 32px); padding: 28px 0 60px; }
+  .account-card { gap: 28px; padding: 30px 24px; }
+  .account-avatar-wrap { width: 100px; height: 100px; flex-basis: 100px; }
+  .account-details h2 { font-size: 22px; }
+  .account-status-box { min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; }
+  .account-stat { width: 100%; height: 120px; padding: 20px; }
+  .account-stat.feedback { margin-left: 0; }
+}
+
+@media (max-width: 520px) {
+  .account-main { width: calc(100% - 24px); }
+  .account-greeting h1 { font-size: 22px; }
+  .account-card { align-items: flex-start; }
+  .account-status-title { font-size: 22px; }
+  .account-status-box { grid-template-columns: 1fr; }
+}

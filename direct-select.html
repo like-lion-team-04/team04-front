@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff6ed" >
+    <title>미식쉐드 | 메뉴 직접 선택</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+    <link rel="stylesheet" href="assets/css/menu.css" >
+    <script src="assets/js/direct-select.js" defer></script>
+  </head>
+  <body data-page="direct-select">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a><a class="active" href="menu-input.html">메뉴입력</a><a href="#">결과</a><a href="#">개인화</a><a href="#">타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
+      </div>
+    </header>
+
+    <main class="direct-main">
+      <section class="direct-stage is-active" data-direct-stage="select" aria-labelledby="direct-title">
+        <h1 id="direct-title">메뉴 선택</h1>
+        <label class="direct-search"><span aria-hidden="true"></span><input type="search" placeholder="메뉴를 검색하거나 초성으로 찾아보세요" data-direct-search ></label>
+        <div class="direct-categories" role="group" aria-label="메뉴 분류">
+          <button class="is-active" type="button" data-category="ALL">전체</button>
+          <button type="button" data-category="RICE">밥류</button>
+          <button type="button" data-category="NOODLE">면류</button>
+          <button type="button" data-category="FLOUR">분식류</button>
+          <button type="button" data-category="BOWL_RICE">덮밥류</button>
+          <button type="button" data-category="BREAD">빵류</button>
+        </div>
+        <div class="direct-columns">
+          <section>
+            <p class="column-label">검색결과　·　전체</p>
+            <div class="direct-result-list" data-direct-results></div>
+          </section>
+          <section class="selected-column">
+            <p class="column-label">선택한 메뉴</p>
+            <div class="direct-selected-list" data-direct-selected>
+              <div class="empty-selection"><strong>아직 선택한 메뉴가 없어요.</strong><span>왼쪽 목록에서 메뉴를 선택해주세요.</span></div>
+            </div>
+          </section>
+        </div>
+        <button class="screen-primary direct-next" type="button" data-direct-next disabled>선택 완료</button>
+      </section>
+
+      <section class="direct-stage manual-review" data-direct-stage="review" aria-labelledby="review-title">
+        <h1 id="review-title">선택한 메뉴</h1>
+        <p>지원님이 선택한 메뉴예요. 확인 후 필요 시 수정할 수 있어요.</p>
+        <div class="manual-tab">선택한 메뉴 (<span data-selected-count>0</span>)</div>
+        <div class="manual-review-list" data-review-list></div>
+        <button class="add-food-button" type="button" data-review-add><span aria-hidden="true">＋</span> 항목 직접 추가</button>
+        <button class="screen-primary manual-confirm" type="button" data-manual-confirm>확인</button>
+      </section>
+    </main>
+  </body>
+</html>
