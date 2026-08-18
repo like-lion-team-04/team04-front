@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" >
+    <meta name="theme-color" content="#fff9f3" >
+    <title>미식쉐드 | 추천 사이드 메뉴</title>
+    <link rel="stylesheet" href="assets/css/styles.css" >
+    <link rel="stylesheet" href="assets/css/side-menu.css" >
+    <script src="assets/js/side-menu.js" defer></script>
+  </head>
+  <body data-page="side-menu">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a class="active" href="side-menu.html">개인화</a><a href="coaching-plan.html">타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
+      </div>
+    </header>
+
+    <main class="side-menu-main">
+      <header class="side-menu-heading">
+        <h1 data-page-title>추천 사이드 메뉴</h1>
+        <p>이 서비스가 사용하는 데이터와 계산 근거를 확인할 수 있어요.</p>
+      </header>
+
+      <div class="side-menu-top">
+        <section class="current-order-card">
+          <h2>현재 식사 순서</h2>
+          <ol data-current-order>
+            <li><b>1</b><img src="assets/side-menu/rolled-omelet.png" alt="" ><span><strong>계란말이</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+            <li><b>2</b><img src="assets/side-menu/spicy-pork.png" alt="" ><span><strong>제육볶음</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+            <li><b>3</b><img src="assets/side-menu/doenjang-stew.png" alt="" ><span><strong>된장찌개</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+            <li><b>4</b><img src="assets/side-menu/spinach.png" alt="" ><span><strong>시금치 나물</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+            <li><b>5</b><img src="assets/side-menu/rice.png" alt="" ><span><strong>공기밥</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+          </ol>
+          <p>섭취 간격: 약 5~10분</p>
+        </section>
+
+        <aside class="menu-preview-card" data-preview>
+          <h2>메뉴 미리보기</h2>
+          <div class="preview-empty" data-preview-empty><p>아직 메뉴를 선택하지 않았어요.<br>원하는 메뉴를 선택해주세요.</p></div>
+          <div class="preview-content" data-preview-content hidden>
+            <img src="assets/side-menu/cabbage-salad.png" alt="양배추 샐러드" >
+            <h3>양배추 샐러드 <span>추천</span></h3>
+            <p>아삭하고 가볍게 즐길 수 있는 채소 사이드</p>
+            <section class="nutrition"><h4>영양 정보 <small>1인분 기준</small></h4><dl><div><dt>단백질</dt><dd>1.5g</dd></div><div><dt>지방</dt><dd>3.5g</dd></div><div><dt>나트륨</dt><dd>150mg</dd></div><div><dt>탄수화물</dt><dd>9g</dd></div><div><dt>당류</dt><dd>4g</dd></div><div><dt>식이섬유</dt><dd>2.5g</dd></div><div><dt>열량</dt><dd>약 70 kcal</dd></div></dl></section>
+          </div>
+        </aside>
+      </div>
+
+      <div class="side-menu-workspace">
+        <section class="side-menu-search-card">
+          <h2>사이드 메뉴 검색</h2>
+          <label class="side-search"><span aria-hidden="true"></span><input type="search" placeholder="원하는 메뉴를 검색해주세요." data-side-search ></label>
+          <div class="side-categories" role="group" aria-label="메뉴 분류"><button class="is-active" type="button">전체</button><button type="button">밥류</button><button type="button">면류</button><button type="button">분식류</button><button type="button">덮밥류</button><button type="button">빵류</button></div>
+          <p class="search-summary">검색결과　·　전체</p>
+          <div class="side-search-results" data-side-results>
+            <button type="button" data-side-item="양배추 샐러드"><span><strong>양배추 샐러드</strong><small>단백질 2.0g　·　식이섬유 2.8g</small></span><em>GI 58</em><i>✓</i></button>
+            <button type="button" data-side-item="양배추찜"><span><strong>양배추찜</strong><small>탄수화물 65g　·　단백질 18g</small></span><em>GI 52</em><i>✓</i></button>
+            <button type="button" data-side-item="양배추 피클"><span><strong>양배추 피클</strong><small>탄수화물 70g　·　단백질 15g</small></span><em>GI 56</em><i>✓</i></button>
+            <button type="button" data-side-item="양배추 콘샐러드"><span><strong>양배추 콘샐러드</strong><small>탄수화물 75g　·　단백질 14g</small></span><em>GI 61</em><i>✓</i></button>
+          </div>
+        </section>
+
+        <aside class="recommendation-panel" data-recommendation hidden>
+          <section><h2>왜 추천하나요?</h2><article><i>✓</i><div><strong>식이섬유 2.8g으로 식이섬유 보강</strong><p>1단계(채소·식이섬유)를 더 강화해<br>식후 혈당 상승을 완화해요.</p></div></article><article><i>✓</i><div><strong>낮은 칼로리, 부담 없는 사이드</strong><p>아삭한 식감으로 포만감을 높여 전체<br>식사 만족도를 올려줘요.</p></div></article></section>
+          <section class="expected-effect"><h2>기대 효과 (추가시)</h2><dl><div><dt>상대 부담 완화</dt><dd>약 <b>36%</b> 완화</dd></div><div><dt>식이섬유 추가</dt><dd>+2.8g</dd></div><div><dt>단백질 추가</dt><dd>+2.0g</dd></div></dl><p><i>i</i>현재 메뉴 기준 예측치 입니다.</p><button type="button" data-add-side-menu>이 사이드 메뉴 추가하기</button></section>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>

@@ -11,49 +11,55 @@
   margin: 0 auto;
 }
 
-.menu-choice-page { padding-top: 52px; }
+.menu-choice-page { padding: 52px 0 92px; }
 .menu-choice-page > h1,
 .upload-view > h1,
 .result-view > h1 {
   margin: 0;
   color: #444;
-  font-size: 25px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.3;
 }
+.menu-choice-description { margin: 23px 0 0; color: #787878; font-size: 14px; line-height: 1.7; }
 .input-route-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 76px;
-  margin-top: 68px;
+  gap: 38px;
+  margin-top: 51px;
 }
 .route-card {
+  position: relative;
   min-height: 378px;
-  padding: 47px 52px;
+  overflow: hidden;
   border-radius: 16px;
 }
-.route-card-photo { background: var(--menu-blue-pale); }
-.route-card-manual { background: var(--menu-cream-pale); }
-.route-card h2 { margin: 0; font-size: 28px; line-height: 1.75; letter-spacing: -.7px; }
-.route-card p { min-height: 54px; margin: 28px 0 48px; color: #787878; font-size: 12px; line-height: 1.75; }
-.route-button {
-  width: 170px;
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 0 16px;
-  border: 0;
-  border-radius: 22px;
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.route-button span { font-size: 24px; font-weight: 300; line-height: 1; }
-.route-button-blue { background: var(--menu-blue); }
-.route-button-dark { background: #4a4a4a; }
+.route-card-source { position: absolute; top: -247px; width: 1460px; max-width: none; height: 1431px; pointer-events: none; }
+.route-card-source-photo { left: -129px; }
+.route-card-source-manual { left: -749px; }
+.route-card-link { position: absolute; z-index: 1; top: 280px; left: 52px; width: 208px; height: 46px; border-radius: 8px; }
+.route-card-link:focus-visible { outline: 3px solid #2f7fb9; outline-offset: 3px; }
+
+.recent-menu-section { margin-top: 67px; }
+.recent-menu-heading { display: flex; align-items: flex-end; justify-content: space-between; }
+.recent-menu-heading h2 { margin: 0; color: #343434; font-size: 28px; line-height: 1.35; }
+.recent-menu-heading p { margin: 19px 0 0; color: #787878; font-size: 14px; }
+.recent-menu-heading > a { display: inline-flex; align-items: center; gap: 17px; margin-bottom: 12px; color: #4d96d1; font-size: 15px; font-weight: 600; }
+.recent-menu-heading > a span { font-size: 29px; font-weight: 300; line-height: .6; }
+.recent-menu-list { margin-top: 30px; padding: 0 36px; border: 1px solid #cfcfcf; border-radius: 12px; }
+.recent-menu-row { min-height: 142px; display: grid; grid-template-columns: 72px 1fr 190px; align-items: center; gap: 27px; }
+.recent-menu-row + .recent-menu-row { border-top: 1px solid #dedede; }
+.recent-menu-icon { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 10px; background: #eef7ff; }
+.recent-menu-icon svg { width: 46px; height: 46px; fill: none; stroke: #579bd4; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+.recent-menu-copy h3 { margin: 0; color: #343434; font-size: 20px; }
+.recent-menu-copy p { margin: 13px 0 0; color: #787878; font-size: 14px; }
+.recent-menu-row button { height: 54px; display: inline-flex; align-items: center; justify-content: center; gap: 22px; border: 1px solid #d4dce2; border-radius: 8px; background: #fff; color: #4d96d1; font-size: 15px; font-weight: 600; cursor: pointer; }
+.recent-menu-row button span { font-size: 29px; font-weight: 300; line-height: .6; }
+.menu-input-note { min-height: 98px; display: flex; align-items: center; gap: 28px; margin-top: 74px; padding: 22px 34px; border-radius: 10px; background: #f2f7fd; }
+.menu-input-note-icon { width: 44px; height: 44px; flex: 0 0 44px; }
+.menu-input-note-icon svg { width: 100%; height: 100%; fill: none; stroke: #579bd4; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.menu-input-note p { margin: 0; color: #787878; font-size: 14px; line-height: 1.8; }
+.menu-input-note strong { color: #555; font-weight: 500; }
 
 .recognition-view { display: none; }
 .recognition-view.is-active { display: block; }

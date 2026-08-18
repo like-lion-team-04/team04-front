@@ -16,9 +16,9 @@
         <nav class="desktop-nav" aria-label="주요 메뉴">
           <a class="active" href="index.html">홈</a>
           <a href="menu-input.html">메뉴입력</a>
-          <a href="#" data-coming-soon>결과</a>
+          <a href="burden-result.html">결과</a>
           <a href="#" data-coming-soon>개인화</a>
-          <a href="#" data-coming-soon>타이머</a>
+          <a href="coaching-plan.html">타이머</a>
         </nav>
         <a class="profile-button" href="login.html" aria-label="로그인">
           <img src="assets/figma/profile.png" alt="" >
@@ -36,32 +36,35 @@
       </section>
 
       <section class="feedback-card" aria-labelledby="feedback-title">
-        <div>
-          <h2 id="feedback-title">어제 오후 컨디션은 어떠셨나요?</h2>
-          <p>전날 코칭을 완료한 기록이 있어요. 아래 표정을 탭하면 1초 만에 기록돼요.</p>
+        <div class="feedback-heading-row">
+          <div>
+            <h2 id="feedback-title">어제 오후 컨디션은 어떠셨나요?</h2>
+            <p>전날 코칭을 바탕으로, 어제 점심 이후 졸렸는지 알려주세요.</p>
+            <p>1초만 선택해도 다음 식사 안내를 나에게 맞추는데 도움이 돼요.</p>
+          </div>
+          <button class="feedback-detail" type="button" data-coming-soon>자세히 보기 <span aria-hidden="true"></span></button>
         </div>
         <div class="feedback-options" role="group" aria-label="어제 오후 컨디션 선택">
-          <button type="button" aria-label="매우 피곤함"><img src="assets/figma/feedback-1.png" alt="" ></button>
-          <button type="button" aria-label="피곤함"><img src="assets/figma/feedback-2.png" alt="" ></button>
-          <button type="button" aria-label="보통"><img src="assets/figma/feedback-3.png" alt="" ></button>
-          <button type="button" aria-label="좋음"><img src="assets/figma/feedback-4.png" alt="" ></button>
-          <button type="button" aria-label="매우 좋음"><img src="assets/figma/feedback-5.png" alt="" ></button>
+          <button type="button"><img src="assets/figma/feedback-1.png" alt="" ><span>너무 졸렸어요</span></button>
+          <button type="button"><img src="assets/figma/feedback-2.png" alt="" ><span>꽤 졸렸어요</span></button>
+          <button type="button"><img src="assets/figma/feedback-3.png" alt="" ><span>졸렸어요</span></button>
+          <button type="button"><img src="assets/figma/feedback-4.png" alt="" ><span>살짝 졸렸어요</span></button>
+          <button type="button"><img src="assets/figma/feedback-5.png" alt="" ><span>안 졸렸어요</span></button>
         </div>
-        <button class="text-button" type="button" data-skip-feedback>건너뛰고 오늘 코칭 시작하기</button>
       </section>
 
       <section id="coaching" class="coaching-section" aria-labelledby="coaching-title">
         <h2 id="coaching-title">오늘 점심 코칭 시작하기</h2>
         <div class="coaching-grid">
           <a class="action-card" href="photo-recognition.html">
-            <div class="action-visual" aria-hidden="true"></div>
-            <h3>사진으로 메뉴 인식</h3>
-            <p>메뉴판 / 배달 앱 화면 / 음식 사진 중 무엇이든 한 장이면 됩니다.</p>
+            <h3>사진으로 빠르게<br>인식하기</h3>
+            <p>메뉴판 / 배달 앱 화면 / 음식 사진 중<br>무엇이든 한 장이면 됩니다.</p>
+            <span class="home-route-button home-route-blue">사진 입력하기 <b aria-hidden="true"></b></span>
           </a>
           <a class="action-card" href="direct-select.html">
-            <div class="action-visual" aria-hidden="true"></div>
-            <h3>메뉴 직접 선택</h3>
-            <p>밥류 / 면류 / 분식류 등 50개 메뉴에서 바로 고를 수 있어요.</p>
+            <h3>메뉴 직접<br>선택하기</h3>
+            <p>사진 없이 바로 메뉴를 검색해서 선택할 수 있어요.<br>재방문이거나 사진이 없을 때 편리해요.</p>
+            <span class="home-route-button home-route-dark">직접 선택하기 <b aria-hidden="true"></b></span>
           </a>
         </div>
       </section>
