@@ -15,9 +15,9 @@
         <nav class="desktop-nav" aria-label="주요 메뉴">
           <a href="index.html">홈</a>
           <a class="active" href="menu-input.html">메뉴 입력</a>
-          <a href="#" data-coming-soon>결과</a>
+          <a href="burden-result.html">결과</a>
           <a href="#" data-coming-soon>개인화</a>
-          <a href="#" data-coming-soon>타이머</a>
+          <a href="coaching-plan.html">타이머</a>
         </nav>
         <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
       </div>
@@ -25,18 +25,59 @@
 
     <main class="menu-main menu-choice-page">
       <h1>메뉴 입력</h1>
+      <p class="menu-choice-description">오늘 드실 메뉴를 입력하면 나에게 맞는 식사 순서와 섭취 간격을 안내해드려요.</p>
       <div class="input-route-grid">
         <section class="route-card route-card-photo">
-          <h2>사진으로 빠르게<br>인식하기</h2>
-          <p>메뉴판 / 배달 앱 화면 / 음식 사진 중<br>무엇이든 한 장이면 됩니다.</p>
-          <a class="route-button route-button-blue" href="photo-recognition.html">사진 입력하기 <span aria-hidden="true">›</span></a>
+          <img class="route-card-source route-card-source-photo" src="assets/figma/menu-input-home-source.svg" alt="" aria-hidden="true" >
+          <h2 class="sr-only">사진으로 빠르게 인식하기</h2>
+          <a class="route-card-link" href="photo-recognition.html" aria-label="사진 입력하기"></a>
         </section>
         <section class="route-card route-card-manual">
-          <h2>메뉴 직접<br>선택하기</h2>
-          <p>사진 없이 바로 메뉴를 검색해서 선택할 수 있어요.<br>재방문이거나 사진이 없을 때 편리해요.</p>
-          <a class="route-button route-button-dark" href="direct-select.html">직접 선택하기 <span aria-hidden="true">›</span></a>
+          <img class="route-card-source route-card-source-manual" src="assets/figma/menu-input-home-source.svg" alt="" aria-hidden="true" >
+          <h2 class="sr-only">메뉴 직접 선택하기</h2>
+          <a class="route-card-link" href="direct-select.html" aria-label="메뉴 직접 선택하기"></a>
         </section>
       </div>
+
+      <section class="recent-menu-section" aria-labelledby="recent-menu-title">
+        <div class="recent-menu-heading">
+          <div>
+            <h2 id="recent-menu-title">최근 메뉴</h2>
+            <p>전에 입력한 메뉴를 빠르게 다시 불러올 수 있어요.</p>
+          </div>
+          <a href="#" data-coming-soon>코칭 기록 보기 <span aria-hidden="true">›</span></a>
+        </div>
+
+        <div class="recent-menu-list">
+          <article class="recent-menu-row">
+            <span class="recent-menu-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15"></circle><path d="M24 15v10l7 4"></path></svg>
+            </span>
+            <div class="recent-menu-copy">
+              <h3>어제 점심</h3>
+              <p>계란말이 · 시금치나물 · 제육볶음 · 된장찌개 · 공기밥</p>
+            </div>
+            <button type="button" data-recent-menu="yesterday">다시 불러오기 <span aria-hidden="true">›</span></button>
+          </article>
+          <article class="recent-menu-row">
+            <span class="recent-menu-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><rect x="10" y="13" width="28" height="26" rx="3"></rect><path d="M16 9v8M32 9v8M10 21h28M17 27h4M27 27h4M17 33h4M27 33h4"></path></svg>
+            </span>
+            <div class="recent-menu-copy">
+              <h3>8월 16일</h3>
+              <p>불고기 · 파채 · 공기밥</p>
+            </div>
+            <button type="button" data-recent-menu="2026-08-16">다시 불러오기 <span aria-hidden="true">›</span></button>
+          </article>
+        </div>
+      </section>
+
+      <aside class="menu-input-note">
+        <span class="menu-input-note-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M16 29c-4-3-6-7-6-12a14 14 0 0 1 28 0c0 5-2 9-6 12-2 2-3 4-3 7H19c0-3-1-5-3-7Z"></path><path d="M19 40h10M21 44h6"></path></svg>
+        </span>
+        <p><strong>입력한 메뉴를 바탕으로 식사 순서와 섭취 간격을 안내해드려요.</strong><br>더 정확한 안내를 위해 가능한 한 정확한 메뉴를 입력해주세요.</p>
+      </aside>
     </main>
   </body>
 </html>

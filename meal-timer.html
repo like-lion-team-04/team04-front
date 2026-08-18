@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff9f3">
+    <title>미식쉐드 | 식사 타이머</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/meal-timer.css">
+    <script src="assets/js/meal-timer.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드"></a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="#">개인화</a><a class="active" href="coaching-plan.html">타이머</a>
+        </nav>
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt=""></a>
+      </div>
+    </header>
+
+    <main class="meal-timer-main">
+      <header class="timer-heading"><h1>식사 타이머</h1><p>타이머와 함께 식사를 시작해보세요.</p></header>
+
+      <div class="timer-layout" data-timer-screen>
+        <section class="timer-card">
+          <div class="stage-chip" data-stage-chip>1단계 · 단백질</div>
+          <h2 data-stage-title>단백질부터 시작해요</h2>
+          <p class="stage-guide" data-stage-guide>처음 5분은 계란말이를 천천히 드세요.</p>
+          <div class="timer-ring" data-timer-ring style="--timer-progress:0deg"><div><span data-time-label>남은 시간</span><strong data-time>05:00</strong></div></div>
+          <div class="timer-actions"><button class="pause-button" type="button" data-pause>일시정지</button><button class="next-button" type="button" data-next>다음 단계</button></div>
+          <button class="finish-link" type="button" data-finish>타이머 종료</button>
+        </section>
+
+        <aside class="timer-sidebar">
+          <section class="progress-card">
+            <h2>진행 단계</h2>
+            <div class="progress-summary"><span>전체 식사 진행</span><b data-progress-count>1 / 3</b></div>
+            <div class="progress-bar"><i data-progress-bar></i></div>
+            <ol data-stage-list>
+              <li class="is-current"><b>1</b><span><strong>단백질</strong><small>현재 진행 중</small></span><em>5분</em></li>
+              <li><b>2</b><span><strong>식이섬유</strong><small>대기</small></span><em>5분</em></li>
+              <li><b>3</b><span><strong>탄수화물</strong><small>대기</small></span><em>제한 없음</em></li>
+            </ol>
+          </section>
+          <section class="today-menu-card">
+            <h2>오늘 메뉴</h2>
+            <ol>
+              <li><b>1</b><img src="assets/side-menu/rolled-omelet.png" alt=""><span><strong>계란말이</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+              <li><b>2</b><img src="assets/side-menu/cabbage-salad.png" alt=""><span><strong>양배추 샐러드</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+              <li><b>3</b><img src="assets/side-menu/spinach.png" alt=""><span><strong>시금치 나물</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+              <li><b>4</b><img src="assets/side-menu/spicy-pork.png" alt=""><span><strong>제육볶음</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+              <li><b>5</b><img src="assets/side-menu/doenjang-stew.png" alt=""><span><strong>된장찌개</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+              <li><b>6</b><img src="assets/side-menu/rice.png" alt=""><span><strong>공기밥</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
+            </ol>
+            <p>섭취 간격: 약 5~10분</p>
+          </section>
+        </aside>
+      </div>
+
+      <section class="timer-complete" data-complete-screen hidden>
+        <div class="complete-card">
+          <div class="stage-chip">식사 완료</div><h2>식사를 완료하였습니다!</h2><p>오늘도 건강한 식사 습관을 실천했어요.</p>
+          <img class="complete-mark-image" src="assets/timer/meal-complete-mark.png" alt="식사 완료 체크 표시">
+          <section class="record-summary">
+            <h3>오늘 기록 요약</h3>
+            <dl><div><dt>◷</dt><dd><small>총 식사 시간</small><strong data-total-time>00:00</strong></dd></div><div><dt>☰</dt><dd><small>단계 완료</small><strong>3 / 3</strong></dd></div><div><dt>☆</dt><dd><small>식사 순서 준수</small><strong>100%</strong></dd></div></dl>
+          </section>
+          <div class="complete-actions"><button type="button" data-restart>타이머 다시 시작</button><a href="index.html">홈으로 이동</a></div>
+        </div>
+        <aside class="timer-sidebar complete-sidebar">
+          <section class="progress-card">
+            <h2>진행 단계</h2><div class="progress-summary"><span>전체 식사 진행</span><b>3 / 3</b></div><div class="progress-bar"><i style="width:100%"></i></div>
+            <ol><li class="is-done"><b>✓</b><span><strong>단백질</strong><small>식사 완료</small></span><em>5분</em></li><li class="is-done"><b>✓</b><span><strong>식이섬유</strong><small>식사 완료</small></span><em>5분</em></li><li class="is-done"><b>✓</b><span><strong>탄수화물</strong><small>식사 완료</small></span><em>제한 없음</em></li></ol>
+          </section>
+          <section class="today-menu-card complete-menu-copy"></section>
+        </aside>
+      </section>
+      <p class="auto-guide"><b>자동 전환 안내</b>　시간이 지나면 다음 단계로 자동 전환됩니다. 알림음 없이 화면만 바뀌니 편하게 식사해주세요.</p>
+    </main>
+  </body>
+</html>

@@ -7,13 +7,15 @@
     <title>미식쉐드 | 식후 부담 비교</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
     <link rel="stylesheet" href="assets/css/burden.css" >
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/burden-result.js" defer></script>
   </head>
   <body data-page="burden-result">
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
         <nav class="desktop-nav" aria-label="주요 메뉴">
-          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a class="active" href="burden-result.html">결과</a><a href="#">개인화</a><a href="#">타이머</a>
+          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a class="active" href="burden-result.html">결과</a><a href="#">개인화</a><a href="coaching-plan.html">타이머</a>
         </nav>
         <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
       </div>
@@ -26,9 +28,9 @@
       </header>
 
       <section class="summary-grid" aria-label="부담 비교 요약">
-        <article class="summary-card effect-card"><h2>효과 요약</h2><p>추천 순서 적용 시,</p><strong>약 28% 완화</strong></article>
-        <article class="summary-card original-card"><h2>기존 부담</h2><p>상대적으로 부담</p><strong>높음</strong></article>
-        <article class="summary-card applied-card"><h2>추천 순서 적용했을 경우</h2><p>상대적으로 부담</p><strong>적음</strong></article>
+        <article class="summary-card effect-card"><h2>효과 요약</h2><p>추천 순서 적용 시,</p><strong data-relief-rate>약 28% 완화</strong></article>
+        <article class="summary-card original-card"><h2>기존 부담</h2><p>상대적으로 부담</p><strong data-baseline-level>높음</strong></article>
+        <article class="summary-card applied-card"><h2>추천 순서 적용했을 경우</h2><p>상대적으로 부담</p><strong data-recommended-level>적음</strong></article>
         <article class="condition-card">
           <h2>비교조건</h2>
           <dl><div><dt><i>✓</i> 메뉴 항목</dt><dd>5개</dd></div><div><dt><i>✓</i> 총 인분</dt><dd>1.5인분</dd></div><div><dt><i>✓</i> 개인화 계수</dt><dd>반영됨</dd></div></dl>
@@ -59,7 +61,7 @@
 
         <aside class="dashboard-card order-card">
           <h2>추천 식사 순서</h2>
-          <ol>
+          <ol data-recommended-order>
             <li><b>1</b><img src="assets/recognition/spicy-pork.png" alt="" ><span><strong>제육볶음</strong><small>1인분</small></span><em>GL 기여(상대)<strong>낮음</strong></em></li>
             <li><b>2</b><img src="assets/recognition/doenjang-stew.png" alt="" ><span><strong>된장찌개</strong><small>1인분</small></span><em>GL 기여(상대)<strong>낮음</strong></em></li>
             <li><b>3</b><img src="assets/recognition/rice.png" alt="" ><span><strong>공기밥</strong><small>1인분</small></span><em>GL 기여(상대)<strong>낮음</strong></em></li>
@@ -78,13 +80,13 @@
             <article><b>2단계</b><strong>시금치 나물</strong><p>식이섬유가 추가되면 효과가 더 탄탄해져요.</p></article>
             <article><b>3단계</b><strong>밥</strong><p>이제 탄수화물을 자유롭게 드시면 됩니다.</p></article>
           </div>
-          <div class="preview-footer"><p><span>i</span> 위 순서는 일반적인 권장 순서이며, 개인의 상태와 상황에 따라 달라질 수 있어요.</p><button type="button" data-future-screen>자세히 보기　›</button></div>
+          <div class="preview-footer"><p><span>i</span> 위 순서는 일반적인 권장 순서이며, 개인의 상태와 상황에 따라 달라질 수 있어요.</p><a href="coaching-plan.html">자세히 보기　›</a></div>
         </section>
 
         <aside class="dashboard-card side-card">
           <h2>사이드 메뉴 추천</h2>
-          <ul><li><span><strong>삶은 계란</strong><small>단백질 6g</small></span><button type="button">＋　추가</button></li><li><span><strong>두부 한 모</strong><small>단백질 8g</small></span><button type="button">＋　추가</button></li><li><span><strong>우유 200ml</strong><small>단백질 7g</small></span><button type="button">＋　추가</button></li></ul>
-          <button class="outline-action" type="button" data-future-screen>＋　직접 추가</button>
+          <ul data-side-recommendations><li><span><strong>삶은 계란</strong><small>단백질 6g</small></span><button type="button" disabled>＋　추가</button></li><li><span><strong>두부 한 모</strong><small>단백질 8g</small></span><button type="button" disabled>＋　추가</button></li><li><span><strong>우유 200ml</strong><small>단백질 7g</small></span><button type="button" disabled>＋　추가</button></li></ul>
+          <a class="outline-action" href="side-menu.html">＋　직접 추가</a>
         </aside>
       </div>
 
@@ -93,7 +95,7 @@
           <h2>비교 결과 근거</h2>
           <div class="equation-cards"><article><b>기존 부담</b><strong>항목별 GL 합</strong><p>순서를 고려하지 않은<br>각 항목의 GL 종합</p></article><i>−</i><article><b>감소 계수 적용</b><strong>감소상한 × 순서가중도<br>× 간격계수 × 개인계수</strong><p>개인 특성과 섭취 패턴을<br>반영한 보정</p></article><i>=</i><article><b>추천 순서 적용 부담</b><strong>기존 부담 × (1 - 감소 계수)</strong><p>추천 순서 적용 시의<br>상대적 부담</p></article></div>
         </section>
-        <section class="dashboard-card source-card"><h2>데이터 출처 및 고지</h2><p>영양성분: 식품의약품안전처 식품영양성분DB (2024)<br>GI 데이터: 한국인 대상 실측 GI 데이터 논문 및 연구 자료</p><p>본 서비스는 비의료 목적의 정보 제공 서비스이며,<br>질병의 진단, 치료, 처방을 목적으로 하지 않습니다.</p><button type="button" data-future-screen>자세히 보기　›</button></section>
+        <section class="dashboard-card source-card"><h2>데이터 출처 및 고지</h2><p>영양성분: 식품의약품안전처 식품영양성분DB (2024)<br>GI 데이터: 한국인 대상 실측 GI 데이터 논문 및 연구 자료</p><p>본 서비스는 비의료 목적의 정보 제공 서비스이며,<br>질병의 진단, 치료, 처방을 목적으로 하지 않습니다.</p><a href="evidence.html">자세히 보기　›</a></section>
         <section class="dashboard-card personal-card"><h2>개인화 반영 상태</h2><dl><div><dt>체중 / 연령 / 성별</dt><dd>반영됨</dd></div><div><dt>활동량 수준</dt><dd>반영됨</dd></div><div><dt>기타 개인계수</dt><dd>반영됨</dd></div></dl><button type="button" data-future-screen>자세히 보기　›</button></section>
       </div>
     </main>
