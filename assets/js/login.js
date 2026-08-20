@@ -2,6 +2,13 @@
   "use strict";
 
   const REMEMBERED_EMAIL_KEY = "firstbite.rememberedEmail";
+  const SOCIAL_PROVIDER_LABELS = {
+    kakao: "카카오",
+    google: "구글",
+    naver: "네이버",
+    apple: "Apple"
+  };
+  const SUPPORTED_SOCIAL_PROVIDERS = new Set(["kakao", "google"]);
 
   function nextPage() {
     const next = new URLSearchParams(window.location.search).get("next");
@@ -10,6 +17,15 @@
 
   function validEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
+  }
+
+  function oauthErrorMessage(code) {
+    const messages = {
+      failed: "소셜 로그인에 실패했습니다. 다시 시도해 주세요.",
+      cancelled: "소셜 로그인이 취소되었습니다.",
+      session: "소셜 로그인 세션을 확인하지 못했습니다. 다시 로그인해 주세요."
+    };
+    return messages[code] || "소셜 로그인을 완료하지 못했습니다. 다시 시도해 주세요.";
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -30,6 +46,15 @@
     const setError = (message = "") => {
       if (errorText) errorText.textContent = message;
     };
+
+    const oauthError = new URLSearchParams(window.location.search).get("oauth_error");
+    if (oauthError) {
+      window.FirstBiteApi.clearPendingSocialLogin();
+      setError(oauthErrorMessage(oauthError));
+      const url = new URL(window.location.href);
+      url.searchParams.delete("oauth_error");
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    }
 
     const setBusy = (busy) => {
       submit.textContent = busy ? "로그인 중..." : "로그인";
@@ -90,10 +115,22 @@
       input.addEventListener("input", () => setError());
     });
 
-    // 현재 백엔드에는 소셜 로그인 API가 없으므로 버튼이 잘못된 성공 흐름으로 이동하지 않게 막는다.
-    document.querySelectorAll(".social-buttons button").forEach((button) => {
+    document.querySelectorAll("[data-social-provider]").forEach((button) => {
       button.addEventListener("click", () => {
-        setError("현재 소셜 로그인은 백엔드 API가 준비되지 않아 사용할 수 없습니다.");
+        const provider = String(button.dataset.socialProvider || "").toLowerCase();
+        const label = SOCIAL_PROVIDER_LABELS[provider] || "소셜";
+        setError();
+
+        if (!SUPPORTED_SOCIAL_PROVIDERS.has(provider)) {
+          setError(`현재 백엔드에서는 ${label} 로그인을 지원하지 않습니다.`);
+          return;
+        }
+
+        try {
+          window.FirstBiteApi.beginSocialLogin(provider, nextPage());
+        } catch (error) {
+          setError(error.message || `${label} 로그인을 시작하지 못했습니다.`);
+        }
       });
     });
   });
