@@ -2,12 +2,14 @@
   "use strict";
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const profileLink = document.querySelector(".profile-button");
-    if (!profileLink || !window.FirstBiteApi) return;
+    const profileLinks = [...document.querySelectorAll(".profile-button, .mobile-profile-hit")];
+    if (!profileLinks.length || !window.FirstBiteApi) return;
 
     const applyState = (loggedIn) => {
-      profileLink.href = loggedIn ? "account.html" : "login.html";
-      profileLink.setAttribute("aria-label", loggedIn ? "계정 및 사용자 데이터" : "로그인");
+      profileLinks.forEach((profileLink) => {
+        profileLink.href = loggedIn ? "account.html" : "login.html";
+        profileLink.setAttribute("aria-label", loggedIn ? "계정 및 사용자 데이터" : "로그인");
+      });
     };
 
     try {

@@ -3,6 +3,7 @@
 
   const LABELS = ["너무 졸렸어요", "꽤 졸렸어요", "졸렸어요", "살짝 졸렸어요", "안 졸렸어요"];
   const LEFTS = ["10.82%", "26.92%", "43.01%", "59.11%", "75.21%"];
+  const MOBILE_LEFTS = ["6.3736%", "24.2557%", "42.1378%", "60.0200%", "77.9020%"];
   const STORAGE_KEY = "firstbite.latestFeedback.v3";
   const PENDING_KEY = "firstbite.pendingFeedback.v2";
   const SUBMISSION_KEY = "firstbite.feedbackSubmission.v1";
@@ -123,7 +124,8 @@
 
       if (overlay) {
         overlay.hidden = false;
-        overlay.style.setProperty("--selected-left", LEFTS[index]);
+        const mobileHome = canvas.classList.contains("home-design") && window.matchMedia("(max-width: 767px)").matches;
+        overlay.style.setProperty("--selected-left", (mobileHome ? MOBILE_LEFTS : LEFTS)[index]);
       }
       if (icon) icon.src = `assets/design/feedback/selected-${score}.png`;
       if (label) label.textContent = LABELS[index];

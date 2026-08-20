@@ -252,7 +252,21 @@
   async function init() {
     renderSelected();
     const loggedIn = await ensureAuthenticated();
-    if (loggedIn) await loadFoods();
+    if (!loggedIn) return;
+
+    // 화면에 특정 사용자 이름을 하드코딩하지 않고 현재 로그인 계정 정보를 사용한다.
+    const nameTarget = document.querySelector("[data-direct-user-name]");
+    if (nameTarget) {
+      window.FirstBiteApi.getMe()
+        .then((account) => {
+          nameTarget.textContent = account && account.name ? account.name : "회원";
+        })
+        .catch(() => {
+          nameTarget.textContent = "회원";
+        });
+    }
+
+    await loadFoods();
   }
 
   init();

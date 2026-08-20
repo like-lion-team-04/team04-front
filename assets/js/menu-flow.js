@@ -143,7 +143,9 @@
     uploadError.textContent = "";
     selectedFile = null;
     if (!file) return;
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+    const allowedExtension = /\.(jpe?g|png|webp)$/i.test(file.name || "");
+    if (!allowedTypes.has(String(file.type || "").toLowerCase()) && !allowedExtension) {
       uploadError.textContent = "JPG, PNG, WEBP 형식의 사진을 선택해 주세요.";
       startButton.disabled = true;
       return;
@@ -155,12 +157,20 @@
     }
 
     selectedFile = file;
+    // 유효한 사진을 선택한 즉시 버튼을 활성화한다.
+    // 미리보기 디코딩이 늦거나 실패해도 파일 선택 자체가 유효하면 인식 요청은 가능하다.
+    startButton.disabled = false;
+
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       preview.src = reader.result;
       preview.hidden = false;
       addPhoto.hidden = true;
-      startButton.disabled = false;
+    });
+    reader.addEventListener("error", () => {
+      preview.hidden = true;
+      addPhoto.hidden = false;
+      uploadError.textContent = "사진 미리보기를 불러오지 못했지만 인식은 진행할 수 있어요.";
     });
     reader.readAsDataURL(file);
   }

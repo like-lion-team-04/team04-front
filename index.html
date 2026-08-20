@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fff6ed">
     <title>미식쉐드 | 오늘의 식사 코칭</title>
-    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-13">
+    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-mobile-bottomnav-1">
   </head>
   <body class="design-body" data-page="home">
     <header class="site-header design-page-header">
@@ -20,7 +20,7 @@
           <a href="personalization.html">개인화</a>
           <a href="#" data-coming-soon>타이머</a>
         </nav>
-        <a class="profile-button" href="login.html" aria-label="로그인">
+        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터">
           <img src="assets/figma/profile.png" alt="">
         </a>
       </div>
@@ -28,7 +28,10 @@
 
     <main class="design-canvas home-design" data-state="default">
       <h1 class="sr-only">미식쉐드 홈</h1>
-      <img class="design-artwork" data-design-artwork src="assets/design/home-default.svg?v=20260820-10" alt="오늘 점심 식사 코칭 홈 화면" draggable="false">
+      <img class="design-artwork desktop-home-artwork" data-design-artwork src="assets/design/home-default.svg?v=20260820-10" alt="오늘 점심 식사 코칭 홈 화면" draggable="false">
+      <img class="mobile-home-artwork" src="assets/design/mobile/home.svg?v=20260820-mobile-home-2" alt="오늘 점심 식사 코칭 모바일 홈 화면" draggable="false">
+
+      <a class="design-hit mobile-profile-hit" href="account.html" aria-label="계정 및 사용자 데이터"></a>
 
       <a class="design-hit feedback-detail-hit" href="personalization.html" aria-label="졸음 피드백 자세히 보기"></a>
       <div class="feedback-score-hits" aria-label="어제 오후 컨디션 선택">
@@ -50,11 +53,20 @@
       <a class="design-hit photo-start-hit" href="photo-recognition.html" aria-label="사진 입력하기"></a>
       <a class="design-hit direct-start-hit" href="direct-select.html" aria-label="메뉴 직접 선택하기"></a>
       <a class="design-hit coaching-record-hit" href="personalization.html" aria-label="코칭 기록 보기"></a>
+
+      <nav class="mobile-bottom-nav-hits" aria-label="모바일 주요 메뉴">
+        <a class="mobile-nav-hit mobile-nav-home" href="index.html" aria-label="홈"></a>
+        <a class="mobile-nav-hit mobile-nav-menu" href="menu-input.html" aria-label="메뉴 입력"></a>
+        <a class="mobile-nav-hit mobile-nav-result" href="burden-result.html" aria-label="결과"></a>
+        <a class="mobile-nav-hit mobile-nav-personalization" href="personalization.html" aria-label="개인화"></a>
+        <a class="mobile-nav-hit mobile-nav-timer" href="meal-timer.html" aria-label="타이머"></a>
+      </nav>
+
       <p class="sr-only" role="status" aria-live="polite" data-feedback-status></p>
     </main>
 
     <script src="assets/js/api.js"></script>
-    <script src="assets/js/auth-header.js"></script>
+    <script src="assets/js/auth-header.js?v=20260820-profile-fix-1"></script>
     <script src="assets/js/feedback-ui.js?v=20260820-12"></script>
     <script src="assets/js/home-feedback.js?v=20260820-12"></script>
   </body>

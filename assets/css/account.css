@@ -61,3 +61,229 @@
   .account-status-title { font-size: 22px; }
   .account-status-box { grid-template-columns: 1fr; }
 }
+
+
+/* =========================================================
+   모바일 계정 및 사용자 데이터 (Figma 360x800 원본 기준)
+   - 실제 사용자 이름/이메일/기록 수는 기존 API 데이터 사용
+   - 767px 이하에서만 원본 배치로 변경
+   ========================================================= */
+@media (max-width: 767px) {
+  body[data-page="account"] {
+    min-width: 320px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  body[data-page="account"] .site-header {
+    height: 64px;
+    border-bottom: 0;
+    background: #fff;
+  }
+
+  body[data-page="account"] .header-inner {
+    width: 100%;
+    height: 64px;
+    flex-wrap: nowrap;
+    align-content: normal;
+    padding: 16px 21px 0;
+  }
+
+  body[data-page="account"] .brand {
+    width: 63px;
+    height: 23px;
+    flex: 0 0 63px;
+    order: initial;
+  }
+
+  body[data-page="account"] .profile-button {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    order: initial;
+    margin-left: auto;
+    overflow: hidden;
+  }
+
+  body[data-page="account"] .desktop-nav { display: none; }
+
+  body[data-page="account"] .account-main {
+    width: 100%;
+    min-height: calc(100svh - 120px);
+    margin: 0;
+    padding: 14px 17px 63px;
+  }
+
+  body[data-page="account"] .account-greeting p,
+  body[data-page="account"] .account-greeting h1 { margin: 0; }
+
+  body[data-page="account"] .account-greeting p {
+    color: #474747;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  body[data-page="account"] .account-greeting h1 {
+    margin-top: 3px;
+    color: #575757;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -.3px;
+  }
+
+  body[data-page="account"] .account-card {
+    width: 100%;
+    min-height: 79px;
+    height: 79px;
+    align-items: center;
+    gap: 16px;
+    margin-top: 25px;
+    padding: 16px 11px;
+    border: 1px solid #c1c1c1;
+    border-radius: 10px;
+  }
+
+  body[data-page="account"] .account-avatar-wrap {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+  }
+
+  body[data-page="account"] .account-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 0;
+    object-fit: cover;
+  }
+
+  body[data-page="account"] .account-camera {
+    right: 0;
+    bottom: 0;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #d9d9d9;
+  }
+
+  body[data-page="account"] .account-camera::before {
+    width: 6px;
+    height: 4px;
+    border-radius: 1px;
+  }
+
+  body[data-page="account"] .account-camera::after {
+    width: 2px;
+    height: 2px;
+    border-width: 1px;
+  }
+
+  body[data-page="account"] .account-details {
+    min-width: 0;
+    align-self: center;
+  }
+
+  body[data-page="account"] .account-details h2 {
+    overflow: hidden;
+    margin: 0;
+    color: #474747;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body[data-page="account"] .account-details p {
+    overflow: hidden;
+    max-width: 215px;
+    margin-top: 3px;
+    color: #787878;
+    font-size: 12px;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body[data-page="account"] .member-badge {
+    margin-top: 6px;
+    padding: 2px 9px 3px;
+    border-radius: 4px;
+    background: #e7e7e7;
+    color: #474747;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  body[data-page="account"] .account-status-title {
+    margin: 60px 0 9px;
+    color: #474747;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  body[data-page="account"] .account-status-box {
+    width: 100%;
+    min-height: 359px;
+    height: 359px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    justify-content: stretch;
+    padding: 31px 38px 30px;
+    border: 1px solid #c1c1c1;
+    border-radius: 8px;
+  }
+
+  body[data-page="account"] .account-stat {
+    width: 100%;
+    height: 136px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 22px 31px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  body[data-page="account"] .account-stat.coaching {
+    background: #73acd9;
+    color: #343434;
+  }
+
+  body[data-page="account"] .account-stat.feedback {
+    margin: 0;
+    background: #474747;
+    color: #fff;
+  }
+
+  body[data-page="account"] .account-stat-label {
+    grid-column: 1 / -1;
+    align-self: end;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  body[data-page="account"] .account-stat-value {
+    align-self: start;
+    margin-top: 11px;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  body[data-page="account"] .account-stat-arrow {
+    align-self: start;
+    margin-top: 8px;
+    font-size: 46px;
+    font-weight: 200;
+    line-height: .7;
+  }
+}
