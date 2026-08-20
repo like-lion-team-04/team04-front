@@ -6,10 +6,10 @@
     <meta name="theme-color" content="#fff6ed" >
     <title>미식쉐드 | 사진 인식</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
-    <link rel="stylesheet" href="assets/css/menu.css" >
+    <link rel="stylesheet" href="assets/css/menu.css?v=20260820-mobile-low-confidence-1" >
     <script src="assets/js/api.js" defer></script>
     <script src="assets/js/auth-header.js?v=20260820-profile-fix-1" defer></script>
-    <script src="assets/js/menu-flow.js?v=20260820-photo-enable-1" defer></script>
+    <script src="assets/js/menu-flow.js?v=20260820-mobile-low-confidence-1" defer></script>
   </head>
   <body data-page="photo-recognition">
     <header class="site-header" data-app-header>
@@ -28,6 +28,18 @@
 
     <main class="recognition-app" data-recognition-app>
       <section class="recognition-view upload-view is-active" data-view="upload" aria-labelledby="upload-title">
+        <div class="mobile-photo-flow" data-mobile-photo-flow data-step="guide" aria-label="모바일 사진 입력">
+          <img class="mobile-photo-artwork" data-mobile-photo-artwork src="assets/design/mobile/photo-guide.svg" alt="사진 입력 안내" >
+          <button class="mobile-photo-hit mobile-photo-back" type="button" data-mobile-photo-back aria-label="뒤로가기"></button>
+          <button class="mobile-photo-hit mobile-photo-guide-confirm" type="button" data-mobile-photo-guide-confirm aria-label="사진 입력 안내 확인"></button>
+          <button class="mobile-photo-hit mobile-photo-add" type="button" data-mobile-photo-add aria-label="사진 추가"></button>
+          <button class="mobile-photo-hit mobile-photo-gallery" type="button" data-mobile-photo-gallery aria-label="내 사진첩에서 고르기"></button>
+          <button class="mobile-photo-hit mobile-photo-camera" type="button" data-mobile-photo-camera aria-label="사진 찍기"></button>
+          <button class="mobile-photo-hit mobile-photo-source-confirm" type="button" data-mobile-photo-source-confirm aria-label="사진 올리기 창 닫기"></button>
+          <button class="mobile-photo-confirm" type="button" data-mobile-photo-confirm disabled>확인</button>
+          <input class="sr-only" id="food-photo-camera" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true" >
+        </div>
+
         <h1 id="upload-title">사진 입력</h1>
         <div class="upload-layout">
           <section class="upload-panel">
@@ -61,12 +73,17 @@
       </section>
 
       <section class="recognition-view processing-view" data-view="processing" aria-labelledby="processing-title" aria-live="polite">
+        <button class="mobile-recognition-back" type="button" data-mobile-processing-back aria-label="사진 입력 화면으로 돌아가기"></button>
         <h1 id="processing-title">음식을 인식하는 중이에요</h1>
         <p>잠시만 기다려주세요</p>
         <div class="progress-ring" data-progress-ring style="--progress: 0deg"><span data-progress>0%</span></div>
       </section>
 
       <section class="recognition-view result-view" data-view="result" aria-labelledby="result-title">
+        <div class="mobile-recognition-header" aria-hidden="true">
+          <a href="index.html" tabindex="-1"><img src="assets/figma/logo.svg" alt="" ></a>
+          <a href="account.html" tabindex="-1"><img src="assets/figma/profile.png" alt="" ></a>
+        </div>
         <h1 id="result-title">인식한 메뉴</h1>
         <p class="result-description">AI가 인식한 결과예요. 확인 후 필요 시 수정할 수 있어요.</p>
         <div class="result-tabs" role="tablist" aria-label="인식 결과 분류">
@@ -82,6 +99,7 @@
     <div class="food-modal" data-food-modal hidden>
       <button class="modal-backdrop" type="button" data-close-modal aria-label="검색 창 닫기"></button>
       <section class="food-picker" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+        <button class="mobile-picker-back" type="button" data-close-modal aria-label="인식 결과로 돌아가기"></button>
         <h2 class="sr-only" id="picker-title">메뉴 검색 및 선택</h2>
         <label class="picker-search"><span aria-hidden="true"></span><input type="search" placeholder="메뉴를 검색해 주세요" aria-label="메뉴 검색" data-food-search ></label>
         <div class="picker-categories" role="group" aria-label="메뉴 분류">
@@ -92,5 +110,13 @@
         <button class="screen-primary picker-complete" type="button" data-picker-complete disabled>선택 완료</button>
       </section>
     </div>
+
+    <nav class="mobile-app-bottom-nav recognition-bottom-nav" aria-label="모바일 주요 메뉴">
+      <a href="index.html">홈</a>
+      <a class="active" href="menu-input.html" aria-current="page">메뉴입력</a>
+      <a href="burden-result.html">결과</a>
+      <a href="personalization.html">개인화</a>
+      <a href="meal-timer.html">타이머</a>
+    </nav>
   </body>
 </html>
