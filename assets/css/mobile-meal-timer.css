@@ -1,0 +1,482 @@
+/* 모바일 식사 타이머: 360px Figma 화면 기준. PC 코칭 화면은 coaching.css를 그대로 사용한다. */
+.mobile-timer-progress,
+.mobile-auto-note,
+.mobile-completion-details,
+.mobile-completion-actions,
+.mobile-time-label { display: none; }
+
+@media (max-width: 767px) {
+  html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+  body[data-page="meal-timer"] { background: #fff; }
+
+  body[data-page="meal-timer"] .coaching-main {
+    width: 100%;
+    margin: 0;
+    padding: 20px 16px calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .timer-page-heading { padding: 0 8px; }
+  .timer-page-heading h1 {
+    margin: 0;
+    color: #444;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -.7px;
+  }
+  .timer-page-heading p {
+    margin: 4px 0 0;
+    color: #8d8d8d;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  body[data-page="meal-timer"] .timer-layout {
+    width: 100%;
+    display: block;
+    margin: 24px 0 0;
+  }
+
+  body[data-page="meal-timer"] .timer-aside { display: none; }
+
+  .mobile-timer-progress {
+    display: block;
+    width: 100%;
+    padding: 18px 22px 17px;
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background: #fff;
+  }
+  .mobile-timer-progress h2,
+  .mobile-completion-progress-card h3,
+  .mobile-completion-menu-card h3 {
+    margin: 0;
+    color: #505050;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .mobile-progress-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    color: #888;
+    font-size: 12px;
+  }
+  .mobile-progress-summary strong { color: #777; font-weight: 500; }
+  .mobile-progress-track {
+    width: 100%;
+    height: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e7e7e7;
+  }
+  .mobile-progress-track i {
+    width: 33.333%;
+    height: 100%;
+    display: block;
+    border-radius: inherit;
+    background: #70afe0;
+    transition: width .25s ease;
+  }
+  .mobile-progress-stages {
+    display: grid;
+    gap: 8px;
+    margin: 9px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mobile-progress-stages li {
+    min-height: 69px;
+    display: grid;
+    grid-template-columns: 26px minmax(0,1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px 10px 12px;
+    border: 1px solid #dfdfdf;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .mobile-progress-stages .mobile-stage-number {
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #e5e5e5;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .mobile-progress-stages .mobile-stage-copy { min-width: 0; }
+  .mobile-progress-stages .mobile-stage-copy strong,
+  .mobile-progress-stages .mobile-stage-copy small { display: block; }
+  .mobile-progress-stages .mobile-stage-copy strong {
+    overflow: hidden;
+    color: #5b5b5b;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mobile-progress-stages .mobile-stage-copy small {
+    margin-top: 7px;
+    color: #aaa;
+    font-size: 10px;
+  }
+  .mobile-progress-stages .mobile-stage-time {
+    color: #777;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .mobile-progress-stages li.is-current {
+    border-color: #66ace2;
+    background: #edf7ff;
+  }
+  .mobile-progress-stages li.is-current .mobile-stage-number,
+  .mobile-progress-stages li.is-done .mobile-stage-number { background: #70afe0; }
+  .mobile-progress-stages li.is-current .mobile-stage-copy strong,
+  .mobile-progress-stages li.is-current .mobile-stage-time { color: #5398cd; }
+
+  body[data-page="meal-timer"] .timer-card {
+    width: 100%;
+    margin: 20px 0 0;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 0;
+    text-align: center;
+    background: transparent;
+  }
+  body[data-page="meal-timer"] .timer-stage-badge {
+    min-height: 29px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 17px;
+    border-radius: 999px;
+    background: #e3f2fd;
+    color: #5ea2d4;
+    font-size: 12px;
+  }
+  body[data-page="meal-timer"] .timer-card h2 {
+    margin: 8px 0 0;
+    color: #4b4b4b;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -.4px;
+  }
+  body[data-page="meal-timer"] .timer-guide {
+    margin: 7px 0 0;
+    color: #969696;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  body[data-page="meal-timer"] .timer-ring {
+    width: min(82vw, 290px);
+    height: min(82vw, 290px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 18px auto 0;
+    border-radius: 50%;
+    background: conic-gradient(#69abe0 var(--timer-progress,100%), #e5e5e5 0);
+  }
+  body[data-page="meal-timer"] .timer-ring::before { inset: 10px; background: #fff; }
+  .mobile-time-label {
+    position: relative;
+    z-index: 1;
+    display: block;
+    color: #999;
+    font-size: 13px;
+    line-height: 1;
+  }
+  body[data-page="meal-timer"] .timer-time {
+    position: relative;
+    z-index: 1;
+    margin-top: 17px;
+    color: #505050;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.4px;
+  }
+
+  .timer-mobile-actions {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 9px;
+    margin: 28px 0 0;
+  }
+  .timer-mobile-actions .coach-primary,
+  .timer-mobile-actions .coach-secondary {
+    min-width: 0;
+    width: 100%;
+    height: 53px;
+    padding: 0 8px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .timer-mobile-actions .timer-end-link {
+    grid-column: 1 / -1;
+    width: max-content;
+    height: auto;
+    min-height: 0;
+    justify-self: center;
+    margin-top: 13px;
+    padding: 0 0 3px;
+    border: 0;
+    border-bottom: 1px solid #aaa;
+    border-radius: 0;
+    background: transparent;
+    color: #7f7f7f;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  body[data-page="meal-timer"] .coach-status {
+    min-height: 18px;
+    margin: 10px 0 0;
+    font-size: 11px;
+  }
+
+  .mobile-auto-note {
+    min-height: 67px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 15px 16px;
+    border-radius: 8px;
+    background: #fafafa;
+  }
+  .mobile-auto-note strong {
+    flex: 0 0 auto;
+    color: #666;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .mobile-auto-note span {
+    color: #a0a0a0;
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  /* 모바일 식사 완료: 360x1310 원본 디자인 기준. PC 완료 화면은 기존 구조를 유지한다. */
+  .desktop-timer-completion { display: none; }
+  body[data-page="meal-timer"] .timer-completion {
+    width: 100%;
+    margin: 24px 0 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: center;
+  }
+  .mobile-timer-completion {
+    display: block;
+    width: 100%;
+  }
+  .mobile-completion-progress-card {
+    width: 100%;
+    padding: 20px 22px 18px;
+    border: 1px solid #ded8d2;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+  }
+  .mobile-completion-progress-card h3 {
+    margin: 0;
+    color: #505050;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .mobile-completion-progress-card .mobile-progress-summary { margin-top: 18px; }
+  .mobile-completion-progress-card .mobile-progress-stages { margin-top: 10px; }
+  .mobile-completion-progress-card .mobile-progress-stages li {
+    min-height: 69px;
+    padding: 10px 15px 10px 12px;
+  }
+
+  .mobile-complete-message {
+    margin-top: 20px;
+    padding: 0 12px;
+    text-align: center;
+  }
+  .mobile-complete-stage-badge {
+    min-height: 29px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 17px;
+    border-radius: 999px;
+    background: #e3f2fd;
+    color: #5ea2d4;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .mobile-complete-message h2 {
+    margin: 9px 0 0;
+    color: #4d4d4d;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -.4px;
+  }
+  .mobile-complete-message p {
+    margin: 7px 0 0;
+    color: #969696;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .mobile-complete-check {
+    width: min(82vw, 290px);
+    height: auto;
+    display: block;
+    margin: 25px auto 0;
+  }
+
+  .mobile-complete-summary-card {
+    width: calc(100% - 32px);
+    margin: 34px auto 0;
+    padding: 16px 0 14px;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    background: #fff;
+    text-align: left;
+  }
+  .mobile-complete-summary-card h3 {
+    margin: 0 16px 11px;
+    color: #555;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .mobile-complete-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .mobile-complete-summary-grid > div {
+    min-width: 0;
+    min-height: 92px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2px 7px 0;
+    border-right: 1px solid #e4e4e4;
+    text-align: center;
+  }
+  .mobile-complete-summary-grid > div:last-child { border-right: 0; }
+  .mobile-summary-icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: block;
+    margin-bottom: 6px;
+    color: #70afe0;
+  }
+  .mobile-summary-icon.is-time {
+    border: 2px solid #70afe0;
+    border-radius: 50%;
+  }
+  .mobile-summary-icon.is-time::before {
+    content: "";
+    width: 2px;
+    height: 7px;
+    position: absolute;
+    left: 9px;
+    top: 4px;
+    border-radius: 2px;
+    background: #70afe0;
+  }
+  .mobile-summary-icon.is-time::after {
+    content: "";
+    width: 6px;
+    height: 2px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    transform: rotate(35deg);
+    transform-origin: left center;
+    border-radius: 2px;
+    background: #70afe0;
+  }
+  .mobile-summary-icon.is-steps::before,
+  .mobile-summary-icon.is-steps::after {
+    content: "";
+    width: 20px;
+    height: 2px;
+    position: absolute;
+    left: 2px;
+    border-radius: 2px;
+    background: #70afe0;
+    box-shadow: 0 6px 0 #70afe0;
+  }
+  .mobile-summary-icon.is-steps::before { top: 5px; }
+  .mobile-summary-icon.is-adherence {
+    width: 27px;
+    height: 27px;
+    margin-top: -3px;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .mobile-complete-summary-grid small {
+    color: #666;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+  .mobile-complete-summary-grid strong {
+    margin-top: 4px;
+    color: #414141;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .desktop-completion-actions { display: none; }
+  .mobile-completion-actions {
+    width: calc(100% - 32px);
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+    margin: 20px auto 0;
+  }
+  .mobile-completion-actions a {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .mobile-completion-secondary {
+    border: 1px solid #d5d5d5;
+    background: #fff;
+    color: #666;
+  }
+  .mobile-completion-primary {
+    border: 1px solid #70afe0;
+    background: #70afe0;
+    color: #fff;
+  }
+  .mobile-complete-auto-note {
+    width: 100%;
+    min-height: 70px;
+    display: flex;
+    margin-top: 20px;
+    padding: 15px 16px;
+    border-radius: 8px;
+    background: #fafafa;
+    text-align: left;
+  }
+
+}

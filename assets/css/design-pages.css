@@ -617,3 +617,320 @@ html { min-width: 320px; background: #fff; }
     outline-offset: -2px;
   }
 }
+
+
+/* --------------------------------------------------------------------------
+   Mobile personalization / sleepiness feedback detail (360 x 800 original)
+   - Uses the supplied SVG artwork unchanged.
+   - Desktop personalization stays untouched.
+   - API-driven feedback and personalization values are layered on top.
+   -------------------------------------------------------------------------- */
+.mobile-personalization-artwork,
+.mobile-personalization-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body.design-body[data-page="personalization"] .design-page-header {
+    display: none;
+  }
+
+  body.design-body[data-page="personalization"] .design-canvas.personalization-design {
+    width: 100vw;
+    min-width: 0;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0 0 max(56px, calc(100vw * 56 / 360));
+    overflow-x: hidden;
+    container-type: inline-size;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  .personalization-design > .design-artwork {
+    display: none;
+  }
+
+  .personalization-design .mobile-personalization-artwork {
+    display: block;
+    width: 100%;
+    max-width: 100vw;
+    height: calc(100vw * 744 / 360);
+    margin: 0;
+    object-fit: cover;
+    object-position: top center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .personalization-design .mobile-profile-hit {
+    display: block;
+    left: 86.6667%;
+    top: 2%;
+    width: 6.6667%;
+    height: 3%;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  /* Feedback cards and controls measured from the supplied 360x800 artwork. */
+  .personalization-design .feedback-score {
+    top: 25.75%;
+    width: 15.56%;
+    height: 7.9%;
+  }
+  .personalization-design .score-1 { left: 6.67%; }
+  .personalization-design .score-2 { left: 24.44%; }
+  .personalization-design .score-3 { left: 42.22%; }
+  .personalization-design .score-4 { left: 60%; }
+  .personalization-design .score-5 { left: 77.78%; }
+
+  .personalization-design .feedback-defer {
+    left: 34.44%;
+    top: 35.75%;
+    width: 15.28%;
+    height: 2.05%;
+  }
+
+  .personalization-design .feedback-save {
+    left: 51.67%;
+    top: 35.75%;
+    width: 15.28%;
+    height: 2.05%;
+  }
+
+  .personalization-design .feedback-save.is-active {
+    border-radius: 1.1cqw;
+    font-size: 2.05cqw;
+  }
+
+  .personalization-design .selected-card-overlay {
+    top: 25.75%;
+    width: 15.56%;
+    aspect-ratio: 56 / 63;
+    border-radius: 2.3cqw;
+    box-shadow: 0 1.2cqw 2.5cqw rgb(115 172 217 / 24%);
+  }
+
+  .personalization-design .selected-card-overlay img {
+    width: 41%;
+    margin-top: 23%;
+  }
+
+  .personalization-design .selected-card-overlay span {
+    margin-top: 13%;
+    font-size: 2.05cqw;
+  }
+
+  .personalization-design .neutral-last-card {
+    left: 77.78%;
+    top: 25.75%;
+    width: 15.56%;
+    aspect-ratio: 56 / 63;
+  }
+
+  /* Saved copy overlays the artwork only when the stored answer is not the
+     reference artwork's '안 졸렸어요' value. */
+  .personalization-design .saved-answer {
+    left: 27%;
+    top: 30.1%;
+    width: 46%;
+    height: auto;
+    padding: .6cqw 1cqw;
+    background: #eff8ff;
+    color: #777;
+    font-size: 1.65cqw;
+    line-height: 1.45;
+    box-sizing: border-box;
+  }
+
+  .personalization-design .feedback-unavailable-note {
+    left: 4.7%;
+    top: 19.1%;
+    width: 90.6%;
+    height: 19.2%;
+    padding: 4cqw;
+    border-radius: 2.2cqw;
+    background: #eff8ff;
+    color: #5785aa;
+    font-size: 2.5cqw;
+    line-height: 1.6;
+    box-sizing: border-box;
+  }
+
+  /* Cover the static sample progress values in the SVG with the real API
+     personalization state while preserving the supplied card layout. */
+  .personalization-design .personalization-status-live {
+    left: 7.8%;
+    top: 44.2%;
+    width: 84.4%;
+    height: 11.5%;
+    padding: 0 1.2cqw;
+    background: #fff;
+    color: #666;
+    box-sizing: border-box;
+  }
+
+  .personalization-design .personalization-progress-live {
+    width: 49%;
+    gap: 2.8cqw;
+  }
+
+  .personalization-design .personalization-direction-live {
+    width: 49%;
+    gap: 2cqw;
+    padding-left: 2.8cqw;
+  }
+
+  .personalization-design .personalization-live-divider {
+    height: 72%;
+  }
+
+  .personalization-design .personalization-progress-ring {
+    width: 12.5cqw;
+    height: 12.5cqw;
+    flex-basis: 12.5cqw;
+  }
+
+  .personalization-design .personalization-progress-ring::before {
+    inset: .95cqw;
+  }
+
+  .personalization-design .personalization-progress-ring span {
+    font-size: 2.6cqw;
+  }
+
+  .personalization-design .personalization-progress-copy,
+  .personalization-design .personalization-direction-copy {
+    gap: 1.1cqw;
+  }
+
+  .personalization-design .personalization-progress-copy strong,
+  .personalization-design .personalization-direction-copy strong {
+    font-size: 2.15cqw;
+    white-space: normal;
+  }
+
+  .personalization-design .personalization-progress-copy span,
+  .personalization-design .personalization-direction-copy span,
+  .personalization-design .personalization-direction-copy small {
+    font-size: 1.55cqw;
+    line-height: 1.45;
+  }
+
+  .personalization-design .personalization-direction-icon {
+    width: 6cqw;
+    height: 6cqw;
+    flex-basis: 6cqw;
+    border-radius: 1.1cqw;
+    font-size: 3.1cqw;
+  }
+
+  /* Main page CTA hit areas. */
+  .personalization-design .coaching-record-hit {
+    left: 7.5%;
+    top: 74.3%;
+    width: 22%;
+    height: 4.3%;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  .personalization-design .personalization-start-hit {
+    left: 7.5%;
+    top: 88.2%;
+    width: 22%;
+    height: 4.3%;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  .personalization-design .mobile-personalization-bottom-nav {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100vw;
+    height: max(56px, calc(100vw * 56 / 360));
+    max-height: 64px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid #eee7df;
+    background-color: #fffaf5;
+    background-image: url("../design/mobile/personalization-feedback-detail.svg?v=20260821-01");
+    background-repeat: no-repeat;
+    background-size: 100vw auto;
+    background-position: center bottom;
+    box-sizing: border-box;
+  }
+
+  .personalization-design .mobile-personalization-bottom-nav a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    font-size: 0;
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .personalization-design .mobile-personalization-bottom-nav a:focus-visible {
+    outline: 2px solid rgb(115 172 217 / 55%);
+    outline-offset: -2px;
+  }
+}
+
+/* 모바일 홈 상태 화면
+   - 기존 HTML/JavaScript/API 상태값을 그대로 사용한다.
+   - 360x800 원본 SVG는 CSS의 content 교체로만 표시한다. */
+@media (max-width: 767px) {
+  .home-design .mobile-home-artwork,
+  .home-design[data-state="default"] .mobile-home-artwork,
+  .home-design[data-state="selected"] .mobile-home-artwork {
+    content: url("../design/mobile/home-feedback-default.svg");
+  }
+
+  .home-design[data-state="deferred"] .mobile-home-artwork {
+    content: url("../design/mobile/home-feedback-deferred.svg");
+  }
+
+  .home-design[data-state="saved"] .mobile-home-artwork {
+    content: url("../design/mobile/home-feedback-saved.svg");
+  }
+
+  /* '다음에 답하기' 화면은 피드백 영역이 사라져 세 CTA가 위로 이동한다. */
+  .home-design[data-state="deferred"] .photo-start-hit {
+    left: 6.6667%;
+    top: 35.875%;
+    width: 20.5556%;
+    height: 4%;
+  }
+
+  .home-design[data-state="deferred"] .direct-start-hit {
+    left: 53.6111%;
+    top: 35.875%;
+    width: 20.5556%;
+    height: 4%;
+  }
+
+  .home-design[data-state="deferred"] .coaching-record-hit {
+    left: 6.6667%;
+    top: 50.125%;
+    width: 21.1111%;
+    height: 4%;
+  }
+
+  /* 저장 화면의 안내 문구는 서버에서 받은 점수가 5점이 아닐 때만 덧씌워진다. */
+  .home-design[data-state="saved"] .saved-answer {
+    left: 19%;
+    top: 32.2%;
+    width: 62%;
+    height: auto;
+    padding: .35cqw 1cqw;
+    background: #eff8ff;
+    font-size: 1.55cqw;
+    line-height: 1.45;
+  }
+}

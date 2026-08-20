@@ -6,8 +6,11 @@
     <meta name="theme-color" content="#fff9f3" >
     <title>미식쉐드 | 추천 사이드 메뉴</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
-    <link rel="stylesheet" href="assets/css/side-menu.css" >
+    <link rel="stylesheet" href="assets/css/side-menu.css?v=20260820-mobile-side-corrected-1" >
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/auth-header.js" defer></script>
     <script src="assets/js/side-menu.js" defer></script>
+    <script src="assets/js/mobile-side-menu.js?v=20260820-mobile-side-corrected-1" defer></script>
   </head>
   <body data-page="side-menu">
     <header class="site-header">
@@ -71,5 +74,96 @@
         </aside>
       </div>
     </main>
+
+    <main class="mobile-side-menu-page" aria-label="모바일 사이드 메뉴 추가">
+      <section class="mobile-side-direct-view" data-mobile-side-view="direct">
+        <header class="mobile-side-topbar">
+          <a class="mobile-side-logo" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드"></a>
+          <a class="mobile-side-profile" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt=""></a>
+        </header>
+
+        <section class="mobile-side-intro mobile-side-direct-intro">
+          <h1>추천 사이드 메뉴</h1>
+          <p>이 서비스가 사용하는 데이터와 계산 근거를 확인할 수 있어요.</p>
+        </section>
+
+        <section class="mobile-side-current-order">
+          <h2>현재 식사 순서</h2>
+          <ol data-mobile-side-current-order>
+            <li class="is-empty">현재 식사 순서를 불러오고 있어요.</li>
+          </ol>
+          <p data-mobile-side-current-interval>섭취 간격을 확인하고 있어요.</p>
+        </section>
+
+        <button class="mobile-side-search-open" type="button" data-mobile-side-search-open>사이드 메뉴 검색</button>
+        <p class="mobile-side-status" data-mobile-side-status role="status"></p>
+      </section>
+
+      <section class="mobile-side-search-view" data-mobile-side-view="search" hidden>
+        <button class="mobile-side-back" type="button" data-mobile-side-search-back aria-label="이전 화면">‹</button>
+        <label class="mobile-side-search-box">
+          <span aria-hidden="true"></span>
+          <input type="search" placeholder="원하는 메뉴를 검색해주세요." data-mobile-side-query autocomplete="off">
+        </label>
+        <div class="mobile-side-filter-tabs" role="group" aria-label="사이드 메뉴 분류">
+          <button type="button" class="is-active" data-mobile-side-category="">전체</button>
+          <button type="button" data-mobile-side-category="RICE">밥류</button>
+          <button type="button" data-mobile-side-category="NOODLE">면류</button>
+          <button type="button" data-mobile-side-category="BUNSIK">분식류</button>
+          <button type="button" data-mobile-side-category="RICE_BOWL">덮밥류</button>
+        </div>
+        <p class="mobile-side-search-summary">검색결과　·　<span data-mobile-side-category-label>전체</span></p>
+        <div class="mobile-side-search-list" data-mobile-side-search-list>
+          <p class="mobile-side-search-empty">사이드 메뉴를 불러오고 있어요.</p>
+        </div>
+        <button class="mobile-side-select-complete" type="button" data-mobile-side-select-complete disabled>선택 완료</button>
+        <p class="mobile-side-search-status" data-mobile-side-search-status role="status"></p>
+      </section>
+
+      <section class="mobile-side-preview-view" data-mobile-side-view="preview" hidden>
+        <button class="mobile-side-back" type="button" data-mobile-side-preview-back aria-label="이전 화면">‹</button>
+        <article class="mobile-side-preview-card">
+          <h1>메뉴 미리보기</h1>
+          <img class="mobile-side-preview-image" data-mobile-preview-image src="assets/side-menu/cabbage-salad.png" alt="">
+          <div class="mobile-side-preview-title"><h2 data-mobile-preview-name>사이드 메뉴</h2><span>추천</span></div>
+          <p class="mobile-side-preview-description" data-mobile-preview-description>추천 정보를 불러오고 있어요.</p>
+          <section class="mobile-side-preview-nutrition">
+            <header><h3>영양 정보</h3><small data-mobile-preview-serving>1인분 기준</small></header>
+            <dl>
+              <div><dt>단백질</dt><dd data-mobile-preview-protein>—</dd></div>
+              <div><dt>지방</dt><dd data-mobile-preview-fat>—</dd></div>
+              <div><dt>나트륨</dt><dd data-mobile-preview-sodium>—</dd></div>
+              <div><dt>탄수화물</dt><dd data-mobile-preview-carb>—</dd></div>
+              <div><dt>당류</dt><dd>—</dd></div>
+              <div><dt>식이섬유</dt><dd data-mobile-preview-fiber>—</dd></div>
+              <div class="is-calorie"><dt>열량</dt><dd data-mobile-preview-calorie>—</dd></div>
+            </dl>
+          </section>
+        </article>
+
+        <article class="mobile-side-reason-card">
+          <h2>왜 추천하나요?</h2>
+          <div class="mobile-side-reasons" data-mobile-preview-reasons></div>
+          <div class="mobile-side-effect-divider"></div>
+          <h2>기대 효과 (추가시)</h2>
+          <dl class="mobile-side-effects">
+            <div><dt>상대 부담 완화</dt><dd data-mobile-preview-relief>—</dd></div>
+            <div><dt>식이섬유 추가</dt><dd data-mobile-preview-fiber-delta>—</dd></div>
+            <div><dt>단백질 추가</dt><dd data-mobile-preview-protein-delta>—</dd></div>
+          </dl>
+          <p class="mobile-side-estimated"><i>i</i><span data-mobile-preview-estimated>현재 메뉴 기준 예측치 입니다.</span></p>
+          <button class="mobile-side-add-preview" type="button" data-mobile-preview-add disabled>이 사이드 메뉴 추가하기</button>
+          <p class="mobile-side-preview-status" data-mobile-preview-status role="status"></p>
+        </article>
+      </section>
+    </main>
+
+    <nav class="mobile-app-bottom-nav mobile-side-bottom-nav" aria-label="모바일 주요 메뉴">
+      <a class="active" href="index.html" aria-current="page">홈</a>
+      <a href="menu-input.html">메뉴입력</a>
+      <a href="burden-result.html">결과</a>
+      <a href="personalization.html">개인화</a>
+      <a href="meal-timer.html">타이머</a>
+    </nav>
   </body>
 </html>

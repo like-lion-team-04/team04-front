@@ -774,3 +774,77 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     color: #73acd9;
   }
 }
+
+
+/* =========================================================
+   모바일 상세 페이지 공통 헤더
+   - Figma 360px 모바일 디자인 기준
+   - 운영체제 상태바(시간/Wi-Fi/배터리)는 웹에서 표시하지 않음
+   ========================================================= */
+.mobile-detail-header { display: none; }
+
+@media (max-width: 767px) {
+  body:has(.mobile-detail-header) > .site-header { display: none; }
+
+  .mobile-detail-header {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: #fff;
+  }
+
+  .mobile-detail-header .mobile-detail-logo {
+    width: 63px;
+    height: 28px;
+    display: block;
+  }
+
+  .mobile-detail-header .mobile-detail-logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  .mobile-detail-header .mobile-detail-profile {
+    width: 24px;
+    height: 24px;
+    display: block;
+    flex: 0 0 24px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .mobile-detail-header .mobile-detail-profile img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .personalization-status-main {
+    width: 100%;
+    min-height: calc(100vh - 64px - 56px);
+    padding: 23px 24px 96px;
+    background: #fff;
+    color: #4a4a4a;
+  }
+
+  .personalization-status-main h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -.6px;
+  }
+
+  .personalization-status-main p {
+    margin: 6px 0 0;
+    color: #858585;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}

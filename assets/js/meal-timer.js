@@ -50,6 +50,105 @@
     return Boolean(stage && stage.recommendedSeconds != null && Number(stage.recommendedSeconds) >= 0);
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>\"']/g, (char) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+    }[char]));
+  }
+
+  function stageDurationText(stage) {
+    if (!stage || stage.recommendedSeconds == null) return "제한 없음";
+    const seconds = Math.max(0, Number(stage.recommendedSeconds) || 0);
+    if (seconds < 60) return `${Math.round(seconds)}초`;
+    return `${Math.max(1, Math.round(seconds / 60))}분`;
+  }
+
+  function renderMobileProgress() {
+    const items = stages();
+    const list = document.querySelector("[data-mobile-progress-stages]");
+    const count = document.querySelector("[data-mobile-progress-count]");
+    const bar = document.querySelector("[data-mobile-progress-bar]");
+    if (!list || !items.length) return;
+
+    const currentPosition = Math.min(items.length, stageIndex + 1);
+    if (count) count.textContent = `${currentPosition} / ${items.length}`;
+    if (bar) bar.style.width = `${(currentPosition / items.length) * 100}%`;
+
+    list.innerHTML = items.map((item, index) => {
+      const state = index < stageIndex ? "is-done" : (index === stageIndex ? "is-current" : "");
+      const status = index < stageIndex ? "식사 완료" : (index === stageIndex ? "현재 진행 중" : "대기");
+      return `<li class="${state}">
+        <span class="mobile-stage-number">${escapeHtml(item.stage || index + 1)}</span>
+        <span class="mobile-stage-copy"><strong>${escapeHtml(item.title || `${index + 1}단계`)}</strong><small>${status}</small></span>
+        <span class="mobile-stage-time">${escapeHtml(stageDurationText(item))}</span>
+      </li>`;
+    }).join("");
+  }
+
+  function flattenPlanItems() {
+    const seen = new Set();
+    const result = [];
+    stages().forEach((stage) => {
+      (Array.isArray(stage.items) ? stage.items : []).forEach((item) => {
+        const key = item.foodId || item.id || item.name;
+        if (!key || seen.has(key)) return;
+        seen.add(key);
+        result.push({ ...item, role: stage.title || `${stage.stage}단계` });
+      });
+    });
+    return result;
+  }
+
+  function mobileStageShortLabel(stage, index = 0) {
+    const stageNo = stage && stage.stage != null ? stage.stage : index + 1;
+    const raw = String(stage && stage.title ? stage.title : `${stageNo}단계`)
+      .replace(/부터\s*시작해요[.!]?/g, "")
+      .replace(/먼저\s*드세요[.!]?/g, "")
+      .trim();
+    return `${stageNo}단계 · ${raw || `${stageNo}단계`}`;
+  }
+
+  function renderMobileCompletion(result) {
+    if (!plan) plan = readJson(PLAN_KEY);
+    const items = stages();
+    const stageList = document.querySelector("[data-mobile-completion-stages]");
+    const count = document.querySelector("[data-mobile-complete-count]");
+    const progressBar = document.querySelector("[data-mobile-complete-progress-bar]");
+    const summary = result && result.summary ? result.summary : {};
+    const completed = Number.isFinite(Number(summary.completedStages)) ? Number(summary.completedStages) : items.length;
+    const total = Number.isFinite(Number(summary.totalStages)) ? Number(summary.totalStages) : items.length;
+
+    if (count) count.textContent = total ? `${completed} / ${total}` : "-";
+    if (progressBar) progressBar.style.width = total ? `${Math.max(0, Math.min(100, completed / total * 100))}%` : "0%";
+    if (stageList) {
+      stageList.innerHTML = items.length ? items.map((item, index) => {
+        const done = index < completed;
+        return `<li class="${done ? "is-done" : ""}">
+          <span class="mobile-stage-number">${done ? "✓" : escapeHtml(item.stage || index + 1)}</span>
+          <span class="mobile-stage-copy"><strong>${escapeHtml(item.title || `${index + 1}단계`)}</strong><small>${done ? "식사 완료" : "대기"}</small></span>
+          <span class="mobile-stage-time">${escapeHtml(stageDurationText(item))}</span>
+        </li>`;
+      }).join("") : `<li><span class="mobile-stage-copy"><strong>완료된 식사</strong><small>단계 정보를 확인할 수 없어요.</small></span></li>`;
+    }
+
+    const firstStage = items[0] || null;
+    const badge = document.querySelector("[data-mobile-complete-stage-badge]");
+    const title = document.querySelector("[data-mobile-complete-title]");
+    const guide = document.querySelector("[data-mobile-complete-guide]");
+    if (badge) badge.textContent = mobileStageShortLabel(firstStage, 0);
+    if (title) title.textContent = firstStage && firstStage.title ? firstStage.title : "식사를 완료했어요";
+    if (guide) guide.textContent = firstStage && firstStage.guide
+      ? firstStage.guide
+      : "오늘도 추천 순서에 맞춰 식사를 마무리했어요.";
+
+    const mobileTotalTime = document.querySelector("[data-mobile-total-time]");
+    const mobileCompleted = document.querySelector("[data-mobile-completed-stages]");
+    const mobileAdherence = document.querySelector("[data-mobile-adherence-rate]");
+    if (mobileTotalTime) mobileTotalTime.textContent = Number.isFinite(Number(summary.totalSeconds)) ? format(summary.totalSeconds) : "-";
+    if (mobileCompleted) mobileCompleted.textContent = total ? `${completed}/${total}` : "-";
+    if (mobileAdherence) mobileAdherence.textContent = Number.isFinite(Number(summary.adherenceRate)) ? `${summary.adherenceRate}%` : "-";
+  }
+
   function format(seconds) {
     const value = Math.max(0, Math.floor(Number(seconds) || 0));
     return `${String(Math.floor(value / 60)).padStart(2, "0")}:${String(value % 60).padStart(2, "0")}`;
@@ -116,6 +215,7 @@
 
     const pauseButton = document.querySelector("[data-pause]");
     pauseButton.textContent = paused ? "다시 시작" : "일시정지";
+    renderMobileProgress();
     setControlsDisabled(busy);
   }
 
@@ -232,6 +332,7 @@
     const adherence = document.querySelector("[data-adherence-rate]");
     if (adherence) adherence.textContent = Number.isFinite(Number(summary.adherenceRate)) ? `${summary.adherenceRate}%` : "-";
 
+    renderMobileCompletion(result);
     setStatus("");
   }
 
@@ -383,6 +484,7 @@
 
       const lastCompletion = readJson(LAST_COMPLETION_KEY);
       if (lastCompletion && lastCompletion.recordId) {
+        plan = readJson(PLAN_KEY);
         renderCompletion(lastCompletion);
         return;
       }

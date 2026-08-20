@@ -1110,3 +1110,431 @@ body.is-processing .site-header { display: none; }
     color: #fff;
   }
 }
+
+/* =========================================================
+   모바일 메뉴 직접 선택 / 선택한 메뉴 / 메뉴 확정
+   - 제공된 360x800 디자인 기준
+   - PC 레이아웃과 API 로직은 유지
+   - 모바일 시스템 상태바는 별도로 그리지 않음
+   ========================================================= */
+@media (max-width: 767px) {
+  body[data-page="direct-select"],
+  body[data-page="menu-confirmed"] {
+    min-width: 320px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  body[data-page="direct-select"] .site-header,
+  body[data-page="menu-confirmed"] .site-header {
+    height: 64px;
+    border-bottom: 0;
+    background: #fff;
+  }
+
+  body[data-page="direct-select"] .header-inner,
+  body[data-page="menu-confirmed"] .header-inner {
+    width: 100%;
+    height: 64px;
+    flex-wrap: nowrap;
+    align-content: normal;
+    padding: 16px 21px 0;
+  }
+
+  body[data-page="direct-select"] .brand,
+  body[data-page="menu-confirmed"] .brand {
+    width: 63px;
+    height: 23px;
+    flex: 0 0 63px;
+    order: initial;
+  }
+
+  body[data-page="direct-select"] .profile-button,
+  body[data-page="menu-confirmed"] .profile-button {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    order: initial;
+    margin-left: auto;
+    overflow: hidden;
+  }
+
+  body[data-page="direct-select"] .desktop-nav,
+  body[data-page="menu-confirmed"] .desktop-nav {
+    display: none;
+  }
+
+  /* 메뉴 검색/선택 상태 */
+  body[data-page="direct-select"] .direct-main {
+    width: 100%;
+    margin: 0;
+  }
+
+  body[data-page="direct-select"] .direct-stage {
+    width: 100%;
+    min-height: calc(100svh - 120px);
+    padding: 17px 16px 155px;
+  }
+
+  body[data-page="direct-select"] .direct-stage[data-direct-stage="select"] > h1 {
+    display: none;
+  }
+
+  body[data-page="direct-select"] .direct-search {
+    width: 100%;
+    height: 30px;
+    gap: 11px;
+    margin: 0;
+    padding: 0 12px;
+    border: 2px solid #e4e4e4;
+    border-radius: 7px;
+    background: #fff;
+  }
+
+  body[data-page="direct-select"] .direct-search span {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border: 2px solid #7b7b7b;
+  }
+
+  body[data-page="direct-select"] .direct-search span::after {
+    width: 5px;
+    height: 2px;
+    margin: 7px 0 0 6px;
+    background: #7b7b7b;
+  }
+
+  body[data-page="direct-select"] .direct-search input {
+    height: 100%;
+    padding: 0;
+    color: #737373;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  body[data-page="direct-select"] .direct-categories {
+    gap: 6px;
+    margin-top: 9px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body[data-page="direct-select"] .direct-categories button {
+    width: 50px;
+    min-width: 50px;
+    height: 24px;
+    padding: 0;
+    border-color: #c1c1c1;
+    border-radius: 12px;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  body[data-page="direct-select"] .direct-categories button[data-category="BREAD"] {
+    display: none;
+  }
+
+  body[data-page="direct-select"] .direct-categories button.is-active {
+    border-color: #73acd9;
+    background: #73acd9;
+    color: #fff;
+  }
+
+  body[data-page="direct-select"] .direct-columns {
+    display: block;
+    margin-top: 8px;
+  }
+
+  body[data-page="direct-select"] .direct-columns > section:first-child {
+    width: 100%;
+  }
+
+  body[data-page="direct-select"] .selected-column {
+    display: none;
+  }
+
+  body[data-page="direct-select"] .column-label {
+    margin: 0 0 13px 6px;
+    color: #777;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  body[data-page="direct-select"] .direct-result-list {
+    gap: 17px;
+  }
+
+  body[data-page="direct-select"] .direct-food-option {
+    min-height: 70px;
+    grid-template-columns: minmax(0, 1fr) 47px 24px;
+    padding: 10px 13px 10px 15px;
+    border: 2px solid #e4e4e4;
+    border-radius: 11px;
+  }
+
+  body[data-page="direct-select"] .direct-food-option strong {
+    margin-bottom: 8px;
+    color: #737373;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  body[data-page="direct-select"] .direct-food-option small {
+    display: block;
+    overflow: hidden;
+    color: #858585;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  body[data-page="direct-select"] .direct-food-option em {
+    color: #777;
+    font-size: 12px;
+    line-height: 1;
+    text-align: right;
+  }
+
+  body[data-page="direct-select"] .direct-food-option i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e4e4e4;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  body[data-page="direct-select"] .direct-food-option.is-selected {
+    border: 1px solid #5785aa;
+    background: #eff8ff;
+  }
+
+  body[data-page="direct-select"] .direct-food-option.is-selected strong,
+  body[data-page="direct-select"] .direct-food-option.is-selected small,
+  body[data-page="direct-select"] .direct-food-option.is-selected em,
+  body[data-page="direct-select"] .direct-food-option.is-selected i {
+    color: #73acd9;
+  }
+
+  body[data-page="direct-select"] .empty-selection {
+    min-height: 70px;
+    border: 2px solid #e4e4e4;
+    border-radius: 11px;
+  }
+
+  body[data-page="direct-select"] .direct-next {
+    position: fixed;
+    z-index: 115;
+    right: auto;
+    bottom: calc(106px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    width: 200px;
+    height: 54px;
+    margin: 0;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  body[data-page="direct-select"] .direct-next:disabled {
+    display: none;
+  }
+
+  /* 선택한 메뉴 검토 상태 */
+  body[data-page="direct-select"] .manual-review {
+    padding: 17px 16px 175px;
+  }
+
+  body[data-page="direct-select"] .manual-review h1 {
+    margin: 0;
+    color: #474747;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  body[data-page="direct-select"] .manual-review > p {
+    margin: 5px 0 0;
+    color: #858585;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  body[data-page="direct-select"] .manual-tab {
+    margin-top: 23px;
+    padding-bottom: 13px;
+    border-bottom-width: 2px;
+    color: #73acd9;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  body[data-page="direct-select"] .manual-review-list {
+    gap: 17px;
+    margin-top: 8px;
+  }
+
+  body[data-page="direct-select"] .manual-review-row {
+    min-height: 70px;
+    grid-template-columns: minmax(0, 1fr) 91px 28px;
+    gap: 12px;
+    padding: 10px 15px;
+    border: 2px solid #e4e4e4;
+    border-radius: 11px;
+  }
+
+  body[data-page="direct-select"] .manual-review-row strong {
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  body[data-page="direct-select"] .manual-review-row div span {
+    display: block;
+    overflow: hidden;
+    color: #858585;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  body[data-page="direct-select"] .manual-review-row > em,
+  body[data-page="direct-select"] .manual-review-row .food-divider,
+  body[data-page="direct-select"] .manual-review-row [data-review-edit] {
+    display: none;
+  }
+
+  body[data-page="direct-select"] .manual-review-row select {
+    width: 91px;
+    height: 31px;
+    padding: 0 28px 0 18px;
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #777;
+    font-size: 12px;
+  }
+
+  body[data-page="direct-select"] .manual-review-row [data-review-delete] {
+    width: 28px;
+    height: 31px;
+    padding: 4px;
+  }
+
+  body[data-page="direct-select"] .manual-review-row [data-review-delete] svg {
+    width: 24px;
+    height: 24px;
+    stroke: #c1c1c1;
+    stroke-width: 1.6;
+  }
+
+  body[data-page="direct-select"] .add-food-button {
+    width: 140px;
+    height: 44px;
+    margin-top: 12px;
+    border: 1px solid #73acd9;
+    border-radius: 8px;
+    background: #fff;
+    color: #73acd9;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  body[data-page="direct-select"] .add-food-button span {
+    margin-right: 7px;
+    font-size: 24px;
+    font-weight: 300;
+    vertical-align: -2px;
+  }
+
+  body[data-page="direct-select"] .manual-confirm {
+    position: fixed;
+    z-index: 115;
+    right: auto;
+    bottom: calc(105px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    width: 200px;
+    height: 54px;
+    margin: 0;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* 메뉴 확정 */
+  body[data-page="menu-confirmed"] .confirmed-main {
+    min-height: calc(100svh - 120px);
+    padding: 184px 20px 175px;
+  }
+
+  body[data-page="menu-confirmed"] .confirmed-mark {
+    width: 106px;
+    height: 106px;
+    border-width: 4px;
+  }
+
+  body[data-page="menu-confirmed"] .confirmed-mark span {
+    width: 47px;
+    height: 27px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+  }
+
+  body[data-page="menu-confirmed"] .confirmed-main h1 {
+    margin-top: 58px;
+    color: #474747;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  body[data-page="menu-confirmed"] .confirmed-main p {
+    margin-top: 24px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  body[data-page="menu-confirmed"] .confirmed-button {
+    position: fixed;
+    z-index: 115;
+    right: auto;
+    bottom: calc(105px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    width: 200px;
+    height: 54px;
+    margin: 0;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  body[data-page="menu-confirmed"] [data-analysis-status]:not(.sr-only) {
+    position: fixed;
+    z-index: 116;
+    right: 20px;
+    bottom: calc(168px + env(safe-area-inset-bottom, 0px));
+    left: 20px;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.96);
+    color: #777;
+    font-size: 11px;
+    line-height: 1.35;
+    text-align: center;
+  }
+}

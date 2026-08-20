@@ -52,3 +52,239 @@ button[data-future-screen] { cursor:default; }
 .order-card li.data-empty span { grid-column:1 / -1; color:#888; }
 .side-card li.data-empty { justify-content:flex-start; border-bottom:0; }
 .side-card li.is-added button { border-color:var(--result-blue); color:var(--result-blue); }
+
+/* =========================================================
+   모바일 상대 식후 부담 비교 - Figma 360px 디자인
+   ========================================================= */
+@media (max-width: 767px) {
+  body[data-page="burden-result"] { background: #fff; }
+  body[data-page="burden-result"] .burden-main {
+    width: 100%;
+    margin: 0;
+    padding: 22px 16px 92px;
+    color: #4b4b4b;
+  }
+
+  body[data-page="burden-result"] .burden-heading h1 {
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -.45px;
+  }
+  body[data-page="burden-result"] .burden-heading p {
+    max-width: 310px;
+    margin-top: 5px;
+    color: #858585;
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  body[data-page="burden-result"] .summary-grid {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 6px;
+    margin-top: 22px;
+  }
+  body[data-page="burden-result"] .summary-card {
+    min-height: 88px;
+    padding: 13px 10px;
+    border-radius: 6px;
+  }
+  body[data-page="burden-result"] .summary-card h2 {
+    font-size: 8px;
+    font-weight: 600;
+  }
+  body[data-page="burden-result"] .summary-card p {
+    margin: 14px 0 7px;
+    font-size: 7px;
+  }
+  body[data-page="burden-result"] .summary-card strong {
+    font-size: 15px;
+    line-height: 1.15;
+  }
+  body[data-page="burden-result"] .condition-card {
+    grid-column: 1 / -1;
+    min-height: 148px;
+    margin-top: 10px;
+    padding: 17px 14px 15px;
+    border-radius: 10px;
+  }
+  body[data-page="burden-result"] .condition-card h2 { font-size: 12px; }
+  body[data-page="burden-result"] .condition-card dl { margin-top: 13px; }
+  body[data-page="burden-result"] .condition-card dl div { margin-top: 13px; }
+  body[data-page="burden-result"] .condition-card dt,
+  body[data-page="burden-result"] .condition-card dd { font-size: 9px; }
+  body[data-page="burden-result"] .condition-card i {
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    font-size: 8px;
+  }
+
+  body[data-page="burden-result"] .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  body[data-page="burden-result"] .dashboard-card {
+    min-width: 0;
+    padding: 17px 14px;
+    border-radius: 10px;
+  }
+  body[data-page="burden-result"] .dashboard-card h2 { font-size: 12px; }
+
+  body[data-page="burden-result"] .graph-card { min-height: 228px; }
+  body[data-page="burden-result"] .chart-legend {
+    gap: 5px;
+    margin: 9px 0 0 0;
+    font-size: 6px;
+  }
+  body[data-page="burden-result"] .chart-legend .blue-dot,
+  body[data-page="burden-result"] .chart-legend .gray-dot { width: 4px; height: 4px; }
+  body[data-page="burden-result"] .chart-legend .blue-dot { margin-left: 10px; }
+  body[data-page="burden-result"] .burden-chart { margin-top: 8px; }
+  body[data-page="burden-result"] .burden-chart text { font-size: 8px; }
+  body[data-page="burden-result"] .burden-chart .chart-label text { font-size: 8px; }
+  body[data-page="burden-result"] .burden-chart .chart-label .strong { font-size: 10px; }
+  body[data-page="burden-result"] .chart-note {
+    margin-top: 2px;
+    font-size: 5px;
+    line-height: 1.45;
+  }
+
+  body[data-page="burden-result"] .order-card { padding: 21px 23px; }
+  body[data-page="burden-result"] .order-card h2 { font-size: 16px; }
+  body[data-page="burden-result"] .order-card ol {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  body[data-page="burden-result"] .order-card li {
+    grid-template-columns: 22px 34px 1fr 67px;
+    gap: 8px;
+  }
+  body[data-page="burden-result"] .order-card li > b {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+  body[data-page="burden-result"] .order-card img {
+    width: 34px;
+    height: 34px;
+    border-radius: 5px;
+  }
+  body[data-page="burden-result"] .order-card li span strong { font-size: 10px; }
+  body[data-page="burden-result"] .order-card li span small,
+  body[data-page="burden-result"] .order-card li em { font-size: 7px; }
+  body[data-page="burden-result"] .order-card li em strong { font-size: 9px; }
+  body[data-page="burden-result"] .order-card > p { margin-top: 17px; font-size: 8px; }
+
+  body[data-page="burden-result"] .preview-card { min-height: 180px; }
+  body[data-page="burden-result"] .stage-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  body[data-page="burden-result"] .stage-cards article {
+    min-height: 92px;
+    padding: 12px 8px;
+    border-radius: 4px;
+  }
+  body[data-page="burden-result"] .stage-cards b { font-size: 6px; }
+  body[data-page="burden-result"] .stage-cards strong { margin-top: 12px; font-size: 7px; }
+  body[data-page="burden-result"] .stage-cards p { margin-top: 8px; font-size: 6px; line-height: 1.55; }
+  body[data-page="burden-result"] .preview-footer {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-top: 13px;
+  }
+  body[data-page="burden-result"] .preview-footer p { flex: 1; font-size: 5px; line-height: 1.4; }
+  body[data-page="burden-result"] .preview-footer p span {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    font-size: 6px;
+  }
+  body[data-page="burden-result"] .preview-footer a {
+    width: 88px;
+    height: 24px;
+    flex: 0 0 88px;
+    font-size: 6px;
+  }
+
+  body[data-page="burden-result"] .side-card { padding: 20px 23px 23px; }
+  body[data-page="burden-result"] .side-card h2 { font-size: 16px; }
+  body[data-page="burden-result"] .side-card ul { margin-top: 14px; }
+  body[data-page="burden-result"] .side-card li { padding: 12px 0; }
+  body[data-page="burden-result"] .side-card li strong { font-size: 10px; }
+  body[data-page="burden-result"] .side-card li small { margin-top: 4px; font-size: 7px; }
+  body[data-page="burden-result"] .side-card li button {
+    width: 58px;
+    height: 30px;
+    font-size: 8px;
+  }
+  body[data-page="burden-result"] .outline-action {
+    width: 86px;
+    height: 30px;
+    margin-top: 12px;
+    font-size: 8px;
+  }
+
+  body[data-page="burden-result"] .dashboard-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  body[data-page="burden-result"] .dashboard-footer-grid .evidence-card { grid-column: 1 / -1; }
+  body[data-page="burden-result"] .evidence-card { padding: 14px 11px; }
+  body[data-page="burden-result"] .evidence-card h2 { font-size: 10px; }
+  body[data-page="burden-result"] .equation-cards {
+    grid-template-columns: 1fr 12px 1.05fr 12px 1fr;
+    gap: 4px;
+    margin-top: 11px;
+  }
+  body[data-page="burden-result"] .equation-cards article {
+    min-height: 99px;
+    padding: 10px 7px;
+    border-radius: 5px;
+  }
+  body[data-page="burden-result"] .equation-cards b { font-size: 6px; }
+  body[data-page="burden-result"] .equation-cards strong { margin-top: 10px; font-size: 6px; line-height: 1.5; }
+  body[data-page="burden-result"] .equation-cards p { margin-top: 7px; font-size: 5px; line-height: 1.45; }
+  body[data-page="burden-result"] .equation-cards > i {
+    transform: none;
+    font-size: 13px;
+  }
+
+  body[data-page="burden-result"] .source-card,
+  body[data-page="burden-result"] .personal-card {
+    min-height: 135px;
+    padding: 13px 10px;
+  }
+  body[data-page="burden-result"] .source-card h2,
+  body[data-page="burden-result"] .personal-card h2 { font-size: 9px; }
+  body[data-page="burden-result"] .source-card p {
+    margin-top: 12px;
+    font-size: 5.5px;
+    line-height: 1.55;
+  }
+  body[data-page="burden-result"] .personal-card dl { margin-top: 10px; }
+  body[data-page="burden-result"] .personal-card dl div {
+    margin-top: 9px;
+    font-size: 6px;
+  }
+  body[data-page="burden-result"] .detail-page-link {
+    width: 100%;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    margin-top: 12px;
+    border: 1px solid #dbe8f2;
+    border-radius: 3px;
+    background: #fff;
+    color: #67a7d8;
+    font-size: 6px;
+    text-decoration: none;
+  }
+}
+
+/* 직접 추가 화면 연결 */
+a.outline-action{display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer}

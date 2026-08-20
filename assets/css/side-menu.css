@@ -9,3 +9,121 @@
 .recommendation-panel{display:grid;gap:26px}.recommendation-panel>section{padding:29px 25px}.recommendation-panel article{display:grid;grid-template-columns:25px 1fr;gap:14px;margin-top:32px}.recommendation-panel article>i{width:23px;height:23px;display:grid;place-items:center;border:1px solid var(--side-blue);border-radius:50%;color:var(--side-blue);font-size:11px;font-style:normal}.recommendation-panel article strong{font-size:11px}.recommendation-panel article p{margin:15px 0 0;color:#888;font-size:10px;line-height:1.8}.expected-effect dl{margin:23px 0 0}.expected-effect dl div{display:flex;justify-content:space-between;padding:17px 0;border-bottom:1px solid #ddd;font-size:11px}.expected-effect dt,.expected-effect dd{margin:0}.expected-effect dd{color:#4f91c8;font-size:16px}.expected-effect dd b{font-size:18px}.expected-effect>p{margin:21px 0;color:#999;font-size:9px}.expected-effect>p i{width:17px;height:17px;display:inline-grid;place-items:center;margin-right:9px;border:1px solid var(--side-blue);border-radius:50%;color:var(--side-blue);font-style:normal}.expected-effect button{width:100%;height:54px;border:0;border-radius:6px;background:var(--side-blue);color:#fff;font-weight:600}
 @media(max-width:900px){.side-menu-top,.side-menu-workspace{grid-template-columns:1fr}.menu-preview-card{min-height:0}.preview-empty{height:150px}.recommendation-panel{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.side-menu-main{width:calc(100% - 32px);padding-top:32px}.side-menu-top{margin-top:34px}.current-order-card,.menu-preview-card,.side-menu-search-card{padding:20px 16px}.current-order-card li{grid-template-columns:25px 42px 1fr}.current-order-card li em{display:none}.side-categories{overflow-x:auto;padding-bottom:5px}.side-search-results>button{grid-template-columns:1fr 45px 20px;padding:0 14px}.recommendation-panel{grid-template-columns:1fr}}
+
+/* =========================================================
+   모바일 사이드 메뉴 추가
+   - 추천 메뉴 미리보기
+   - 직접 추가 시작 / 검색 / 선택
+   OS 상태바(시간, Wi-Fi, 배터리)는 웹 화면에 표시하지 않음.
+   ========================================================= */
+.mobile-side-menu-page{display:none}
+@media(max-width:767px){
+  body[data-page="side-menu"]{background:#fff;overflow-x:hidden}
+  body[data-page="side-menu"]>.site-header,
+  body[data-page="side-menu"]>.side-menu-main{display:none!important}
+  body[data-page="side-menu"] .mobile-side-menu-page{display:block;width:100%;max-width:100%;min-height:100dvh;color:#555;background:#fff}
+  body[data-page="side-menu"] [data-mobile-side-view][hidden]{display:none!important}
+
+  .mobile-side-direct-view{min-height:100dvh;padding:0 16px calc(86px + env(safe-area-inset-bottom,0px))}
+  .mobile-side-topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 8px}
+  .mobile-side-logo{display:block;width:62px}
+  .mobile-side-logo img{display:block;width:62px;height:auto}
+  .mobile-side-profile{display:block;width:29px;height:29px;border-radius:50%;overflow:hidden}
+  .mobile-side-profile img{display:block;width:100%;height:100%;object-fit:cover}
+  .mobile-side-direct-intro{padding:10px 9px 0}
+  .mobile-side-direct-intro h1{margin:0;color:#4d4d4d;font-size:22px;font-weight:700;line-height:1.25;letter-spacing:-.035em}
+  .mobile-side-direct-intro p{margin:5px 0 0;color:#888;font-size:10px;line-height:1.45}
+
+  .mobile-side-current-order{margin-top:25px;padding:31px 24px 25px;border:1px solid #ddd;border-radius:12px;background:#fff}
+  .mobile-side-current-order h2{margin:0;color:#505050;font-size:18px;font-weight:700;letter-spacing:-.02em}
+  .mobile-side-current-order ol{display:grid;gap:30px;margin:27px 0 0;padding:0;list-style:none}
+  .mobile-side-current-order li{display:grid;grid-template-columns:24px 40px minmax(0,1fr);align-items:center;gap:13px;min-height:42px}
+  .mobile-side-current-order li>b{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:#70abe0;color:#fff;font-size:13px;font-weight:700}
+  .mobile-side-current-order li>img{width:40px;height:40px;border-radius:8px;object-fit:cover;background:#eee}
+  .mobile-side-current-order li span{min-width:0}
+  .mobile-side-current-order li strong,.mobile-side-current-order li small{display:block}
+  .mobile-side-current-order li strong{color:#555;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-side-current-order li small{margin-top:7px;color:#8d97a6;font-size:10px}
+  .mobile-side-current-order li.is-empty{display:block;min-height:80px;color:#999;font-size:11px;line-height:1.6}
+  .mobile-side-current-order>p{margin:28px 0 0;color:#8e9aae;font-size:10px}
+  .mobile-side-search-open{width:200px;height:54px;display:block;margin:22px auto 0;border:0;border-radius:8px;background:#72ade0;color:#fff;font-size:15px;font-weight:700}
+  .mobile-side-status{min-height:16px;margin:9px 0 0;color:#c85a5a;font-size:9px;text-align:center}
+
+  /* 직접 추가 - 검색 */
+  .mobile-side-search-view{min-height:100dvh;padding:19px 16px 104px;background:#fff}
+  .mobile-side-back{width:36px;height:40px;display:flex;align-items:center;justify-content:flex-start;margin:0;padding:0;border:0;background:transparent;color:#2e2e2e;font-family:Arial,sans-serif;font-size:50px;font-weight:200;line-height:1;transform:translateY(-4px)}
+  .mobile-side-search-box{height:32px;display:flex;align-items:center;gap:10px;margin-top:14px;padding:0 12px;border:2px solid #e2e2e2;border-radius:9px;background:#fff}
+  .mobile-side-search-box>span{width:13px;height:13px;position:relative;flex:0 0 auto;border:3px solid #777;border-radius:50%}
+  .mobile-side-search-box>span:after{content:"";width:6px;height:3px;position:absolute;right:-6px;bottom:-3px;border-radius:2px;background:#777;transform:rotate(45deg)}
+  .mobile-side-search-box input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#666;font:12px Pretendard,sans-serif}
+  .mobile-side-search-box input::placeholder{color:#8b8b8b}
+  .mobile-side-filter-tabs{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+  .mobile-side-filter-tabs::-webkit-scrollbar{display:none}
+  .mobile-side-filter-tabs button{height:24px;min-width:50px;flex:0 0 auto;padding:0 12px;border:1px solid #c9c9c9;border-radius:15px;background:#fff;color:#555;font-size:11px;font-weight:600}
+  .mobile-side-filter-tabs button.is-active{border-color:#71ade0;background:#71ade0;color:#fff}
+  .mobile-side-search-summary{margin:8px 0 0 6px;color:#777;font-size:10px}
+  .mobile-side-search-list{display:grid;gap:16px;margin-top:13px;padding-bottom:12px}
+  .mobile-side-search-empty{margin:30px 0;color:#999;font-size:11px;text-align:center}
+  .mobile-side-search-item{min-height:72px;display:grid;grid-template-columns:minmax(0,1fr) 45px 22px;align-items:center;gap:8px;padding:12px 15px;border:2px solid #e4e4e4;border-radius:12px;background:#fff;text-align:left}
+  .mobile-side-search-item span{min-width:0}
+  .mobile-side-search-item strong,.mobile-side-search-item small{display:block}
+  .mobile-side-search-item strong{color:#737373;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-side-search-item small{margin-top:9px;color:#777;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-side-search-item em{color:#777;font-size:10px;font-style:normal;text-align:right}
+  .mobile-side-search-item i{color:#e4e4e4;font-size:25px;font-style:normal;line-height:1;text-align:right}
+  .mobile-side-search-item.is-selected{border-color:#4e86af;background:#eaf5fd}
+  .mobile-side-search-item.is-selected strong{color:#4f8dbd}
+  .mobile-side-search-item.is-selected small,.mobile-side-search-item.is-selected em,.mobile-side-search-item.is-selected i{color:#69abe1}
+  .mobile-side-select-complete{height:49px;position:fixed;z-index:230;left:25px;right:25px;bottom:calc(17px + env(safe-area-inset-bottom,0px));border:0;border-radius:8px;background:#71ade0;color:#fff;font-size:15px;font-weight:700}
+  .mobile-side-select-complete:disabled{background:#e1e1e1;color:#fff}
+  .mobile-side-search-status{position:fixed;z-index:231;left:30px;right:30px;bottom:calc(71px + env(safe-area-inset-bottom,0px));margin:0;color:#c85a5a;font-size:9px;text-align:center;pointer-events:none}
+
+  /* 추천 메뉴 미리보기 */
+  .mobile-side-preview-view{min-height:100dvh;padding:18px 9px 38px;background:#fff}
+  .mobile-side-preview-view>.mobile-side-back{margin-left:6px}
+  .mobile-side-preview-card,.mobile-side-reason-card{margin:10px 0 0;padding:31px 26px;border:1px solid #ddd;border-radius:8px;background:#fff}
+  .mobile-side-preview-card h1{margin:0;color:#505050;font-size:18px;font-weight:700}
+  .mobile-side-preview-image{width:100%;height:250px;display:block;margin-top:22px;border-radius:8px;object-fit:cover;background:#eee}
+  .mobile-side-preview-title{display:flex;align-items:center;gap:8px;margin-top:22px}
+  .mobile-side-preview-title h2{margin:0;color:#4f8fc1;font-size:13px;font-weight:700}
+  .mobile-side-preview-title span{padding:5px 9px;border-radius:13px;background:#e5f3ff;color:#67a9dd;font-size:9px}
+  .mobile-side-preview-description{margin:13px 0 0;color:#777;font-size:10px;line-height:1.5}
+  .mobile-side-preview-nutrition{margin-top:25px;padding-top:21px;border-top:1px solid #e0e0e0}
+  .mobile-side-preview-nutrition header{display:flex;align-items:center;justify-content:space-between}
+  .mobile-side-preview-nutrition h3{margin:0;color:#4c8fbe;font-size:12px;font-weight:700}
+  .mobile-side-preview-nutrition header small{color:#aaa;font-size:9px}
+  .mobile-side-preview-nutrition dl{margin:12px 0 0}
+  .mobile-side-preview-nutrition dl>div{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #e6e6e6;color:#777;font-size:10px}
+  .mobile-side-preview-nutrition dt,.mobile-side-preview-nutrition dd{margin:0}
+  .mobile-side-preview-nutrition dl>div.is-calorie{border-bottom:0;color:#4f91c8}
+  .mobile-side-reason-card{margin-top:15px;padding-top:30px;padding-bottom:28px}
+  .mobile-side-reason-card h2{margin:0;color:#505050;font-size:16px;font-weight:700}
+  .mobile-side-reasons{display:grid;gap:26px;margin-top:24px}
+  .mobile-side-reasons article{display:grid;grid-template-columns:25px minmax(0,1fr);gap:14px;align-items:start}
+  .mobile-side-reasons article>i{width:21px;height:21px;display:grid;place-items:center;border:1px solid #70afe2;border-radius:50%;color:#70afe2;font-size:11px;font-style:normal}
+  .mobile-side-reasons strong{display:block;color:#555;font-size:11px;line-height:1.5}
+  .mobile-side-reasons p{margin:10px 0 0;color:#8a8a8a;font-size:9px;line-height:1.75}
+  .mobile-side-reason-empty{margin:20px 0;color:#999;font-size:10px}
+  .mobile-side-effect-divider{height:1px;margin:34px 0 23px;background:#e3e3e3}
+  .mobile-side-effects{margin:20px 0 0}
+  .mobile-side-effects>div{padding:11px 0}
+  .mobile-side-effects dt{color:#777;font-size:10px}
+  .mobile-side-effects dd{margin:8px 0 0;color:#67a8dc;font-size:17px;font-weight:700}
+  .mobile-side-effects>div:after{content:"";height:5px;display:block;margin-top:9px;border-radius:5px;background:linear-gradient(to right,#6face0 0 84%,#e4e6e8 84% 100%)}
+  .mobile-side-estimated{display:flex;align-items:center;gap:8px;margin:18px 0 0;color:#999;font-size:9px}
+  .mobile-side-estimated i{width:18px;height:18px;display:grid;place-items:center;border:1px solid #70afe2;border-radius:50%;color:#70afe2;font-size:10px;font-style:normal}
+  .mobile-side-add-preview{width:100%;height:55px;margin-top:26px;border:0;border-radius:8px;background:#70abe0;color:#fff;font-size:14px;font-weight:700}
+  .mobile-side-add-preview:disabled{opacity:.45}
+  .mobile-side-preview-status{min-height:16px;margin:9px 0 0;color:#c85a5a;font-size:9px;text-align:center}
+
+  .mobile-side-bottom-nav{z-index:220}
+  body.side-mobile-search .mobile-side-bottom-nav,
+  body.side-mobile-preview .mobile-side-bottom-nav{display:none!important}
+}
+@media(max-width:374px){
+  .mobile-side-direct-view{padding-left:12px;padding-right:12px}
+  .mobile-side-current-order{padding-left:20px;padding-right:20px}
+  .mobile-side-preview-view{padding-left:8px;padding-right:8px}
+  .mobile-side-preview-card,.mobile-side-reason-card{padding-left:22px;padding-right:22px}
+  .mobile-side-search-view{padding-left:14px;padding-right:14px}
+}

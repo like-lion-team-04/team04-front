@@ -6,6 +6,7 @@
   const addedSideMenusKey = mealId ? `firstbite.addedSideMenus.${mealId}` : "firstbite.addedSideMenus";
 
   let addedSideMenus = new Map();
+  let latestSideRecommendations = new Map();
 
   function number(value) {
     const parsed = Number(value);
@@ -262,6 +263,7 @@
     if (!list) return;
 
     const recommendedItems = Array.isArray(recommendations && recommendations.items) ? recommendations.items : [];
+    latestSideRecommendations = new Map(recommendedItems.map((item) => [String(item.sideMenuId), item]));
     const addedItems = Array.from(addedSideMenus.values());
     const addedIds = new Set(addedItems.map((item) => String(item.sideMenuId)));
     const availableItems = recommendedItems.filter((item) => !addedIds.has(String(item.sideMenuId)));
@@ -369,6 +371,18 @@
       if (!addButton && !removeButton) return;
 
       const button = addButton || removeButton;
+
+      // 모바일에서는 추천 사이드 메뉴를 바로 추가하지 않고, 디자인 명세의 "메뉴 미리보기"를 먼저 보여준다.
+      if (addButton && window.matchMedia("(max-width: 767px)").matches) {
+        const sideMenuId = addButton.dataset.addSideMenu;
+        const recommendation = latestSideRecommendations.get(String(sideMenuId));
+        if (recommendation) {
+          sessionStorage.setItem("firstbite.sideMenuPreview", JSON.stringify(recommendation));
+          window.location.href = `side-menu.html?mode=preview&sideMenuId=${encodeURIComponent(sideMenuId)}`;
+        }
+        return;
+      }
+
       button.disabled = true;
       const originalText = button.textContent;
 

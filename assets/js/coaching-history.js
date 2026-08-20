@@ -8,6 +8,53 @@
   let loadingMore = false;
   let weekOffset = 0;
   let allRecords = [];
+  let accessDeniedActive = false;
+
+  function isAccessDenied(error) {
+    if (!error) return false;
+    const code = String(error.code || "").toUpperCase();
+    return Number(error.status) === 403 || code.includes("FORBIDDEN") || code.includes("ACCESS_DENIED");
+  }
+
+  function renderAccessDeniedState() {
+    accessDeniedActive = true;
+    allRecords = [];
+    page = 1;
+    totalPages = 1;
+
+    const summaryKeys = ["coachingCount", "completedCount", "feedbackCount"];
+    summaryKeys.forEach((key) => {
+      const node = document.querySelector(`[data-summary="${key}"]`);
+      if (node) node.textContent = "--";
+    });
+
+    const note = document.querySelector("[data-summary-note]");
+    if (note) note.textContent = "유효 피드백을 꾸준히 남기면 개인화 추천에 반영돼요.";
+
+    const list = document.querySelector("[data-history-list]");
+    if (list) {
+      list.innerHTML = `
+        <div class="record-access-denied" role="alert">
+          <span class="record-access-denied-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M8.5 10V7.8a3.5 3.5 0 0 1 7 0V10"/>
+              <rect x="6.5" y="10" width="11" height="8.5" rx="2"/>
+              <path d="M12 13.2v2.2"/>
+            </svg>
+          </span>
+          <strong>접근 권한이 없습니다</strong>
+          <p>다른 사용자의 기록에는 접근할 수 없어요.</p>
+        </div>`;
+    }
+
+    const loadMore = document.querySelector("[data-load-more]");
+    if (loadMore) {
+      loadMore.hidden = true;
+      loadMore.disabled = true;
+    }
+    const status = document.querySelector("[data-history-status]");
+    if (status) status.textContent = "";
+  }
 
   const mealTypeByHour = (value) => {
     const date = value ? new Date(value) : new Date();
@@ -169,6 +216,13 @@
     const recordsPromise = getAllRecordsInRange(range);
     const [summaryResult, recordsResult] = await Promise.allSettled([summaryPromise, recordsPromise]);
 
+    const summaryDenied = summaryResult.status === "rejected" && isAccessDenied(summaryResult.reason);
+    const recordsDenied = recordsResult.status === "rejected" && isAccessDenied(recordsResult.reason);
+    if (summaryDenied || recordsDenied || accessDeniedActive) {
+      renderAccessDeniedState();
+      return;
+    }
+
     if (summaryResult.status !== "fulfilled") {
       document.querySelector('[data-summary="coachingCount"]').textContent = "-";
       document.querySelector('[data-summary="completedCount"]').textContent = "-";
@@ -221,7 +275,9 @@
         loadMore.disabled = page >= totalPages;
       }
     } catch (error) {
-      if (requestedPage === 1) {
+      if (isAccessDenied(error)) {
+        renderAccessDeniedState();
+      } else if (requestedPage === 1) {
         document.querySelector("[data-history-list]").innerHTML = `
           <div class="record-error">
             <div>코칭 기록을 불러오지 못했어요.<br>${escapeHtml(error.message || "잠시 후 다시 시도해 주세요.")}<br><button type="button" data-record-retry>다시 시도</button></div>

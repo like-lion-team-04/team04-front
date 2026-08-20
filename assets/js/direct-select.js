@@ -63,7 +63,8 @@
   function updateResultLabel(total) {
     if (!resultLabel) return;
     const categoryName = document.querySelector("[data-category].is-active")?.textContent?.trim() || "전체";
-    resultLabel.textContent = `검색결과　·　${categoryName}${Number.isFinite(total) ? ` (${total})` : ""}`;
+    const isMobile = window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+    resultLabel.textContent = `검색결과　·　${categoryName}${!isMobile && Number.isFinite(total) ? ` (${total})` : ""}`;
   }
 
   function renderResults(message) {

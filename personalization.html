@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fff6ed">
     <title>개인화 | 미식쉐드</title>
-    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-13">
+    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260821-01">
   </head>
   <body class="design-body" data-page="personalization">
     <header class="site-header design-page-header">
@@ -29,6 +29,8 @@
     <main class="design-canvas personalization-design" data-state="selected">
       <h1 class="sr-only">개인화</h1>
       <img class="design-artwork" data-design-artwork src="assets/design/personalization-default.svg?v=20260820-10" alt="졸음 피드백과 개인화 진행 상황" draggable="false">
+      <img class="mobile-personalization-artwork" data-mobile-personalization-artwork src="assets/design/mobile/personalization-feedback-detail.svg?v=20260821-01" alt="졸음 피드백과 개인화 진행 상황" draggable="false">
+      <a class="design-hit mobile-profile-hit" href="login.html" aria-label="로그인"></a>
 
       <div class="neutral-last-card" data-neutral-last-card hidden aria-hidden="true"></div>
       <div class="feedback-score-hits" aria-label="어제 오후 컨디션 선택">
@@ -71,12 +73,19 @@
 
       <a class="design-hit coaching-record-hit" href="coaching-history.html" aria-label="코칭 기록 보기"></a>
       <a class="design-hit personalization-start-hit" href="menu-input.html" aria-label="새로운 식사 코칭 시작하기"></a>
+      <nav class="mobile-personalization-bottom-nav" aria-label="모바일 주요 메뉴">
+        <a class="active" href="index.html" aria-current="page">홈</a>
+        <a href="menu-input.html">메뉴입력</a>
+        <a href="burden-result.html">결과</a>
+        <a href="personalization.html">개인화</a>
+        <a href="meal-timer.html">타이머</a>
+      </nav>
       <p class="sr-only" role="status" aria-live="polite" data-feedback-status></p>
     </main>
 
     <script src="assets/js/api.js"></script>
     <script src="assets/js/auth-header.js"></script>
     <script src="assets/js/feedback-ui.js?v=20260820-12"></script>
-    <script src="assets/js/personalization.js?v=20260820-12"></script>
+    <script src="assets/js/personalization.js?v=20260821-01"></script>
   </body>
 </html>

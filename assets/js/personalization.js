@@ -6,6 +6,11 @@
     saved: "assets/design/personalization-saved.svg?v=20260820-12"
   };
 
+  const MOBILE_ARTWORK = {
+    selected: "assets/design/mobile/personalization-feedback-detail.svg?v=20260821-01",
+    saved: "assets/design/mobile/personalization-feedback-saved.svg?v=20260821-01"
+  };
+
   const DIRECTION_TITLES = {
     GENTLER: "조금 더 완만한 방향으로 안내 중이에요",
     STANDARD: "현재 일반 기준으로 안내 중이에요",
@@ -15,7 +20,13 @@
   document.addEventListener("DOMContentLoaded", async () => {
     const canvas = document.querySelector(".personalization-design");
     const artwork = canvas && canvas.querySelector("[data-design-artwork]");
+    const mobileArtwork = canvas && canvas.querySelector("[data-mobile-personalization-artwork]");
     if (!canvas || !artwork || !window.FirstBiteFeedback) return;
+
+    function setArtwork(state) {
+      artwork.src = ARTWORK[state];
+      if (mobileArtwork) mobileArtwork.src = MOBILE_ARTWORK[state];
+    }
 
     const selection = window.FirstBiteFeedback.setupSelection(canvas);
     const saveButton = canvas.querySelector("[data-feedback-save]");
@@ -39,7 +50,7 @@
     function showUnavailable(message) {
       selection.clear();
       canvas.dataset.state = "unavailable";
-      artwork.src = ARTWORK.selected;
+      setArtwork("selected");
       saveButton.disabled = true;
       saveButton.classList.remove("is-active");
       savedAnswer.hidden = true;
@@ -53,7 +64,7 @@
     function renderPending() {
       hideUnavailable();
       canvas.dataset.state = "selected";
-      artwork.src = ARTWORK.selected;
+      setArtwork("selected");
       savedAnswer.hidden = true;
       selection.clear();
       selectedScore = null;
@@ -65,7 +76,7 @@
     function renderSelected() {
       hideUnavailable();
       canvas.dataset.state = "selected";
-      artwork.src = ARTWORK.selected;
+      setArtwork("selected");
       selection.render(selectedScore);
       saveButton.disabled = false;
       saveButton.classList.add("is-active");
@@ -76,7 +87,7 @@
     function renderSaved(score) {
       hideUnavailable();
       canvas.dataset.state = "saved";
-      artwork.src = ARTWORK.saved;
+      setArtwork("saved");
       selection.clear();
       saveButton.disabled = true;
       saveButton.classList.remove("is-active");
