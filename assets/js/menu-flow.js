@@ -33,7 +33,6 @@
   const mobileProcessingBack = document.querySelector("[data-mobile-processing-back]");
 
   const assets = "assets/recognition/";
-  const fallbackImages = ["spicy-pork.png", "doenjang-stew.png", "rice.png", "rolled-omelet.png", "kimchi.png"];
   const categoryNames = { ALL: "전체", RICE: "밥류", NOODLE: "면류", BUNSIK: "분식류", RICE_BOWL: "덮밥류", BREAD: "빵류" };
 
   let recognizedFoods = [];
@@ -65,18 +64,26 @@
     return `manual-${Date.now()}-${manualSequence}`;
   }
 
-  function imageFor(index) {
-    return assets + fallbackImages[index % fallbackImages.length];
+  // 음식명 키워드로 대표 이미지를 고른다. 매칭이 없으면 중립 플레이스홀더(엉뚱한 음식 사진 방지).
+  function imageForName(name) {
+    const value = String(name || "");
+    if (value.includes("계란") || value.includes("달걀")) return assets + "rolled-omelet.png";
+    if (value.includes("된장")) return assets + "doenjang-stew.png";
+    if (value.includes("김치")) return assets + "kimchi.png";
+    if (value.includes("제육")) return assets + "spicy-pork.png";
+    if (value.includes("밥")) return assets + "rice.png";
+    return assets + "food-photo.jpg";
   }
 
   function mapCandidate(candidate, fallbackName, index = 0) {
+    const name = candidate.name || fallbackName || "확인이 필요한 메뉴";
     return {
       foodId: candidate.foodId || null,
-      name: candidate.name || fallbackName || "확인이 필요한 메뉴",
+      name,
       carb: Number(candidate.carbohydrateG || 0),
       protein: Number(candidate.proteinG || 0),
       gi: Number(candidate.gi || 0),
-      image: imageFor(index),
+      image: candidate.imageUrl || imageForName(name),
       servingMultiplier: 1
     };
   }
@@ -93,7 +100,7 @@
             carb: 0,
             protein: 0,
             gi: 0,
-            image: imageFor(index),
+            image: imageForName(item.recognizedName),
             servingMultiplier: 1
           };
 
@@ -482,7 +489,7 @@
     const item = {
       ...selectedCandidate,
       clientId: existing ? existing.clientId : nextManualId(),
-      image: existing ? existing.image : imageFor(recognizedFoods.length),
+      image: existing ? existing.image : (selectedCandidate.image || imageForName(selectedCandidate.name)),
       servingMultiplier: existing ? existing.servingMultiplier : 1,
       needsConfirmation: false,
       recognizedName: existing ? existing.recognizedName : selectedCandidate.name

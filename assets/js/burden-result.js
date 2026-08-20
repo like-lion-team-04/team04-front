@@ -1,7 +1,17 @@
 (function () {
   "use strict";
 
-  const fallbackImages = ["spicy-pork.png", "doenjang-stew.png", "rice.png", "rolled-omelet.png", "kimchi.png"];
+  const recognitionAssets = "assets/recognition/";
+  // 음식명 키워드 기반 대표 이미지. 매칭 없으면 중립 플레이스홀더(엉뚱한 사진 방지).
+  function fallbackImageForName(name) {
+    const value = String(name || "");
+    if (value.includes("계란") || value.includes("달걀")) return recognitionAssets + "rolled-omelet.png";
+    if (value.includes("된장")) return recognitionAssets + "doenjang-stew.png";
+    if (value.includes("김치")) return recognitionAssets + "kimchi.png";
+    if (value.includes("제육")) return recognitionAssets + "spicy-pork.png";
+    if (value.includes("밥")) return recognitionAssets + "rice.png";
+    return recognitionAssets + "food-photo.jpg";
+  }
   const mealId = sessionStorage.getItem("firstbite.currentMealId") || sessionStorage.getItem("firstbiteMealId");
   const addedSideMenusKey = mealId ? `firstbite.addedSideMenus.${mealId}` : "firstbite.addedSideMenus";
 
@@ -35,10 +45,10 @@
     }[char]));
   }
 
-  function image(item, index) {
+  function image(item) {
     return item && item.imageUrl
       ? item.imageUrl
-      : `assets/recognition/${fallbackImages[index % fallbackImages.length]}`;
+      : fallbackImageForName(item && item.name);
   }
 
   function readAddedSideMenus() {
@@ -204,7 +214,7 @@
           return `
             <li>
               <b>${escapeHtml(item.order)}</b>
-              <img src="${escapeHtml(image(item, index))}" alt="">
+              <img src="${escapeHtml(image(item))}" alt="">
               <span><strong>${escapeHtml(item.name)}</strong><small>${formatNumber(item.servingMultiplier || 1, 1)}인분</small></span>
               <em>GL 기여(상대)<strong>${escapeHtml(level)}</strong></em>
             </li>`;
