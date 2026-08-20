@@ -49,6 +49,10 @@
         return;
       }
       console.error("계정 정보를 불러오지 못했습니다.", error);
+      // 조용히 빈 화면으로 두지 않고 사용자에게 표시한다.
+      document.querySelectorAll('[data-account-field="name"]').forEach((element) => {
+        element.textContent = "정보를 불러오지 못했어요";
+      });
     }
 
     if (profileButton) {

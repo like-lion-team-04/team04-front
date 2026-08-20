@@ -109,6 +109,14 @@
       if (errorText) errorText.textContent = message;
     };
 
+    // 준비 중 버튼(약관 보기)이 아무 반응 없이 침묵하지 않도록 안내한다.
+    document.querySelectorAll("[data-coming-soon]").forEach((element) => {
+      element.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.alert("약관 전문은 준비 중입니다.");
+      });
+    });
+
     const setBusy = (busy) => {
       submit.textContent = busy ? "가입 중..." : "작성 완료";
       if (busy) submit.setAttribute("aria-disabled", "true");

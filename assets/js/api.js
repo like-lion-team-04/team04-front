@@ -1,27 +1,7 @@
 (function () {
   "use strict";
 
-  const LOCAL_BACKEND_ORIGIN = "http://localhost:8080";
-  const OAUTH_NEXT_KEY = "firstbite.oauth.next";
-  const OAUTH_PROVIDER_KEY = "firstbite.oauth.provider";
-  const OAUTH_STARTED_AT_KEY = "firstbite.oauth.startedAt";
-  const OAUTH_MAX_AGE_MS = 10 * 60 * 1000;
-
-  function resolveBackendOrigin() {
-    const configured = typeof window.FIRSTBITE_BACKEND_ORIGIN === "string"
-      ? window.FIRSTBITE_BACKEND_ORIGIN.trim().replace(/\/$/, "")
-      : "";
-    if (configured) return configured;
-
-    const host = window.location.hostname;
-    const port = window.location.port;
-    const isLocalHost = host === "localhost" || host === "127.0.0.1";
-    if (isLocalHost && port && port !== "8080") return LOCAL_BACKEND_ORIGIN;
-    return "";
-  }
-
-  const BACKEND_ORIGIN = resolveBackendOrigin();
-  const API_ROOT = `${BACKEND_ORIGIN}/api/v1`;
+  const API_ROOT = "/api/v1";
   let accessToken = null;
   let refreshPromise = null;
 
@@ -186,63 +166,6 @@
     }
   }
 
-
-  function safeNextPage(value) {
-    return value && /^[a-z0-9-]+\.html(?:[?#].*)?$/i.test(value) ? value : "index.html";
-  }
-
-  function oauthLoginUrl(provider) {
-    const normalized = String(provider || "").toLowerCase();
-    if (!new Set(["kakao", "google"]).has(normalized)) {
-      throw new ApiError("지원하지 않는 소셜 로그인입니다.", { code: "AUTH_OAUTH_PROVIDER_UNSUPPORTED" });
-    }
-    return `${BACKEND_ORIGIN}/oauth2/authorization/${normalized}`;
-  }
-
-  function beginSocialLogin(provider, next = "index.html") {
-    const normalized = String(provider || "").toLowerCase();
-    const target = safeNextPage(next);
-    const url = oauthLoginUrl(normalized);
-    sessionStorage.setItem(OAUTH_NEXT_KEY, target);
-    sessionStorage.setItem(OAUTH_PROVIDER_KEY, normalized);
-    sessionStorage.setItem(OAUTH_STARTED_AT_KEY, String(Date.now()));
-    window.location.assign(url);
-  }
-
-  function clearPendingSocialLogin() {
-    sessionStorage.removeItem(OAUTH_NEXT_KEY);
-    sessionStorage.removeItem(OAUTH_PROVIDER_KEY);
-    sessionStorage.removeItem(OAUTH_STARTED_AT_KEY);
-  }
-
-  function getPendingSocialLogin() {
-    const provider = sessionStorage.getItem(OAUTH_PROVIDER_KEY);
-    if (!provider) return null;
-    const startedAt = Number(sessionStorage.getItem(OAUTH_STARTED_AT_KEY));
-    if (!Number.isFinite(startedAt) || Date.now() - startedAt > OAUTH_MAX_AGE_MS) {
-      clearPendingSocialLogin();
-      return null;
-    }
-    return {
-      provider,
-      next: safeNextPage(sessionStorage.getItem(OAUTH_NEXT_KEY))
-    };
-  }
-
-  async function completeSocialLogin() {
-    const pending = getPendingSocialLogin();
-    if (!pending) return null;
-    const restored = await restoreSession();
-    if (!restored) {
-      throw new ApiError("소셜 로그인 세션을 확인하지 못했습니다.", {
-        status: 401,
-        code: "AUTH_OAUTH_SESSION_MISSING"
-      });
-    }
-    clearPendingSocialLogin();
-    return pending;
-  }
-
   async function login(email, password) {
     const data = await send("/auth/login", {
       method: "POST",
@@ -282,12 +205,6 @@
     restoreSession,
     login,
     logout,
-    getBackendOrigin: () => BACKEND_ORIGIN,
-    getOAuthLoginUrl: oauthLoginUrl,
-    beginSocialLogin,
-    getPendingSocialLogin,
-    completeSocialLogin,
-    clearPendingSocialLogin,
     createIdempotencyKey: idempotencyKey,
     getMe: () => send("/accounts/me"),
     getFeedbackStatus: (date) => send(`/feedbacks/status${date ? `?date=${encodeURIComponent(date)}` : ""}`),

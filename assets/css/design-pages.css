@@ -147,21 +147,6 @@ html { min-width: 320px; background: #fff; }
 .home-design .direct-start-hit { left: 54.86%; top: 73.3162%; width: 14.25%; height: 2.3389%; }
 .home-design .coaching-record-hit { left: 10.75%; top: 86.9544%; width: 14.7%; height: 2.3908%; }
 
-/* 홈에서 피드백 대상이 없으면 home-deferred.svg가 피드백 영역을 제거하고
-   아래 섹션을 위로 당긴다. 따라서 보이는 버튼 위치에 맞춰 클릭 영역도 함께 이동한다. */
-.home-design[data-state="deferred"] .photo-start-hit {
-  top: 42.9873%;
-}
-.home-design[data-state="deferred"] .direct-start-hit {
-  top: 42.9873%;
-}
-.home-design[data-state="deferred"] .coaching-record-hit {
-  left: 11.7123%;
-  top: 63.7468%;
-  width: 14.2466%;
-  height: 2.3291%;
-}
-
 .personalization-design .feedback-score { top: 15.2325%; width: 13.9%; height: 9.5494%; }
 .personalization-design .feedback-defer { left: 35.94%; top: 27.4970%; width: 13.6%; height: 2.1886%; }
 .personalization-design .feedback-save { left: 50.41%; top: 27.4660%; width: 13.7%; height: 2.2402%; }
@@ -270,16 +255,13 @@ html { min-width: 320px; background: #fff; }
   left: 9.4%;
   top: 13.9%;
   width: 81.2%;
-  /* SVG 안에 그려진 카드와 하단 두 버튼까지 완전히 덮는다.
-     이전 15.3%에서는 버튼의 아래쪽 약간이 밖으로 보여 잘린 것처럼 보였다. */
-  height: 16.35%;
+  height: 15.3%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.4cqw 2cqw;
-  overflow: hidden;
   border-radius: 1.1cqw;
-  background: #eff8ff;
+  background: rgb(239 248 255 / 96%);
   color: #5785aa;
   font-size: 1.05cqw;
   font-weight: 600;
