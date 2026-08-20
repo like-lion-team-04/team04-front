@@ -96,5 +96,13 @@
         setError("현재 소셜 로그인은 백엔드 API가 준비되지 않아 사용할 수 없습니다.");
       });
     });
+
+    // 준비 중 버튼(아이디·비밀번호 찾기)이 아무 반응 없이 침묵하지 않도록 피드백을 준다.
+    document.querySelectorAll("[data-coming-soon]").forEach((element) => {
+      element.addEventListener("click", (event) => {
+        event.preventDefault();
+        setError("아이디·비밀번호 찾기는 준비 중인 기능입니다.");
+      });
+    });
   });
 })();
