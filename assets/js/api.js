@@ -205,6 +205,7 @@
   const NEUTRAL_FOOD_IMAGE = "assets/recognition/food-photo.jpg";
   const FOOD_IMAGE_EXACT = {
     "김밥": "gimbap.jpg",
+    "고등어구이": "grilled_mackerel.jpg",
     "떡볶이": "tteokbokki.webp",
     "백미밥": "white_rice.jpg",
     "제육볶음": "spicy_pork.jpg",
