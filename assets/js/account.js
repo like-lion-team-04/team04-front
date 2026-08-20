@@ -30,15 +30,12 @@
 
       const coachingCount = document.querySelector('[data-account-field="coachingCount"]');
       if (coachingCount) {
-        const to = new Date();
-        const from = new Date();
-        from.setDate(to.getDate() - 30);
-        const summary = await window.FirstBiteApi.getCoachingHistorySummary({
-          from: from.toISOString().slice(0, 10),
-          to: to.toISOString().slice(0, 10),
-          timezone: "Asia/Seoul"
-        }).catch(() => null);
-        coachingCount.textContent = String(summary && Number.isFinite(summary.coachingCount) ? summary.coachingCount : 0);
+        // 전체 코칭 기록 수를 표시한다(30일 요약이 아니라 누적). 기간 제한으로 0으로 보이던 문제 방지.
+        const records = await window.FirstBiteApi.getCoachingRecords({ page: 1, size: 1 }).catch(() => null);
+        const total = records && records.meta && Number.isFinite(Number(records.meta.totalElements))
+          ? Number(records.meta.totalElements)
+          : 0;
+        coachingCount.textContent = String(total);
       }
 
       const avatar = document.querySelector(".account-avatar");

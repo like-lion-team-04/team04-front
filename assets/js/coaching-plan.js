@@ -74,7 +74,7 @@
             ${foods.length
               ? foods.map((item) => `
                 <span class="stage-food">
-                  ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="">` : ""}
+                  <img src="${escapeHtml(window.FirstBiteFoodImage.forItem(item))}" alt="" onerror="this.onerror=null;this.src='${escapeHtml(window.FirstBiteFoodImage.neutral)}'">
                   ${escapeHtml(item.name)}
                   <small>${formatNumber(item.servingMultiplier || 1, 1)}인분</small>
                 </span>`).join("")

@@ -50,17 +50,11 @@
   }
 
   function localFallbackImage(name) {
-    const value = String(name || "");
-    if (value.includes("계란") || value.includes("달걀")) return "assets/recognition/rolled-omelet.png";
-    if (value.includes("된장")) return "assets/recognition/doenjang-stew.png";
-    if (value.includes("밥")) return "assets/recognition/rice.png";
-    if (value.includes("김치")) return "assets/recognition/kimchi.png";
-    if (value.includes("제육")) return "assets/recognition/spicy-pork.png";
-    return "assets/recognition/food-photo.jpg";
+    return window.FirstBiteFoodImage.byName(name);
   }
 
   function imageMarkup(item) {
-    const src = item.imageUrl || localFallbackImage(item.name);
+    const src = window.FirstBiteFoodImage.forItem(item);
     const fallback = localFallbackImage(item.name);
     return `<img src="${escapeHtml(src)}" alt="" onerror="this.onerror=null;this.src='${escapeHtml(fallback)}'">`;
   }

@@ -78,7 +78,14 @@
         <aside class="dashboard-card side-card">
           <h2>사이드 메뉴 추천</h2>
           <ul data-side-recommendations><li class="data-empty"><span><strong>추천 사이드 메뉴를 확인하고 있어요.</strong></span></li></ul>
-          <button class="outline-action" type="button" data-future-screen>＋　직접 추가</button>
+          <button class="outline-action" type="button" data-open-side-picker aria-expanded="false">＋　직접 추가</button>
+          <div class="side-picker" data-side-picker hidden>
+            <label class="side-picker-search">
+              <span class="sr-only">사이드 메뉴 검색</span>
+              <input type="search" data-side-picker-search placeholder="사이드 메뉴 이름으로 검색" autocomplete="off">
+            </label>
+            <ul class="side-picker-list" data-side-picker-list><li class="data-empty"><span><strong>사이드 메뉴 목록을 불러오고 있어요.</strong></span></li></ul>
+          </div>
         </aside>
       </div>
 
@@ -87,8 +94,8 @@
           <h2>비교 결과 근거</h2>
           <div class="equation-cards"><article><b>기존 부담</b><strong>항목별 GL 합</strong><p>순서를 고려하지 않은<br>각 항목의 GL 종합</p></article><i>−</i><article><b>감소 계수 적용</b><strong>감소상한 × 순서가중도<br>× 간격계수 × 개인계수</strong><p>개인 특성과 섭취 패턴을<br>반영한 보정</p></article><i>=</i><article><b>추천 순서 적용 부담</b><strong>기존 부담 × (1 - 감소 계수)</strong><p>추천 순서 적용 시의<br>상대적 부담</p></article></div>
         </section>
-        <section class="dashboard-card source-card"><h2>데이터 출처 및 고지</h2><p data-source-summary>분석 근거를 불러오고 있어요.</p><p>본 서비스는 비의료 목적의 정보 제공 서비스이며,<br>질병의 진단, 치료, 처방을 목적으로 하지 않습니다.</p><button type="button" data-future-screen>자세히 보기　›</button></section>
-        <section class="dashboard-card personal-card"><h2>개인화 반영 상태</h2><dl><div><dt>개인화 적용</dt><dd data-personal-applied>—</dd></div><div><dt>개인계수</dt><dd data-personal-coefficient>—</dd></div><div><dt>데이터 품질</dt><dd data-data-quality>—</dd></div></dl><button type="button" data-future-screen>자세히 보기　›</button></section>
+        <section class="dashboard-card source-card"><h2>데이터 출처 및 고지</h2><p data-source-summary>분석 근거를 불러오고 있어요.</p><p>본 서비스는 비의료 목적의 정보 제공 서비스이며,<br>질병의 진단, 치료, 처방을 목적으로 하지 않습니다.</p><a class="dashboard-detail-link" href="evidence.html">자세히 보기　›</a></section>
+        <section class="dashboard-card personal-card"><h2>개인화 반영 상태</h2><dl><div><dt>개인화 적용</dt><dd data-personal-applied>—</dd></div><div><dt>개인계수</dt><dd data-personal-coefficient>—</dd></div><div><dt>데이터 품질</dt><dd data-data-quality>—</dd></div></dl><a class="dashboard-detail-link" href="personalization.html">자세히 보기　›</a></section>
       </div>
     </main>
     <script src="assets/js/api.js"></script>
