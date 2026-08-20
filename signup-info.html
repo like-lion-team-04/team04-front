@@ -6,8 +6,6 @@
     <meta name="theme-color" content="#fff6ed" >
     <title>정보 입력 | 미식쉐드</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
-    <script src="assets/js/api.js" defer></script>
-    <script src="assets/js/auth-pages.js" defer></script>
   </head>
   <body data-page="signup-info">
     <header class="site-header compact-header">
@@ -31,6 +29,7 @@
 
         <div class="signup-heading compact">
           <h1 id="info-title">기본정보 입력</h1>
+          <span>가입에 필요한 정보를 입력해 주세요.</span>
         </div>
 
         <div class="form-layout">
@@ -52,7 +51,7 @@
           </div>
           <div class="field-group">
             <label for="birth-date">생년월일 <b>*</b></label>
-            <input id="birth-date" type="text" inputmode="numeric" >
+            <input id="birth-date" type="text" inputmode="numeric" placeholder="YYYYMMDD" >
           </div>
           <div class="field-group">
             <label for="phone-number">휴대폰 번호 <b>*</b></label>
@@ -97,5 +96,7 @@
         </div>
       </section>
     </main>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/signup-info.js"></script>
   </body>
 </html>

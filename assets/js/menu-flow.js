@@ -1,8 +1,9 @@
 (function () {
   "use strict";
-  const api = window.FirstBiteAPI;
+
   const app = document.querySelector("[data-recognition-app]");
   if (!app) return;
+
   const views = [...document.querySelectorAll("[data-view]")];
   const fileInput = document.querySelector("#food-photo");
   const dropZone = document.querySelector("[data-drop-zone]");
@@ -15,96 +16,419 @@
   const pickerList = document.querySelector("[data-picker-list]");
   const pickerComplete = document.querySelector("[data-picker-complete]");
   const foodSearch = document.querySelector("[data-food-search]");
-  let selectedFile = null;
-  let recognitionId = null;
+  const pickerSummary = document.querySelector(".picker-summary");
+  const confirmResult = document.querySelector("[data-confirm-result]");
+  const recognizedTab = document.querySelector('[data-result-tab="recognized"]');
+  const lowTab = document.querySelector('[data-result-tab="low"]');
+
+  const assets = "assets/recognition/";
+  const fallbackImages = ["spicy-pork.png", "doenjang-stew.png", "rice.png", "rolled-omelet.png", "kimchi.png"];
+  const categoryNames = { ALL: "전체", RICE: "밥류", NOODLE: "면류", BUNSIK: "분식류", RICE_BOWL: "덮밥류", BREAD: "빵류" };
+
   let recognizedFoods = [];
-  let lowConfidenceFoods = [];
-  let currentTab = "recognized";
-  let editIndex = null;
-  let selectedCandidate = null;
   let candidates = [];
-  let searchTimer = null;
-  const escapeHtml = (value) => String(value || "").replace(/[&<>'\"]/g, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", '\"':"&quot;" }[character]));
+  let currentTab = "recognized";
+  let editClientId = null;
+  let selectedCandidate = null;
+  let selectedFile = null;
+  let pickerCategory = "ALL";
+  let candidateSearchTimer;
+  let candidateRequestSerial = 0;
+  let manualSequence = 0;
 
-  function setView(name) { views.forEach((view) => view.classList.toggle("is-active", view.dataset.view === name)); document.body.classList.toggle("is-processing", name === "processing"); window.scrollTo(0, 0); }
-  function setProgress(percent) { document.querySelector("[data-progress-ring]").style.setProperty("--progress", percent * 3.6 + "deg"); document.querySelector("[data-progress]").textContent = percent + "%"; }
-  function useFile(file) {
-    uploadError.textContent = ""; selectedFile = null;
-    if (!file) return;
-    if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { uploadError.textContent = "JPG, PNG, WEBP 형식의 사진을 선택해 주세요."; startButton.disabled = true; return; }
-    if (file.size > 10 * 1024 * 1024) { uploadError.textContent = "10MB 이하의 사진을 선택해 주세요."; startButton.disabled = true; return; }
-    selectedFile = file;
-    const reader = new FileReader(); reader.addEventListener("load", () => { preview.src = reader.result; preview.hidden = false; addPhoto.hidden = true; startButton.disabled = false; }); reader.readAsDataURL(file);
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
-  fileInput.addEventListener("change", () => useFile(fileInput.files[0]));
-  ["dragenter","dragover"].forEach((name) => dropZone.addEventListener(name, (event) => { event.preventDefault(); dropZone.classList.add("is-dragging"); }));
-  ["dragleave","drop"].forEach((name) => dropZone.addEventListener(name, (event) => { event.preventDefault(); dropZone.classList.remove("is-dragging"); }));
-  dropZone.addEventListener("drop", (event) => useFile(event.dataTransfer.files[0]));
 
-  function mapRecognitionItem(item) {
-    const best = item.candidates && item.candidates[0];
+  function isUuid(value) {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ""));
+  }
+
+  function nextManualId() {
+    manualSequence += 1;
+    return `manual-${Date.now()}-${manualSequence}`;
+  }
+
+  function imageFor(index) {
+    return assets + fallbackImages[index % fallbackImages.length];
+  }
+
+  function mapCandidate(candidate, fallbackName, index = 0) {
     return {
-      foodId: best && best.foodId,
-      temporaryItemId: item.temporaryItemId,
-      name: (best && best.name) || item.recognizedName,
-      image: preview.src,
-      carbohydrateG: best && best.carbohydrateG,
-      proteinG: best && best.proteinG,
-      gi: best && best.gi,
-      servingMultiplier: item.estimatedServing || 1,
-      candidates: item.candidates || [],
-      needsConfirmation: item.needsConfirmation
+      foodId: candidate.foodId || null,
+      name: candidate.name || fallbackName || "확인이 필요한 메뉴",
+      carb: Number(candidate.carbohydrateG || 0),
+      protein: Number(candidate.proteinG || 0),
+      gi: Number(candidate.gi || 0),
+      image: imageFor(index),
+      servingMultiplier: 1
     };
   }
-  async function waitForRecognition(id) {
-    for (let attempt = 0; attempt < 80; attempt += 1) {
-      setProgress(Math.min(95, 8 + Math.round(attempt * 1.1)));
-      const data = await api.getRecognition(id);
-      if (data.status === "FAILED") throw new Error(data.failureReason || "사진을 인식하지 못했습니다.");
-      if (data.status === "COMPLETED") return data;
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+  function applyRecognition(result) {
+    const items = Array.isArray(result.items) ? result.items : [];
+    recognizedFoods = items.map((item, index) => {
+      const candidate = Array.isArray(item.candidates) ? item.candidates[0] : null;
+      const mapped = candidate
+        ? mapCandidate(candidate, item.recognizedName, index)
+        : {
+            foodId: null,
+            name: item.recognizedName || "확인이 필요한 메뉴",
+            carb: 0,
+            protein: 0,
+            gi: 0,
+            image: imageFor(index),
+            servingMultiplier: 1
+          };
+
+      return {
+        ...mapped,
+        clientId: item.temporaryItemId || `recognized-${index + 1}`,
+        servingMultiplier: [0.5, 1, 1.5, 2].includes(Number(item.estimatedServing)) ? Number(item.estimatedServing) : 1,
+        needsConfirmation: Boolean(item.needsConfirmation || item.confidenceLevel === "LOW" || !candidate),
+        recognizedName: item.recognizedName || mapped.name
+      };
+    });
+
+    if (!recognizedFoods.length) {
+      throw new Error("인식된 메뉴가 없습니다. 다른 사진을 사용하거나 메뉴를 직접 선택해 주세요.");
     }
-    throw new Error("인식 시간이 오래 걸리고 있습니다. 잠시 후 다시 시도해 주세요.");
+
+    sessionStorage.setItem("firstbiteRecognitionWarnings", JSON.stringify(result.warnings || []));
   }
-  startButton.addEventListener("click", async () => {
-    if (!selectedFile) return;
-    setProgress(0); setView("processing");
+
+  function setProgress(progress) {
+    document.querySelector("[data-progress-ring]").style.setProperty("--progress", progress * 3.6 + "deg");
+    document.querySelector("[data-progress]").textContent = progress + "%";
+  }
+
+  async function waitForRecognition(recognitionId) {
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const result = await window.FirstBiteApi.getRecognition(recognitionId);
+      setProgress(Math.min(95, 25 + attempt * 2));
+      if (result.status === "COMPLETED") return result;
+      if (result.status === "FAILED") throw new Error(result.error?.message || "사진 인식에 실패했습니다.");
+      await new Promise((resolve) => window.setTimeout(resolve, 1000));
+    }
+    throw new Error("사진 인식 시간이 초과되었습니다. 다시 시도해 주세요.");
+  }
+
+  function setView(name) {
+    views.forEach((view) => view.classList.toggle("is-active", view.dataset.view === name));
+    document.body.classList.toggle("is-processing", name === "processing");
+    window.scrollTo(0, 0);
+  }
+
+  async function ensureAuthenticated() {
+    if (!window.FirstBiteApi) return false;
     try {
-      const created = await api.createRecognition(selectedFile, "FOOD_PHOTO"); recognitionId = created.recognitionId;
-      const result = await waitForRecognition(recognitionId); setProgress(100);
-      recognizedFoods = (result.items || []).map(mapRecognitionItem);
-      lowConfidenceFoods = recognizedFoods.filter((food) => food.needsConfirmation);
-      renderFoods(); setView("result");
-    } catch (error) { uploadError.textContent = error.message || "사진 인식에 실패했습니다."; setView("upload"); }
+      const loggedIn = await window.FirstBiteApi.restoreSession();
+      if (!loggedIn) {
+        window.location.replace("login.html?next=photo-recognition.html");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      uploadError.textContent = error.message || "로그인 상태를 확인하지 못했습니다.";
+      return false;
+    }
+  }
+
+  function useFile(file) {
+    uploadError.textContent = "";
+    selectedFile = null;
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      uploadError.textContent = "JPG, PNG, WEBP 형식의 사진을 선택해 주세요.";
+      startButton.disabled = true;
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      uploadError.textContent = "10MB 이하의 사진을 선택해 주세요.";
+      startButton.disabled = true;
+      return;
+    }
+
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      preview.src = reader.result;
+      preview.hidden = false;
+      addPhoto.hidden = true;
+      startButton.disabled = false;
+    });
+    reader.readAsDataURL(file);
+  }
+
+  fileInput.addEventListener("change", () => useFile(fileInput.files[0]));
+  ["dragenter", "dragover"].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.add("is-dragging");
+  }));
+  ["dragleave", "drop"].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("is-dragging");
+  }));
+  dropZone.addEventListener("drop", (event) => useFile(event.dataTransfer.files[0]));
+
+  startButton.addEventListener("click", async () => {
+    if (!selectedFile) {
+      uploadError.textContent = "사진을 먼저 선택해 주세요.";
+      return;
+    }
+    const loggedIn = await ensureAuthenticated();
+    if (!loggedIn) return;
+
+    startButton.disabled = true;
+    setView("processing");
+    setProgress(10);
+
+    try {
+      const accepted = await window.FirstBiteApi.createRecognition(selectedFile, "FOOD_PHOTO");
+      if (!accepted || !accepted.recognitionId) throw new Error("사진 인식 요청 정보를 받지 못했습니다.");
+      sessionStorage.setItem("firstbiteRecognitionId", accepted.recognitionId);
+      setProgress(25);
+
+      const result = await waitForRecognition(accepted.recognitionId);
+      applyRecognition(result);
+      setProgress(100);
+      currentTab = "recognized";
+      updateTabs();
+      renderFoods();
+      setView("result");
+    } catch (error) {
+      uploadError.textContent = error.message || "사진 인식에 실패했습니다.";
+      setView("upload");
+    } finally {
+      startButton.disabled = !selectedFile;
+    }
   });
 
-  function activeFoods() { return currentTab === "recognized" ? recognizedFoods : lowConfidenceFoods; }
-  function pencilIcon() { return '<svg viewBox="0 0 24 24" fill="none"><path d="M4 20l4.2-1 10.6-10.6a2 2 0 0 0-2.8-2.8L5.4 16.2 4 20Z"/><path d="m14.7 6.9 2.8 2.8"/></svg>'; }
-  function trashIcon() { return '<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>'; }
-  function foodMeta(food) { return `탄수화물 ${food.carbohydrateG == null ? "-" : food.carbohydrateG}g　·　단백질 ${food.proteinG == null ? "-" : food.proteinG}g`; }
+  function activeFoods() {
+    return currentTab === "recognized" ? recognizedFoods : recognizedFoods.filter((food) => food.needsConfirmation);
+  }
+
+  function findFood(clientId) {
+    return recognizedFoods.find((food) => food.clientId === clientId);
+  }
+
+  function pencilIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20l4.2-1 10.6-10.6a2 2 0 0 0-2.8-2.8L5.4 16.2 4 20Z"/><path d="m14.7 6.9 2.8 2.8"/></svg>';
+  }
+
+  function trashIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>';
+  }
+
+  function updateTabs() {
+    const lowCount = recognizedFoods.filter((food) => food.needsConfirmation).length;
+    recognizedTab.textContent = `인식한 메뉴 (${recognizedFoods.length})`;
+    lowTab.textContent = `낮은 신뢰도 메뉴(${lowCount})`;
+  }
+
+  function updateConfirmState() {
+    const invalid = !recognizedFoods.length
+      || recognizedFoods.length > 20
+      || recognizedFoods.some((food) => !isUuid(food.foodId) || food.needsConfirmation);
+    confirmResult.disabled = invalid;
+  }
+
   function renderFoods() {
     const foods = activeFoods();
-    document.querySelector('[data-result-tab="recognized"]').textContent = `인식한 메뉴 (${recognizedFoods.length})`;
-    document.querySelector('[data-result-tab="low"]').textContent = `낮은 신뢰도 메뉴(${lowConfidenceFoods.length})`;
-    foodList.innerHTML = foods.map((food,index) => `<article class="food-row"><img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.name)}"><div class="food-copy"><strong>${escapeHtml(food.name)}</strong><span>${escapeHtml(foodMeta(food))}</span></div><span class="food-gi">GI ${food.gi == null ? "-" : escapeHtml(food.gi)}</span><select class="serving-select" data-serving-index="${index}" aria-label="인분 선택">${[0.5,1,1.5,2].map((amount)=>`<option value="${amount}" ${amount===food.servingMultiplier?"selected":""}>${amount}인분</option>`).join("")}</select><span class="food-divider"></span><button class="icon-button" type="button" data-edit-food="${index}" aria-label="수정">${pencilIcon()}</button><button class="icon-button" type="button" data-delete-food="${index}" aria-label="삭제">${trashIcon()}</button></article>`).join("") || '<div class="empty-selection"><strong>인식된 메뉴가 없어요.</strong></div>';
+    if (!foods.length) {
+      foodList.innerHTML = `<div class="empty-selection"><strong>${currentTab === "low" ? "확인이 필요한 메뉴가 없어요." : "인식된 메뉴가 없어요."}</strong><span>${currentTab === "low" ? "모든 메뉴가 확인되었습니다." : "항목을 직접 추가해주세요."}</span></div>`;
+    } else {
+      foodList.innerHTML = foods.map((food) => `
+        <article class="food-row">
+          <img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.name)}" >
+          <div class="food-copy"><strong>${escapeHtml(food.name)}</strong><span>${food.foodId ? `탄수화물 ${food.carb}g　·　단백질 ${food.protein}g` : "메뉴 확인이 필요해요"}</span></div>
+          <span class="food-gi">${food.foodId ? `GI ${food.gi}` : "확인 필요"}</span>
+          <select class="serving-select" data-serving-food="${escapeHtml(food.clientId)}" aria-label="${escapeHtml(food.name)} 인분 선택">
+            ${[0.5, 1, 1.5, 2].map((amount) => `<option value="${amount}" ${amount === food.servingMultiplier ? "selected" : ""}>${amount}인분</option>`).join("")}
+          </select>
+          <span class="food-divider" aria-hidden="true"></span>
+          <button class="icon-button" type="button" data-edit-food="${escapeHtml(food.clientId)}" aria-label="${escapeHtml(food.name)} 수정">${pencilIcon()}</button>
+          <button class="icon-button" type="button" data-delete-food="${escapeHtml(food.clientId)}" aria-label="${escapeHtml(food.name)} 삭제">${trashIcon()}</button>
+        </article>`).join("");
+    }
+
     document.querySelector("[data-add-food]").hidden = currentTab === "low";
+    updateTabs();
+    updateConfirmState();
   }
-  document.querySelectorAll("[data-result-tab]").forEach((tab) => tab.addEventListener("click", () => { currentTab = tab.dataset.resultTab; document.querySelectorAll("[data-result-tab]").forEach((item) => { const active=item===tab; item.classList.toggle("is-active",active); item.setAttribute("aria-selected",String(active)); }); renderFoods(); }));
-  foodList.addEventListener("change", (event) => { if (event.target.matches("[data-serving-index]")) activeFoods()[Number(event.target.dataset.servingIndex)].servingMultiplier = Number(event.target.value); });
-  foodList.addEventListener("click", (event) => { const edit=event.target.closest("[data-edit-food]"); const remove=event.target.closest("[data-delete-food]"); if(edit) openPicker(Number(edit.dataset.editFood)); if(remove){ const target=activeFoods()[Number(remove.dataset.deleteFood)]; recognizedFoods=recognizedFoods.filter((food)=>food!==target); lowConfidenceFoods=lowConfidenceFoods.filter((food)=>food!==target); renderFoods(); } });
+
+  document.querySelectorAll("[data-result-tab]").forEach((tab) => tab.addEventListener("click", () => {
+    currentTab = tab.dataset.resultTab;
+    document.querySelectorAll("[data-result-tab]").forEach((item) => {
+      const active = item === tab;
+      item.classList.toggle("is-active", active);
+      item.setAttribute("aria-selected", String(active));
+    });
+    renderFoods();
+  }));
+
+  foodList.addEventListener("change", (event) => {
+    if (!event.target.matches("[data-serving-food]")) return;
+    const food = findFood(event.target.dataset.servingFood);
+    if (food) food.servingMultiplier = Number(event.target.value);
+  });
+
+  foodList.addEventListener("click", (event) => {
+    const edit = event.target.closest("[data-edit-food]");
+    const remove = event.target.closest("[data-delete-food]");
+    if (edit) openPicker(edit.dataset.editFood);
+    if (remove) {
+      recognizedFoods = recognizedFoods.filter((food) => food.clientId !== remove.dataset.deleteFood);
+      renderFoods();
+    }
+  });
+
+  function renderCandidates(message) {
+    if (message) {
+      pickerList.innerHTML = `<div class="empty-selection"><strong>${escapeHtml(message.title)}</strong><span>${escapeHtml(message.description)}</span></div>`;
+      return;
+    }
+
+    if (!candidates.length) {
+      pickerList.innerHTML = '<div class="empty-selection"><strong>검색 결과가 없어요.</strong><span>다른 메뉴명이나 카테고리로 검색해 주세요.</span></div>';
+      return;
+    }
+
+    pickerList.innerHTML = candidates.map((food) => `
+      <button class="picker-option ${selectedCandidate && selectedCandidate.foodId === food.foodId ? "is-selected" : ""}" type="button" data-candidate="${escapeHtml(food.foodId)}">
+        <span><strong>${escapeHtml(food.name)}</strong><small>탄수화물 ${food.carb}g　·　단백질 ${food.protein}g</small></span>
+        <span>GI ${food.gi}</span><i aria-hidden="true">✓</i>
+      </button>`).join("");
+  }
 
   async function loadCandidates() {
-    pickerList.innerHTML = '<div class="empty-selection"><strong>메뉴를 불러오는 중이에요.</strong></div>';
-    try { const data = await api.getFoods({ query: foodSearch.value.trim(), size: 50 }); candidates = Array.isArray(data) ? data : (data.items || []); renderCandidates(); }
-    catch (error) { pickerList.innerHTML = `<div class="empty-selection"><strong>${escapeHtml(error.message || "메뉴를 불러오지 못했어요.")}</strong></div>`; }
+    const serial = ++candidateRequestSerial;
+    selectedCandidate = null;
+    pickerComplete.disabled = true;
+    if (pickerSummary) pickerSummary.textContent = "검색 중...";
+    renderCandidates({ title: "메뉴를 찾고 있어요.", description: "잠시만 기다려주세요." });
+
+    try {
+      const response = await window.FirstBiteApi.searchFoods({
+        query: foodSearch.value.trim(),
+        category: pickerCategory === "ALL" ? null : pickerCategory,
+        page: 1,
+        size: 20
+      });
+      if (serial !== candidateRequestSerial) return;
+      candidates = (response.items || []).map((food, index) => mapCandidate(food, food.name, index)).filter((food) => isUuid(food.foodId));
+      const total = response.meta ? Number(response.meta.totalElements) : candidates.length;
+      if (pickerSummary) pickerSummary.textContent = `검색결과　 ${categoryNames[pickerCategory] || "전체"} · ${total}개`;
+      renderCandidates();
+    } catch (error) {
+      if (serial !== candidateRequestSerial) return;
+      candidates = [];
+      if (error && error.status === 401) {
+        closePicker();
+        window.location.replace("login.html?next=photo-recognition.html");
+        return;
+      }
+      if (pickerSummary) pickerSummary.textContent = "검색 실패";
+      renderCandidates({ title: "메뉴를 불러오지 못했어요.", description: error.message || "잠시 후 다시 시도해 주세요." });
+    }
   }
-  function renderCandidates() { pickerList.innerHTML = candidates.map((food)=>`<button class="picker-option ${selectedCandidate&&selectedCandidate.foodId===food.foodId?"is-selected":""}" type="button" data-candidate="${escapeHtml(food.foodId)}"><span><strong>${escapeHtml(food.name)}</strong><small>${escapeHtml(food.category || "기타")}</small></span><span>GI ${food.gi == null ? "-" : escapeHtml(food.gi)}</span><i>✓</i></button>`).join("") || '<div class="empty-selection"><strong>검색 결과가 없어요.</strong></div>'; }
-  function openPicker(index) { editIndex=Number.isInteger(index)?index:null; selectedCandidate=null; pickerComplete.disabled=true; modal.hidden=false; document.body.style.overflow="hidden"; foodSearch.value=editIndex===null?"":activeFoods()[editIndex].name; loadCandidates(); foodSearch.focus(); }
-  function closePicker(){ modal.hidden=true; document.body.style.overflow=""; }
-  document.querySelector("[data-add-food]").addEventListener("click",()=>openPicker(null));
-  document.querySelectorAll("[data-close-modal]").forEach((button)=>button.addEventListener("click",closePicker));
-  foodSearch.addEventListener("input",()=>{clearTimeout(searchTimer);searchTimer=setTimeout(loadCandidates,300);});
-  pickerList.addEventListener("click",(event)=>{const option=event.target.closest("[data-candidate]");if(!option)return;selectedCandidate=candidates.find((food)=>food.foodId===option.dataset.candidate);pickerComplete.disabled=false;renderCandidates();});
-  pickerComplete.addEventListener("click",()=>{if(!selectedCandidate)return;const current=editIndex===null?null:activeFoods()[editIndex];const item={...selectedCandidate,image:preview.src,servingMultiplier:current?current.servingMultiplier:1};if(current){const index=recognizedFoods.indexOf(current);if(index>=0)recognizedFoods.splice(index,1,item);lowConfidenceFoods=lowConfidenceFoods.filter((food)=>food!==current);}else recognizedFoods.push(item);renderFoods();closePicker();});
-  document.querySelector("[data-confirm-result]").addEventListener("click",async(event)=>{const button=event.currentTarget;const items=recognizedFoods.filter((food)=>food.foodId).map(({foodId,servingMultiplier})=>({foodId,servingMultiplier}));if(!items.length){window.alert("확정할 메뉴를 선택해 주세요.");return;}button.disabled=true;try{const meal=await api.createMeal({source:"IMAGE",recognitionId,items});sessionStorage.setItem("firstbiteMealId",meal.mealId);window.location.href="menu-confirmed.html";}catch(error){window.alert(error.message||"메뉴를 저장하지 못했습니다.");button.disabled=false;}});
+
+  function openPicker(clientId) {
+    editClientId = clientId || null;
+    const editingFood = editClientId ? findFood(editClientId) : null;
+    selectedCandidate = null;
+    pickerComplete.disabled = true;
+    pickerCategory = "ALL";
+    document.querySelectorAll("[data-picker-category]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.pickerCategory === "ALL");
+    });
+    foodSearch.value = editingFood ? (editingFood.recognizedName || editingFood.name) : "";
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    loadCandidates();
+    foodSearch.focus();
+  }
+
+  function closePicker() {
+    modal.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  document.querySelector("[data-add-food]").addEventListener("click", () => openPicker(null));
+  document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", closePicker));
+
+  foodSearch.addEventListener("input", () => {
+    window.clearTimeout(candidateSearchTimer);
+    candidateSearchTimer = window.setTimeout(loadCandidates, 250);
+  });
+
+  document.querySelectorAll("[data-picker-category]").forEach((button) => button.addEventListener("click", () => {
+    pickerCategory = button.dataset.pickerCategory;
+    document.querySelectorAll("[data-picker-category]").forEach((item) => item.classList.toggle("is-active", item === button));
+    loadCandidates();
+  }));
+
+  pickerList.addEventListener("click", (event) => {
+    const option = event.target.closest("[data-candidate]");
+    if (!option) return;
+    selectedCandidate = candidates.find((food) => food.foodId === option.dataset.candidate) || null;
+    pickerComplete.disabled = !selectedCandidate;
+    renderCandidates();
+  });
+
+  pickerComplete.addEventListener("click", () => {
+    if (!selectedCandidate || !isUuid(selectedCandidate.foodId)) return;
+    const existing = editClientId ? findFood(editClientId) : null;
+    const item = {
+      ...selectedCandidate,
+      clientId: existing ? existing.clientId : nextManualId(),
+      image: existing ? existing.image : imageFor(recognizedFoods.length),
+      servingMultiplier: existing ? existing.servingMultiplier : 1,
+      needsConfirmation: false,
+      recognizedName: existing ? existing.recognizedName : selectedCandidate.name
+    };
+
+    if (existing) {
+      const index = recognizedFoods.findIndex((food) => food.clientId === existing.clientId);
+      if (index >= 0) recognizedFoods.splice(index, 1, item);
+    } else {
+      recognizedFoods.push(item);
+    }
+
+    renderFoods();
+    closePicker();
+  });
+
+  document.querySelectorAll("[data-coming-soon]").forEach((link) => link.addEventListener("click", (event) => event.preventDefault()));
+
+  confirmResult.addEventListener("click", async () => {
+    const unresolved = recognizedFoods.some((food) => !isUuid(food.foodId) || food.needsConfirmation);
+    const duplicate = new Set(recognizedFoods.map((food) => food.foodId)).size !== recognizedFoods.length;
+    if (!recognizedFoods.length || unresolved || duplicate) {
+      if (duplicate) window.alert("같은 메뉴가 중복되어 있어요. 중복 항목을 삭제하거나 다른 메뉴로 수정해 주세요.");
+      return;
+    }
+
+    const loggedIn = await ensureAuthenticated();
+    if (!loggedIn) return;
+
+    sessionStorage.setItem("firstbiteMealSource", "IMAGE");
+    sessionStorage.setItem("firstbiteMealItems", JSON.stringify(recognizedFoods.map(({ foodId, servingMultiplier }) => ({ foodId, servingMultiplier }))));
+    sessionStorage.setItem("firstbiteRecognitionId", sessionStorage.getItem("firstbiteRecognitionId") || "");
+    sessionStorage.removeItem("firstbite.currentAnalysis");
+    window.location.href = "menu-confirmed.html";
+  });
+
+  async function init() {
+    updateTabs();
+    renderFoods();
+    await ensureAuthenticated();
+  }
+
+  init();
 })();

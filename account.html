@@ -7,15 +7,13 @@
     <title>계정 및 사용자 데이터 | 미식쉐드</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
     <link rel="stylesheet" href="assets/css/account.css" >
-    <script src="assets/js/api.js" defer></script>
-    <script src="assets/js/auth-pages.js" defer></script>
   </head>
   <body data-page="account">
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
         <nav class="desktop-nav" aria-label="주요 메뉴">
-          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="#">개인화</a><a href="coaching-plan.html">타이머</a>
+          <a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="personalization.html">개인화</a><a href="coaching-plan.html">타이머</a>
         </nav>
         <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
       </div>
@@ -38,13 +36,15 @@
       </section>
       <h2 class="account-status-title">나의 현황</h2>
       <section class="account-status-box" aria-label="활동 현황">
-        <a class="account-stat coaching" href="#">
-          <span class="account-stat-label">코칭 기록</span><strong class="account-stat-value">12</strong><span class="account-stat-arrow">›</span>
+        <a class="account-stat coaching" href="coaching-history.html">
+          <span class="account-stat-label">코칭 기록</span><strong class="account-stat-value" data-account-field="coachingCount">0</strong><span class="account-stat-arrow">›</span>
         </a>
-        <a class="account-stat feedback" href="#">
-          <span class="account-stat-label">피드백 기록</span><strong class="account-stat-value">48</strong><span class="account-stat-arrow">›</span>
+        <a class="account-stat feedback" href="personalization.html">
+          <span class="account-stat-label">피드백 기록</span><strong class="account-stat-value" data-account-field="feedbackCount">0</strong><span class="account-stat-arrow">›</span>
         </a>
       </section>
     </main>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/account.js"></script>
   </body>
 </html>
