@@ -208,7 +208,6 @@
     "떡볶이": "tteokbokki.webp",
     "백미밥": "white_rice.jpg",
     "제육볶음": "spicy_pork.jpg",
-    "제육덮밥": "spicy_pork.jpg",
     "된장찌개": "soybean_paste_stew.jpg",
     "라면": "ramyeon.webp",
     "잔치국수": "banquet_noodles.jpg",
@@ -227,11 +226,14 @@
     "파프리카": "paprika.jpg",
     "삶은 브로콜리": "boiled_broccoli.jpg",
     "참치 통조림": "canned_tuna.jpg",
-    "무가당 그릭요거트": "plain_greek_yogurt.jpg"
+    "무가당 그릭요거트": "plain_greek_yogurt.jpg",
+    "풋콩": "edamame.jpg",
+    "우유": "milk.jpg"
   };
+  // 키워드 부분매칭. 다른 음식명에 부분포함되어 오매핑되는 키워드(예: "계란"→계란볶음밥,
+  // "제육"→제육덮밥)는 제외하고, 단일 음식에만 대응되는 키워드만 남긴다.
   const FOOD_IMAGE_KEYWORD = [
-    ["계란", "boiled_egg.jpg"], ["달걀", "boiled_egg.jpg"],
-    ["제육", "spicy_pork.jpg"], ["된장", "soybean_paste_stew.jpg"],
+    ["된장", "soybean_paste_stew.jpg"],
     ["라면", "ramyeon.webp"], ["만두", "meat_dumplings.jpg"],
     ["샌드위치", "ham_sandwich.jpg"], ["식빵", "white_bread.jpg"],
     ["브로콜리", "boiled_broccoli.jpg"], ["그릭", "plain_greek_yogurt.jpg"],

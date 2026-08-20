@@ -1,0 +1,81 @@
+/* 데이터 출처 및 고지 페이지 스타일 (styles.css 디자인 토큰 사용) */
+.evidence-main {
+  width: min(calc(100% - 48px), 900px);
+  margin: 0 auto;
+  padding: 48px 0 96px;
+}
+.evidence-main > h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.evidence-lead {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.evidence-section { margin-top: 44px; }
+.evidence-section > h2 {
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--cream);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue-dark);
+}
+.evidence-list { display: grid; gap: 14px; }
+.evidence-row {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 22px;
+  background: var(--white);
+}
+.evidence-row h3 { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: var(--ink); }
+.evidence-row p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.evidence-row .source-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.evidence-row .source-link:hover { text-decoration: underline; }
+
+.formula-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.formula-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 18px;
+  background: var(--blue-soft);
+  text-align: center;
+}
+.formula-card b { display: block; color: var(--blue-dark); font-size: 12px; font-weight: 600; }
+.formula-card strong { display: block; margin: 14px 0; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.formula-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+.notice-box {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 24px;
+  background: var(--white);
+  color: #555;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.evidence-banner {
+  margin-top: 36px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--cream);
+  color: #8a7b66;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .evidence-main { width: calc(100% - 32px); padding: 32px 0 72px; }
+  .evidence-main > h1 { font-size: 22px; }
+  .formula-grid { grid-template-columns: 1fr; }
+}
