@@ -1,17 +1,6 @@
 (function () {
   "use strict";
 
-  const recognitionAssets = "assets/recognition/";
-  // 음식명 키워드 기반 대표 이미지. 매칭 없으면 중립 플레이스홀더(엉뚱한 사진 방지).
-  function fallbackImageForName(name) {
-    const value = String(name || "");
-    if (value.includes("계란") || value.includes("달걀")) return recognitionAssets + "rolled-omelet.png";
-    if (value.includes("된장")) return recognitionAssets + "doenjang-stew.png";
-    if (value.includes("김치")) return recognitionAssets + "kimchi.png";
-    if (value.includes("제육")) return recognitionAssets + "spicy-pork.png";
-    if (value.includes("밥")) return recognitionAssets + "rice.png";
-    return recognitionAssets + "food-photo.jpg";
-  }
   const mealId = sessionStorage.getItem("firstbite.currentMealId") || sessionStorage.getItem("firstbiteMealId");
   const addedSideMenusKey = mealId ? `firstbite.addedSideMenus.${mealId}` : "firstbite.addedSideMenus";
 
@@ -46,9 +35,7 @@
   }
 
   function image(item) {
-    return item && item.imageUrl
-      ? item.imageUrl
-      : fallbackImageForName(item && item.name);
+    return window.FirstBiteFoodImage.forItem(item);
   }
 
   function readAddedSideMenus() {
@@ -412,6 +399,87 @@
         window.setTimeout(() => {
           button.textContent = originalText;
         }, 2200);
+      }
+    });
+  }
+
+  function pickerDetail(item) {
+    const focus = item.nutrientFocus;
+    if (focus === "PROTEIN" && item.proteinG != null) return `단백질 ${formatNumber(item.proteinG, 1)}g`;
+    if (focus === "FIBER" && item.fiberG != null) return `식이섬유 ${formatNumber(item.fiberG, 1)}g`;
+    return item.description || item.servingDescription || "사이드 메뉴";
+  }
+
+  function renderPickerList(items, message = "") {
+    const list = document.querySelector("[data-side-picker-list]");
+    if (!list) return;
+    const rows = (Array.isArray(items) ? items : []).map((item) => {
+      const added = addedSideMenus.has(String(item.sideMenuId));
+      return `
+        <li${added ? ' class="is-added"' : ""}>
+          <span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(pickerDetail(item))}${added ? " · 추가됨" : ""}</small></span>
+          <button type="button" data-picker-add-side-menu="${escapeHtml(item.sideMenuId)}"${added ? " disabled" : ""}>${added ? "추가됨" : "＋　추가"}</button>
+        </li>`;
+    });
+    if (!rows.length) {
+      rows.push(`<li class="data-empty"><span><strong>${escapeHtml(message || "표시할 사이드 메뉴가 없어요.")}</strong></span></li>`);
+    }
+    list.innerHTML = rows.join("");
+  }
+
+  let pickerLoaded = false;
+  let pickerSearchTimer;
+
+  async function loadPickerList(query = "") {
+    const list = document.querySelector("[data-side-picker-list]");
+    if (list) list.innerHTML = `<li class="data-empty"><span><strong>사이드 메뉴 목록을 불러오고 있어요.</strong></span></li>`;
+    try {
+      const response = await window.FirstBiteApi.searchSideMenus({ query, activeOnly: true, size: 50 });
+      renderPickerList(response && response.items, "검색 결과가 없어요.");
+      pickerLoaded = true;
+    } catch (error) {
+      renderPickerList([], error && error.message ? error.message : "사이드 메뉴 목록을 불러오지 못했어요.");
+    }
+  }
+
+  const openPickerButton = document.querySelector("[data-open-side-picker]");
+  const sidePicker = document.querySelector("[data-side-picker]");
+  if (openPickerButton && sidePicker) {
+    openPickerButton.addEventListener("click", () => {
+      const willOpen = sidePicker.hidden;
+      sidePicker.hidden = !willOpen;
+      openPickerButton.setAttribute("aria-expanded", String(willOpen));
+      if (willOpen && !pickerLoaded) loadPickerList("");
+    });
+
+    const searchInput = sidePicker.querySelector("[data-side-picker-search]");
+    if (searchInput) {
+      searchInput.addEventListener("input", () => {
+        window.clearTimeout(pickerSearchTimer);
+        pickerSearchTimer = window.setTimeout(() => loadPickerList(searchInput.value.trim()), 300);
+      });
+    }
+
+    sidePicker.addEventListener("click", async (event) => {
+      const addButton = event.target.closest("[data-picker-add-side-menu]");
+      if (!addButton) return;
+      const sideMenuId = addButton.dataset.pickerAddSideMenu;
+      const row = addButton.closest("li");
+      const name = row && row.querySelector("strong") ? row.querySelector("strong").textContent : "사이드 메뉴";
+      const detail = row && row.querySelector("small") ? row.querySelector("small").textContent : "";
+      addButton.disabled = true;
+      addButton.textContent = "추가 중…";
+      try {
+        await window.FirstBiteApi.addSideMenu(mealId, sideMenuId, 1);
+        addedSideMenus.set(sideMenuId, { sideMenuId, name, reason: detail });
+        saveAddedSideMenus();
+        await refreshAfterSideMenuChange();
+        // 추가 상태를 목록에 즉시 반영
+        addButton.textContent = "추가됨";
+      } catch (error) {
+        addButton.disabled = false;
+        addButton.textContent = error && error.message ? error.message : "다시 시도";
+        window.setTimeout(() => { addButton.textContent = "＋　추가"; }, 2200);
       }
     });
   }

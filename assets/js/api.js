@@ -199,6 +199,66 @@
     }
   }
 
+  // 음식 이미지 로컬 폴백 매핑. 백엔드가 imageUrl을 채워주면 그 값을 우선 쓰고,
+  // 없을 때만 음식명으로 assets/foods/의 대표 이미지를 찾는다. 매칭 없으면 중립 placeholder.
+  const FOOD_IMAGE_ROOT = "assets/foods/";
+  const NEUTRAL_FOOD_IMAGE = "assets/recognition/food-photo.jpg";
+  const FOOD_IMAGE_EXACT = {
+    "김밥": "gimbap.jpg",
+    "떡볶이": "tteokbokki.webp",
+    "백미밥": "white_rice.jpg",
+    "제육볶음": "spicy_pork.jpg",
+    "제육덮밥": "spicy_pork.jpg",
+    "된장찌개": "soybean_paste_stew.jpg",
+    "라면": "ramyeon.webp",
+    "잔치국수": "banquet_noodles.jpg",
+    "고기만두": "meat_dumplings.jpg",
+    "햄샌드위치": "ham_sandwich.jpg",
+    "식빵": "white_bread.jpg",
+    "구운계란": "boiled_egg.jpg",
+    "연두부": "soft_tofu.jpg",
+    "닭가슴살": "chicken_breast.jpg",
+    "방울토마토": "cherry_tomato.jpg",
+    "무나물": "radish_namul.jpg",
+    "오이": "cucumber.jpg",
+    "양배추": "cabbage.jpg",
+    "아몬드": "almonds.jpg",
+    "사과": "apple.jpg",
+    "파프리카": "paprika.jpg",
+    "삶은 브로콜리": "boiled_broccoli.jpg",
+    "참치 통조림": "canned_tuna.jpg",
+    "무가당 그릭요거트": "plain_greek_yogurt.jpg"
+  };
+  const FOOD_IMAGE_KEYWORD = [
+    ["계란", "boiled_egg.jpg"], ["달걀", "boiled_egg.jpg"],
+    ["제육", "spicy_pork.jpg"], ["된장", "soybean_paste_stew.jpg"],
+    ["라면", "ramyeon.webp"], ["만두", "meat_dumplings.jpg"],
+    ["샌드위치", "ham_sandwich.jpg"], ["식빵", "white_bread.jpg"],
+    ["브로콜리", "boiled_broccoli.jpg"], ["그릭", "plain_greek_yogurt.jpg"],
+    ["방울토마토", "cherry_tomato.jpg"], ["양배추", "cabbage.jpg"],
+    ["닭가슴살", "chicken_breast.jpg"], ["아몬드", "almonds.jpg"],
+    ["파프리카", "paprika.jpg"], ["연두부", "soft_tofu.jpg"]
+  ];
+
+  function foodImageByName(name) {
+    const value = String(name || "").trim();
+    if (value && FOOD_IMAGE_EXACT[value]) return FOOD_IMAGE_ROOT + FOOD_IMAGE_EXACT[value];
+    for (const [keyword, file] of FOOD_IMAGE_KEYWORD) {
+      if (value.includes(keyword)) return FOOD_IMAGE_ROOT + file;
+    }
+    return NEUTRAL_FOOD_IMAGE;
+  }
+
+  function foodImageForItem(item) {
+    return item && item.imageUrl ? item.imageUrl : foodImageByName(item && item.name);
+  }
+
+  window.FirstBiteFoodImage = Object.freeze({
+    byName: foodImageByName,
+    forItem: foodImageForItem,
+    neutral: NEUTRAL_FOOD_IMAGE
+  });
+
   window.FirstBiteApi = Object.freeze({
     ApiError,
     request: send,

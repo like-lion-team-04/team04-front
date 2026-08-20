@@ -52,3 +52,17 @@ button[data-future-screen] { cursor:default; }
 .order-card li.data-empty span { grid-column:1 / -1; color:#888; }
 .side-card li.data-empty { justify-content:flex-start; border-bottom:0; }
 .side-card li.is-added button { border-color:var(--result-blue); color:var(--result-blue); }
+
+/* 사이드 메뉴 직접 추가 피커 */
+.side-picker { clear:both; margin-top:14px; border-top:1px solid #eee; padding-top:14px; }
+.side-picker[hidden] { display:none; }
+.side-picker-search input { width:100%; height:38px; box-sizing:border-box; padding:0 12px; border:1px solid #ddd; border-radius:5px; font-size:12px; }
+.side-picker-list { margin:12px 0 0; padding:0; list-style:none; max-height:280px; overflow-y:auto; }
+.side-picker-list li { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee; }
+.side-picker-list li strong,.side-picker-list li small { display:block; }
+.side-picker-list li strong { font-size:12px; }
+.side-picker-list li small { margin-top:6px; color:#999; font-size:9px; }
+.side-picker-list li button { min-width:78px; height:35px; border:1px solid var(--result-blue); border-radius:5px; background:#fff; color:var(--result-blue); font-size:10px; }
+.side-picker-list li button:disabled { border-color:#ddd; color:#bbb; }
+.side-picker-list li.is-added small { color:var(--result-blue); }
+.side-picker-list li.data-empty { justify-content:flex-start; border-bottom:0; color:#999; font-size:11px; }

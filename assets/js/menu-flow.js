@@ -32,7 +32,6 @@
   const cameraInput = document.querySelector("#food-photo-camera");
   const mobileProcessingBack = document.querySelector("[data-mobile-processing-back]");
 
-  const assets = "assets/recognition/";
   const categoryNames = { ALL: "전체", RICE: "밥류", NOODLE: "면류", BUNSIK: "분식류", RICE_BOWL: "덮밥류", BREAD: "빵류" };
 
   let recognizedFoods = [];
@@ -64,15 +63,9 @@
     return `manual-${Date.now()}-${manualSequence}`;
   }
 
-  // 음식명 키워드로 대표 이미지를 고른다. 매칭이 없으면 중립 플레이스홀더(엉뚱한 음식 사진 방지).
+  // 음식명/백엔드 imageUrl 기반 대표 이미지. 매칭이 없으면 중립 플레이스홀더(엉뚱한 음식 사진 방지).
   function imageForName(name) {
-    const value = String(name || "");
-    if (value.includes("계란") || value.includes("달걀")) return assets + "rolled-omelet.png";
-    if (value.includes("된장")) return assets + "doenjang-stew.png";
-    if (value.includes("김치")) return assets + "kimchi.png";
-    if (value.includes("제육")) return assets + "spicy-pork.png";
-    if (value.includes("밥")) return assets + "rice.png";
-    return assets + "food-photo.jpg";
+    return window.FirstBiteFoodImage.byName(name);
   }
 
   function mapCandidate(candidate, fallbackName, index = 0) {
@@ -83,7 +76,7 @@
       carb: Number(candidate.carbohydrateG || 0),
       protein: Number(candidate.proteinG || 0),
       gi: Number(candidate.gi || 0),
-      image: candidate.imageUrl || imageForName(name),
+      image: window.FirstBiteFoodImage.forItem(candidate),
       servingMultiplier: 1
     };
   }
