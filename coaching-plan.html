@@ -3,61 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#fff9f3">
-    <title>미식쉐드 | 추천 식사 순서</title>
+    <meta name="theme-color" content="#fff6ed">
+    <title>식사 순서 | 미식쉐드</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/meal-order.css">
-    <script src="assets/js/coaching.js" defer></script>
+    <link rel="stylesheet" href="assets/css/coaching.css">
   </head>
-  <body>
-    <header class="site-header">
-      <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드"></a>
-        <nav class="desktop-nav" aria-label="주요 메뉴"><a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="#">개인화</a><a class="active" href="coaching-plan.html">타이머</a></nav>
-        <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt=""></a>
-      </div>
-    </header>
-
-    <main class="meal-order-main">
-      <header class="meal-order-heading"><h1>오늘 점심, 이 순서로 시작해보세요</h1><p>이 서비스가 사용하는 데이터와 계산 근거를 확인할 수 있어요.</p></header>
-
-      <section class="order-stage-selector" aria-label="추천 식사 단계">
-        <button class="is-active" type="button" data-stage="0"><b>1단계</b><h2>계란 <span>추천</span></h2><p>단백질 6g 추가하면 1단계 선행 효과가<br>높아져요</p><small>단백질 6g · 지방 5g</small></button>
-        <button type="button" data-stage="1"><b>2단계</b><h2>식이섬유 <span>추천</span></h2><p>시금치 나물을 먼저 섭취하면 이후<br>식사의 상대적 부담을 낮추는 데 도움이 돼요</p><small>단백질 6g · 지방 5g</small></button>
-        <button type="button" data-stage="2"><b>3단계</b><h2>탄수화물 <span>추천</span></h2><p>앞선 메뉴를 충분히 섭취한 뒤<br>밥을 천천히 드세요</p><small>단백질 6g · 지방 5g</small></button>
+  <body data-page="coaching-plan">
+    <header class="site-header"><div class="header-inner">
+      <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드"></a>
+      <nav class="desktop-nav" aria-label="주요 메뉴"><a href="index.html">홈</a><a href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="personalization.html">개인화</a><a class="active" href="coaching-plan.html">타이머</a></nav>
+      <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt=""></a>
+    </div></header>
+    <main class="coaching-main">
+      <header class="coaching-heading"><h1>오늘 점심, 이 순서로 시작해보세요</h1><p>식사 부담을 완화할 수 있도록 3단계 순서를 안내해드려요.</p></header>
+      <section class="coach-panel" aria-labelledby="plan-title">
+        <h2 id="plan-title">추천 식사 순서</h2>
+        <div class="stage-grid" data-stage-grid><p class="loading-message">식사 순서를 불러오고 있어요.</p></div>
+        <div class="coach-action-row"><a class="coach-secondary" href="burden-result.html">결과로 돌아가기</a><button class="coach-primary" type="button" data-start-coaching disabled>식사 시작하기</button></div>
+        <p class="coach-status" role="status" data-coaching-status></p>
       </section>
-
-      <div class="order-detail-layout">
-        <section class="order-stage-detail">
-          <div class="detail-copy">
-            <b data-detail-step>1단계</b>
-            <h2 data-detail-title>계란 <span>추천</span></h2>
-            <p data-detail-description>단백질 6g을 추가하면<br>1단계 선행 효과가 높아져요</p>
-            <hr>
-            <h3>섭취 가이드</h3>
-            <div class="guide-list">
-              <article><i>◷</i><p><strong>섭취 시간</strong><span data-guide-time>식사 시작 직후 드세요</span></p></article>
-              <article><i>⌒</i><p><strong>섭취량</strong><span data-guide-amount>1인분 (약90g)</span></p></article>
-              <article><i>▥</i><p><strong>기대 효과</strong><span data-guide-effect>이후 식사의 혈당 상승을 완화해요</span></p></article>
-            </div>
-          </div>
-          <img data-detail-image src="assets/side-menu/rolled-omelet.png" alt="계란말이">
-        </section>
-
-        <aside class="recommended-order-card">
-          <h2>추천 식사 순서</h2>
-          <ol>
-            <li><b>1</b><img src="assets/side-menu/rolled-omelet.png" alt=""><span><strong>계란말이</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
-            <li><b>2</b><img src="assets/side-menu/spinach.png" alt=""><span><strong>시금치 나물</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
-            <li><b>3</b><img src="assets/side-menu/spicy-pork.png" alt=""><span><strong>제육볶음</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
-            <li><b>4</b><img src="assets/side-menu/doenjang-stew.png" alt=""><span><strong>된장찌개</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
-            <li><b>5</b><img src="assets/side-menu/rice.png" alt=""><span><strong>공기밥</strong><small>1인분</small></span><em>GL 기여 (상대)<strong>낮음</strong></em></li>
-          </ol>
-          <p>섭취 간격: 약 5~10분</p>
-        </aside>
-      </div>
-
-      <a class="start-meal-button" href="meal-timer.html">식사 시작</a>
     </main>
+    <script src="assets/js/api.js"></script><script src="assets/js/auth-header.js"></script><script src="assets/js/coaching-plan.js"></script>
   </body>
 </html>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/styles.css" >
     <link rel="stylesheet" href="assets/css/menu.css" >
     <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/auth-header.js" defer></script>
     <script src="assets/js/menu-flow.js" defer></script>
   </head>
   <body data-page="photo-recognition">
@@ -17,9 +18,9 @@
         <nav class="desktop-nav" aria-label="주요 메뉴">
           <a href="index.html">홈</a>
           <a class="active" href="menu-input.html">메뉴입력</a>
-          <a href="burden-result.html">결과</a>
-          <a href="#" data-coming-soon>개인화</a>
-          <a href="coaching-plan.html">타이머</a>
+          <a href="#" data-coming-soon>결과</a>
+          <a href="personalization.html">개인화</a>
+          <a href="#" data-coming-soon>타이머</a>
         </nav>
         <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
       </div>
@@ -82,9 +83,9 @@
       <button class="modal-backdrop" type="button" data-close-modal aria-label="검색 창 닫기"></button>
       <section class="food-picker" role="dialog" aria-modal="true" aria-labelledby="picker-title">
         <h2 class="sr-only" id="picker-title">메뉴 검색 및 선택</h2>
-        <label class="picker-search"><span aria-hidden="true"></span><input type="search" value="제육볶음" aria-label="메뉴 검색" data-food-search ></label>
+        <label class="picker-search"><span aria-hidden="true"></span><input type="search" placeholder="메뉴를 검색해 주세요" aria-label="메뉴 검색" data-food-search ></label>
         <div class="picker-categories" role="group" aria-label="메뉴 분류">
-          <button class="is-active" type="button">전체</button><button type="button">밥류</button><button type="button">면류</button><button type="button">분식류</button><button type="button">덮밥류</button><button type="button">빵류</button>
+          <button class="is-active" type="button" data-picker-category="ALL">전체</button><button type="button" data-picker-category="RICE">밥류</button><button type="button" data-picker-category="NOODLE">면류</button><button type="button" data-picker-category="BUNSIK">분식류</button><button type="button" data-picker-category="RICE_BOWL">덮밥류</button><button type="button" data-picker-category="BREAD">빵류</button>
         </div>
         <p class="picker-summary">검색결과　 전체</p>
         <div class="picker-list" data-picker-list></div>

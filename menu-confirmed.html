@@ -13,7 +13,7 @@
       <div class="header-inner">
         <a class="brand" href="index.html" aria-label="미식쉐드 홈"><img src="assets/figma/logo.svg" alt="미식쉐드" ></a>
         <nav class="desktop-nav" aria-label="주요 메뉴">
-          <a href="index.html">홈</a><a class="active" href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="#">개인화</a><a href="coaching-plan.html">타이머</a>
+          <a href="index.html">홈</a><a class="active" href="menu-input.html">메뉴입력</a><a href="burden-result.html">결과</a><a href="personalization.html">개인화</a><a href="coaching-plan.html">타이머</a>
         </nav>
         <a class="profile-button" href="account.html" aria-label="계정 및 사용자 데이터"><img src="assets/figma/profile.png" alt="" ></a>
       </div>
@@ -22,7 +22,11 @@
       <div class="confirmed-mark" aria-hidden="true"><span></span></div>
       <h1>메뉴가 확정되었습니다!</h1>
       <p>부담비교 결과로 이동해요.</p>
-      <a class="screen-primary confirmed-button" href="burden-result.html">결과 확인</a>
+      <a class="screen-primary confirmed-button" href="burden-result.html" data-analysis-link aria-disabled="true">결과 확인</a>
+      <p class="sr-only" aria-live="polite" data-analysis-status>분석을 준비하고 있습니다.</p>
     </main>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth-header.js"></script>
+    <script src="assets/js/menu-confirmed.js"></script>
   </body>
 </html>

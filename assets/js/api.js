@@ -1,115 +1,311 @@
 (function () {
   "use strict";
 
-  const BASE_URL = (window.FIRSTBITE_API_BASE || "/api/v1").replace(/\/$/, "");
+  const API_ROOT = "/api/v1";
   let accessToken = null;
-  let refreshing = null;
+  let refreshPromise = null;
 
   class ApiError extends Error {
-    constructor(message, status, code, details) {
+    constructor(message, options = {}) {
       super(message);
       this.name = "ApiError";
-      this.status = status;
-      this.code = code;
-      this.details = details;
+      this.status = options.status || 0;
+      this.code = options.code || "COMMON_REQUEST_FAILED";
+      this.details = Array.isArray(options.details) ? options.details : [];
     }
+  }
+
+  function emitAuthState(authenticated) {
+    window.dispatchEvent(new CustomEvent("firstbite:auth-state", {
+      detail: { authenticated }
+    }));
+  }
+
+  function clearAccessToken() {
+    accessToken = null;
+    emitAuthState(false);
+  }
+
+  async function readPayload(response) {
+    if (response.status === 204) return null;
+
+    const text = await response.text();
+    if (!text) return null;
+
+    try {
+      return JSON.parse(text);
+    } catch (_error) {
+      throw new ApiError("서버 응답을 확인할 수 없습니다.", {
+        status: response.status,
+        code: "COMMON_INVALID_RESPONSE"
+      });
+    }
+  }
+
+  function toApiError(response, payload) {
+    const error = payload && payload.error ? payload.error : {};
+    return new ApiError(error.message || "요청을 처리하지 못했습니다.", {
+      status: response.status,
+      code: error.code,
+      details: error.details
+    });
+  }
+
+  function queryString(params = {}) {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") query.set(key, String(value));
+    });
+    const result = query.toString();
+    return result ? `?${result}` : "";
   }
 
   function idempotencyKey() {
-    return window.crypto && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+      const random = Math.random() * 16 | 0;
+      const value = character === "x" ? random : (random & 3 | 8);
+      return value.toString(16);
+    });
   }
 
-  async function parseResponse(response) {
-    if (response.status === 204) return null;
-    const contentType = response.headers.get("content-type") || "";
-    const body = contentType.includes("application/json") ? await response.json() : null;
-    if (!response.ok || (body && body.success === false)) {
-      const error = body && body.error;
-      throw new ApiError((error && error.message) || `요청을 처리하지 못했습니다. (${response.status})`, response.status, error && error.code, error && error.details);
-    }
-    return body && Object.prototype.hasOwnProperty.call(body, "data") ? body.data : body;
-  }
+  async function send(path, options = {}) {
+    const method = options.method || "GET";
+    const headers = new Headers(options.headers || {});
+    const body = options.body;
 
-  async function raw(path, options) {
-    const settings = { credentials: "include", ...options };
-    settings.headers = { Accept: "application/json", ...(options && options.headers) };
-    if (accessToken && !(options && options.public)) settings.headers.Authorization = `Bearer ${accessToken}`;
-    delete settings.public;
-    if (settings.body && !(settings.body instanceof FormData) && typeof settings.body !== "string") {
-      settings.headers["Content-Type"] = "application/json";
-      settings.body = JSON.stringify(settings.body);
+    if (options.auth !== false && accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
     }
-    const response = await fetch(`${BASE_URL}${path}`, settings);
-    return { response, data: await parseResponse(response) };
+
+    let requestBody;
+    if (body instanceof FormData) {
+      requestBody = body;
+    } else if (body !== undefined) {
+      headers.set("Content-Type", "application/json");
+      requestBody = JSON.stringify(body);
+    }
+
+    let response;
+    try {
+      response = await fetch(`${API_ROOT}${path}`, {
+        method,
+        headers,
+        body: requestBody,
+        credentials: "include"
+      });
+    } catch (_error) {
+      throw new ApiError("서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인해 주세요.", {
+        code: "COMMON_NETWORK_ERROR"
+      });
+    }
+
+    const payload = await readPayload(response);
+
+    // 보호 API에서 Access Token이 만료된 경우 HttpOnly Refresh Token으로 한 번만 복구한다.
+    if (response.status === 401 && options.auth !== false && options.retry !== false) {
+      clearAccessToken();
+      const restored = await restoreSession();
+      if (restored) {
+        return send(path, { ...options, retry: false });
+      }
+    }
+
+    if (!response.ok || (payload && payload.success === false)) {
+      throw toApiError(response, payload);
+    }
+
+    if (payload && payload.success === true) {
+      if (options.includeMeta) return { data: payload.data, meta: payload.meta || null };
+      return payload.data;
+    }
+    return payload;
   }
 
   async function refresh() {
-    if (!refreshing) {
-      refreshing = raw("/auth/refresh", { method: "POST", body: {}, public: true })
-        .then(({ data }) => {
-          accessToken = data && data.accessToken;
-          return data;
-        })
-        .finally(() => { refreshing = null; });
-    }
-    return refreshing;
+    if (refreshPromise) return refreshPromise;
+
+    refreshPromise = send("/auth/refresh", {
+      method: "POST",
+      auth: false,
+      retry: false
+    })
+      .then((data) => {
+        if (!data || !data.accessToken) {
+          throw new ApiError("로그인 상태를 복구하지 못했습니다.", {
+            code: "AUTH_REFRESH_INVALID_RESPONSE"
+          });
+        }
+        accessToken = data.accessToken;
+        emitAuthState(true);
+        return data;
+      })
+      .catch((error) => {
+        clearAccessToken();
+        throw error;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+
+    return refreshPromise;
   }
 
-  async function request(path, options) {
+  async function restoreSession() {
+    if (accessToken) return true;
+
     try {
-      return (await raw(path, options)).data;
+      await refresh();
+      return true;
     } catch (error) {
-      if (error.status === 401 && !(options && options.public) && path !== "/auth/refresh") {
-        await refresh();
-        return (await raw(path, options)).data;
-      }
+      // Refresh Token이 없거나 만료/재사용된 경우는 정상적인 비로그인 상태로 취급한다.
+      if (error instanceof ApiError && [401, 409].includes(error.status)) return false;
       throw error;
     }
   }
 
-  window.FirstBiteAPI = {
-    ApiError,
-    getAccessToken: () => accessToken,
-    setAccessToken: (token) => { accessToken = token || null; },
-    ensureSession: async () => accessToken || (await refresh()).accessToken,
-    login: async (email, password) => {
-      const data = await request("/auth/login", { method: "POST", body: { email, password }, public: true });
-      accessToken = data.accessToken;
-      return data;
-    },
-    signup: (body) => request("/auth/signup", { method: "POST", body, public: true }),
-    createPhoneVerification: (phoneNumber) => request("/auth/phone-verifications", { method: "POST", body: { phoneNumber }, public: true }),
-    confirmPhoneVerification: (verification) => request("/auth/phone-verifications/confirm", {
+  async function login(email, password) {
+    const data = await send("/auth/login", {
       method: "POST",
-      body: typeof verification === "string" ? { requestId: verification } : verification,
-      public: true
-    }),
-    refresh,
-    logout: async () => { await request("/auth/logout", { method: "POST" }); accessToken = null; },
-    getMe: () => request("/accounts/me", { method: "GET" }),
-    createRecognition: (image, imageType) => {
-      const body = new FormData();
-      body.append("image", image);
-      if (imageType) body.append("imageType", imageType);
-      return request("/recognitions", { method: "POST", body, headers: { "Idempotency-Key": idempotencyKey() } });
-    },
-    getRecognition: (recognitionId) => request(`/recognitions/${encodeURIComponent(recognitionId)}`, { method: "GET" }),
-    getFoods: ({ query = "", category = "", page = 1, size = 20 } = {}) => {
-      const params = new URLSearchParams({ page: String(page), size: String(size) });
-      if (query) params.set("query", query);
-      if (category && category !== "ALL") params.set("category", category);
-      return request(`/foods?${params}`, { method: "GET", public: true });
-    },
-    createMeal: (body) => request("/meals", { method: "POST", body, headers: { "Idempotency-Key": idempotencyKey() } }),
-    updateMealItems: (mealId, items) => request(`/meals/${encodeURIComponent(mealId)}/items`, { method: "PUT", body: { items } }),
-    getAnalysis: (mealId) => request(`/meals/${encodeURIComponent(mealId)}/analysis`, { method: "GET" }),
-    getSideMenuRecommendations: (mealId, limit = 3) => request(`/meals/${encodeURIComponent(mealId)}/side-menu-recommendations?limit=${limit}`, { method: "GET" }),
-    getCoachingPlan: (mealId) => request(`/meals/${encodeURIComponent(mealId)}/coaching-plan`, { method: "GET" }),
-    getEvidence: ({ analysisId = "", type = "" } = {}) => {
-      const params = new URLSearchParams();
-      if (analysisId) params.set("analysisId", analysisId);
-      if (type) params.set("type", type);
-      return request(`/evidence${params.size ? `?${params}` : ""}`, { method: "GET", public: true });
+      auth: false,
+      retry: false,
+      body: { email, password }
+    });
+    if (!data || !data.accessToken) {
+      throw new ApiError("로그인 응답에 인증 정보가 없습니다.", {
+        code: "AUTH_LOGIN_INVALID_RESPONSE"
+      });
     }
-  };
+    accessToken = data.accessToken;
+    emitAuthState(true);
+    return data;
+  }
+
+  async function logout() {
+    try {
+      if (!accessToken) {
+        const restored = await restoreSession();
+        if (!restored) {
+          clearAccessToken();
+          return false;
+        }
+      }
+      await send("/auth/logout", { method: "POST", retry: false });
+      return true;
+    } finally {
+      clearAccessToken();
+    }
+  }
+
+  window.FirstBiteApi = Object.freeze({
+    ApiError,
+    request: send,
+    restoreSession,
+    login,
+    logout,
+    createIdempotencyKey: idempotencyKey,
+    getMe: () => send("/accounts/me"),
+    getFeedbackStatus: (date) => send(`/feedbacks/status${date ? `?date=${encodeURIComponent(date)}` : ""}`),
+    getPendingFeedback: (date) => send(`/feedbacks/pending${date ? `?date=${encodeURIComponent(date)}` : ""}`),
+    submitFeedback: (recordId, feedback, requestKey) => send(`/coaching-records/${recordId}/feedback`, {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: feedback
+    }),
+    getPersonalization: () => send("/personalization"),
+    createRecognition: (image, imageType = "FOOD_PHOTO", requestKey = idempotencyKey()) => {
+      const allowedTypes = new Set(["MENU_BOARD", "DELIVERY_SCREEN", "FOOD_PHOTO"]);
+      const normalizedType = allowedTypes.has(imageType) ? imageType : "FOOD_PHOTO";
+      const form = new FormData();
+      form.append("image", image);
+      return send(`/recognitions${queryString({ imageType: normalizedType })}`, {
+        method: "POST",
+        headers: { "Idempotency-Key": requestKey },
+        body: form
+      });
+    },
+    getRecognition: (recognitionId) => send(`/recognitions/${recognitionId}`),
+    searchFoods: async (params = {}) => {
+      const response = await send(`/foods${queryString(params)}`, { includeMeta: true });
+      return { ...(response.data || {}), meta: response.meta || null };
+    },
+    createMeal: (meal, requestKey = idempotencyKey()) => send("/meals", {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: meal
+    }),
+    replaceMealItems: (mealId, items) => send(`/meals/${mealId}/items`, {
+      method: "PUT",
+      body: { items }
+    }),
+    createAnalysis: (mealId, usePersonalization = true, requestKey = idempotencyKey()) => send(`/meals/${mealId}/analysis`, {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: { usePersonalization }
+    }),
+    getAnalysis: (mealId) => send(`/meals/${mealId}/analysis`),
+    getCoachingPlan: (mealId) => send(`/meals/${mealId}/coaching-plan`),
+    getSideMenuRecommendations: (mealId, limit = 3) => {
+      const normalizedLimit = Math.min(3, Math.max(1, Number(limit) || 3));
+      return send(`/meals/${mealId}/side-menu-recommendations${queryString({ limit: normalizedLimit })}`);
+    },
+    searchSideMenus: (params = {}) => send(`/side-menus${queryString(params)}`),
+    addSideMenu: (mealId, sideMenuId, servingMultiplier = 1, requestKey = idempotencyKey()) => send(`/meals/${mealId}/side-menus`, {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: { sideMenuId, servingMultiplier }
+    }),
+    removeSideMenu: (mealId, sideMenuId) => send(`/meals/${mealId}/side-menus/${sideMenuId}`, { method: "DELETE" }),
+    getActiveCoachingSession: () => send("/coaching-sessions/active"),
+    startCoachingSession: (mealId, planVersion, requestKey = idempotencyKey()) => send("/coaching-sessions", {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: { mealId, planVersion }
+    }),
+    updateCoachingStage: (sessionId, action, expectedStage, occurredAt = new Date().toISOString()) => send(`/coaching-sessions/${sessionId}`, {
+      method: "PATCH",
+      body: { action, expectedStage, occurredAt }
+    }),
+    updateCoachingTimer: (sessionId, action, expectedStage, occurredAt = new Date().toISOString()) => send(`/coaching-sessions/${sessionId}/timer`, {
+      method: "PATCH",
+      body: { action, expectedStage, occurredAt }
+    }),
+    completeCoachingSession: (sessionId, reason = "COMPLETED", requestKey = idempotencyKey(), endedAt = new Date().toISOString()) => send(`/coaching-sessions/${sessionId}/complete`, {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: { reason, endedAt }
+    }),
+    getCoachingRecords: async (params = {}) => {
+      const response = await send(`/coaching-records${queryString(params)}`, { includeMeta: true });
+      return { ...(response.data || {}), meta: response.meta || null };
+    },
+    getCoachingRecord: (recordId) => send(`/coaching-records/${recordId}`),
+    getCoachingHistorySummary: (params) => send(`/coaching-records/summary${queryString(params)}`),
+    reuseCoachingRecord: (recordId, includeSideMenus = true, requestKey = idempotencyKey()) => send(`/coaching-records/${recordId}/reuse`, {
+      method: "POST",
+      headers: { "Idempotency-Key": requestKey },
+      body: { includeSideMenus }
+    }),
+    getEvidence: () => send("/evidence"),
+    createPhoneVerification: (phoneNumber) => send("/auth/phone-verifications", {
+      method: "POST",
+      auth: false,
+      retry: false,
+      body: { phoneNumber }
+    }),
+    confirmPhoneVerification: (requestId) => send("/auth/phone-verifications/confirm", {
+      method: "POST",
+      auth: false,
+      retry: false,
+      body: { requestId }
+    }),
+    signup: (signupData) => send("/auth/signup", {
+      method: "POST",
+      auth: false,
+      retry: false,
+      body: signupData
+    })
+  });
 })();

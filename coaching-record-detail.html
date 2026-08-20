@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff6ed">
+    <title>최근 코칭 기록 | 미식쉐드</title>
+    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-10">
+    <link rel="stylesheet" href="assets/css/coaching-history-design.css?v=20260820-2">
+  </head>
+  <body class="design-body coaching-history-body" data-page="coaching-record-detail">
+    <header class="site-header design-page-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈">
+          <img src="assets/figma/logo.svg" alt="미식쉐드">
+        </a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a>
+          <a href="menu-input.html">메뉴 입력</a>
+          <a href="burden-result.html">결과</a>
+          <a class="active" href="personalization.html">개인화</a>
+          <a href="coaching-plan.html">타이머</a>
+        </nav>
+        <a class="profile-button" href="login.html" aria-label="로그인">
+          <img src="assets/figma/profile.png" alt="">
+        </a>
+      </div>
+    </header>
+
+    <main class="history-page-shell record-detail-shell">
+      <div data-detail-loading class="detail-loading">코칭 기록을 불러오고 있어요.</div>
+
+      <section data-detail-content hidden>
+        <header class="detail-heading">
+          <a class="detail-back" href="coaching-history.html" aria-label="코칭 기록 목록으로 돌아가기">‹</a>
+          <h1>최근 코칭 기록</h1>
+        </header>
+
+        <div class="detail-date-line">
+          <h2 data-detail-date>-</h2>
+          <span class="status-badge" data-detail-status>완료</span>
+        </div>
+
+        <section class="detail-overview-card" aria-label="코칭 기록 요약">
+          <div class="detail-overview-meal">
+            <span class="meal-icon" data-detail-meal-icon aria-hidden="true"></span>
+            <strong data-detail-meal-type>식사</strong>
+          </div>
+          <div class="detail-overview-item"><span>코칭 완료 시간</span><strong data-detail-completed-at>-</strong></div>
+          <div class="detail-overview-item"><span>총 실행 시간</span><strong data-detail-duration>-</strong></div>
+          <div class="detail-overview-item"><span>다음 날 피드백</span><strong class="accent" data-detail-feedback>-</strong></div>
+        </section>
+
+        <section class="detail-section-block">
+          <h2>입력한 메뉴</h2>
+          <div class="food-strip" data-detail-items></div>
+        </section>
+
+        <section class="detail-section-block">
+          <h2>추천 식사 순서</h2>
+          <div class="recommended-order" data-detail-order></div>
+          <p class="section-hint">당시 코칭 계획에 저장된 추천 순서를 보여줘요.</p>
+        </section>
+
+        <section class="detail-section-block">
+          <h2>실제 실행 단계 및 시간</h2>
+          <ol class="stage-timeline" data-detail-stages></ol>
+          <p class="section-hint">완료·건너뜀 여부와 실제 실행 시간을 기준으로 표시해요.</p>
+        </section>
+
+        <section class="detail-section-block feedback-section">
+          <h2>다음 날 피드백</h2>
+          <div class="detail-feedback-card" data-detail-feedback-card>
+            <span class="feedback-face" aria-hidden="true">⌣</span>
+            <div><strong data-detail-feedback-label>피드백 대기</strong><small data-detail-feedback-time></small></div>
+            <a href="personalization.html" data-detail-feedback-link>피드백 보기 <span aria-hidden="true">›</span></a>
+          </div>
+        </section>
+
+        <section class="detail-reuse-card" aria-labelledby="detail-reuse-title">
+          <div>
+            <h2 id="detail-reuse-title">이 메뉴로 다시 코칭받을까요?</h2>
+            <p>과거 분석값은 복사하지 않고, 현재 데이터와 개인화 기준으로 새롭게 분석해요.</p>
+            <small data-detail-personalization>개인화 상태 확인 중</small>
+          </div>
+          <button type="button" data-reuse-record>이 메뉴로 다시 코칭받기</button>
+          <p class="detail-reuse-status" data-reuse-status role="status" aria-live="polite"></p>
+        </section>
+      </section>
+
+      <section class="detail-error-state" data-detail-error hidden>
+        <div class="detail-error-icon" aria-hidden="true">!</div>
+        <h1 data-error-title>코칭 기록을 확인할 수 없어요.</h1>
+        <p data-error-message>잠시 후 다시 시도해 주세요.</p>
+        <div class="detail-error-actions">
+          <a href="coaching-history.html">코칭 기록으로 돌아가기</a>
+          <button type="button" data-detail-retry>다시 시도</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth-header.js"></script>
+    <script src="assets/js/coaching-record-detail.js?v=20260820-2"></script>
+  </body>
+</html>

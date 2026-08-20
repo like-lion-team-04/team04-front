@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff6ed">
+    <title>개인화 | 미식쉐드</title>
+    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-12">
+  </head>
+  <body class="design-body" data-page="personalization">
+    <header class="site-header design-page-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈">
+          <img src="assets/figma/logo.svg" alt="미식쉐드">
+        </a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a>
+          <a href="menu-input.html">메뉴 입력</a>
+          <a href="burden-result.html">결과</a>
+          <a class="active" href="personalization.html">개인화</a>
+          <a href="coaching-plan.html">타이머</a>
+        </nav>
+        <a class="profile-button" href="login.html" aria-label="로그인">
+          <img src="assets/figma/profile.png" alt="">
+        </a>
+      </div>
+    </header>
+
+    <main class="design-canvas personalization-design" data-state="selected">
+      <h1 class="sr-only">개인화</h1>
+      <img class="design-artwork" data-design-artwork src="assets/design/personalization-default.svg?v=20260820-10" alt="졸음 피드백과 개인화 진행 상황" draggable="false">
+
+      <div class="neutral-last-card" data-neutral-last-card hidden aria-hidden="true"></div>
+      <div class="feedback-score-hits" aria-label="어제 오후 컨디션 선택">
+        <button class="design-hit feedback-score score-1" type="button" data-feedback-score="1" aria-label="너무 졸렸어요"></button>
+        <button class="design-hit feedback-score score-2" type="button" data-feedback-score="2" aria-label="꽤 졸렸어요"></button>
+        <button class="design-hit feedback-score score-3" type="button" data-feedback-score="3" aria-label="졸렸어요"></button>
+        <button class="design-hit feedback-score score-4" type="button" data-feedback-score="4" aria-label="살짝 졸렸어요"></button>
+        <button class="design-hit feedback-score score-5" type="button" data-feedback-score="5" aria-label="안 졸렸어요"></button>
+      </div>
+
+      <div class="selected-card-overlay" data-selected-card hidden>
+        <img data-selected-icon src="assets/design/feedback/selected-5.png" alt="">
+        <span data-selected-label>안 졸렸어요</span>
+      </div>
+      <button class="design-hit feedback-defer" type="button" data-feedback-defer aria-label="다음에 답하기"></button>
+      <button class="design-hit feedback-save is-active" type="button" data-feedback-save>피드백 저장하기</button>
+      <p class="saved-answer" data-saved-answer hidden></p>
+      <div class="feedback-unavailable-note" data-feedback-unavailable hidden></div>
+
+      <section class="personalization-status-live" data-personalization-live hidden aria-label="개인화 진행 상황">
+        <div class="personalization-progress-live">
+          <div class="personalization-progress-ring" data-personalization-ring>
+            <span data-personalization-count>- / 3</span>
+          </div>
+          <div class="personalization-progress-copy">
+            <strong data-personalization-progress-title>개인화 정보를 확인하고 있어요</strong>
+            <span data-personalization-progress-description>피드백 누적 상태를 불러오는 중이에요.</span>
+          </div>
+        </div>
+        <div class="personalization-live-divider" aria-hidden="true"></div>
+        <div class="personalization-direction-live">
+          <span class="personalization-direction-icon" aria-hidden="true">↻</span>
+          <div class="personalization-direction-copy">
+            <strong data-personalization-direction-title>안내 방향을 확인하고 있어요</strong>
+            <span data-personalization-direction-description>현재 개인화 기준을 불러오는 중이에요.</span>
+            <small data-personalization-coefficient hidden></small>
+          </div>
+        </div>
+      </section>
+
+      <a class="design-hit coaching-record-hit" href="coaching-history.html" aria-label="코칭 기록 보기"></a>
+      <a class="design-hit personalization-start-hit" href="menu-input.html" aria-label="새로운 식사 코칭 시작하기"></a>
+      <p class="sr-only" role="status" aria-live="polite" data-feedback-status></p>
+    </main>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth-header.js"></script>
+    <script src="assets/js/feedback-ui.js?v=20260820-12"></script>
+    <script src="assets/js/personalization.js?v=20260820-12"></script>
+  </body>
+</html>

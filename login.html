@@ -6,8 +6,6 @@
     <meta name="theme-color" content="#fff6ed" >
     <title>로그인 | 미식쉐드</title>
     <link rel="stylesheet" href="assets/css/styles.css" >
-    <script src="assets/js/api.js" defer></script>
-    <script src="assets/js/auth-pages.js" defer></script>
   </head>
   <body data-page="login">
     <header class="site-header compact-header">
@@ -36,14 +34,14 @@
           </div>
           <label class="check-row save-email">
             <input id="remember-email" type="checkbox" >
-            <span>아이디 저장</span>
+            <span>이메일 저장</span>
           </label>
           <a class="primary-button form-submit" href="index.html">로그인</a>
         </div>
 
         <div class="auth-links">
           <a href="signup-verify.html">회원가입</a>
-          <button type="button" data-coming-soon>아이디 찾기</button>
+          <button type="button" data-coming-soon>이메일 찾기</button>
           <button type="button" data-coming-soon>비밀번호 찾기</button>
         </div>
 
@@ -57,5 +55,7 @@
       </section>
     </main>
 
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/login.js"></script>
   </body>
 </html>

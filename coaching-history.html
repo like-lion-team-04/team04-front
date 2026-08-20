@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff6ed">
+    <title>코칭 기록 | 미식쉐드</title>
+    <link rel="stylesheet" href="assets/css/design-pages.css?v=20260820-10">
+    <link rel="stylesheet" href="assets/css/coaching-history-design.css?v=20260820-2">
+  </head>
+  <body class="design-body coaching-history-body" data-page="coaching-history">
+    <header class="site-header design-page-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="미식쉐드 홈">
+          <img src="assets/figma/logo.svg" alt="미식쉐드">
+        </a>
+        <nav class="desktop-nav" aria-label="주요 메뉴">
+          <a href="index.html">홈</a>
+          <a href="menu-input.html">메뉴 입력</a>
+          <a href="burden-result.html">결과</a>
+          <a class="active" href="personalization.html">개인화</a>
+          <a href="coaching-plan.html">타이머</a>
+        </nav>
+        <a class="profile-button" href="login.html" aria-label="로그인">
+          <img src="assets/figma/profile.png" alt="">
+        </a>
+      </div>
+    </header>
+
+    <main class="history-page-shell">
+      <header class="history-page-heading">
+        <h1>개인화</h1>
+        <p>내 데이터를 바탕으로 오늘도 더 나은 식사를 제안해요.</p>
+      </header>
+
+      <section class="weekly-summary" aria-labelledby="weekly-summary-title">
+        <div class="weekly-summary-head">
+          <h2 id="weekly-summary-title">이번 주 코칭 요약</h2>
+          <div class="week-switcher" aria-label="코칭 요약 기간 선택">
+            <button type="button" data-week-prev aria-label="이전 주">‹</button>
+            <span data-week-label>이번 주</span>
+            <button type="button" data-week-next aria-label="다음 주">›</button>
+          </div>
+        </div>
+        <div class="weekly-summary-grid" data-summary-grid aria-live="polite">
+          <article class="summary-card summary-card-blue">
+            <span class="summary-check" aria-hidden="true">✓</span>
+            <div><small>이번주 코칭</small><strong><b data-summary="coachingCount">-</b>회</strong><p>총 코칭 진행 횟수</p></div>
+          </article>
+          <article class="summary-card summary-card-dark">
+            <span class="summary-check" aria-hidden="true">✓</span>
+            <div><small>코칭 완료</small><strong><b data-summary="completedCount">-</b>회</strong><p>끝까지 완료한 코칭 횟수</p></div>
+          </article>
+          <article class="summary-card summary-card-cream">
+            <span class="summary-check" aria-hidden="true">✓</span>
+            <div><small>피드백 완료</small><strong><b data-summary="feedbackCount">-</b>회</strong><p>다음 날 피드백 남긴 횟수</p></div>
+          </article>
+        </div>
+        <p class="summary-note" data-summary-note>유효 피드백을 꾸준히 남기면 개인화 추천에 반영돼요.</p>
+      </section>
+
+      <section class="recent-history" aria-labelledby="recent-history-title">
+        <h2 id="recent-history-title">최근 코칭 기록</h2>
+        <div class="record-list" data-history-list>
+          <div class="record-loading">코칭 기록을 불러오고 있어요.</div>
+        </div>
+        <button class="load-more-records" type="button" data-load-more hidden>
+          더 많은 기록 보기 <span aria-hidden="true">⌄</span>
+        </button>
+        <p class="history-status" data-history-status role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="history-start-banner" aria-label="새로운 식사 코칭 시작">
+        <div class="history-start-copy">
+          <h2>새로운 식사 코칭을 시작할까요?</h2>
+          <p>메뉴를 입력하면 오늘 식사 순서를 바로 추천받을 수 있어요.</p>
+          <a href="menu-input.html">시작하기 <span aria-hidden="true">›</span></a>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth-header.js"></script>
+    <script src="assets/js/coaching-history.js?v=20260820-3"></script>
+  </body>
+</html>
