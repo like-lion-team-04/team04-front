@@ -20,6 +20,17 @@
   const confirmResult = document.querySelector("[data-confirm-result]");
   const recognizedTab = document.querySelector('[data-result-tab="recognized"]');
   const lowTab = document.querySelector('[data-result-tab="low"]');
+  const mobilePhotoFlow = document.querySelector("[data-mobile-photo-flow]");
+  const mobilePhotoArtwork = document.querySelector("[data-mobile-photo-artwork]");
+  const mobilePhotoBack = document.querySelector("[data-mobile-photo-back]");
+  const mobilePhotoGuideConfirm = document.querySelector("[data-mobile-photo-guide-confirm]");
+  const mobilePhotoAdd = document.querySelector("[data-mobile-photo-add]");
+  const mobilePhotoGallery = document.querySelector("[data-mobile-photo-gallery]");
+  const mobilePhotoCamera = document.querySelector("[data-mobile-photo-camera]");
+  const mobilePhotoSourceConfirm = document.querySelector("[data-mobile-photo-source-confirm]");
+  const mobilePhotoConfirm = document.querySelector("[data-mobile-photo-confirm]");
+  const cameraInput = document.querySelector("#food-photo-camera");
+  const mobileProcessingBack = document.querySelector("[data-mobile-processing-back]");
 
   const assets = "assets/recognition/";
   const fallbackImages = ["spicy-pork.png", "doenjang-stew.png", "rice.png", "rolled-omelet.png", "kimchi.png"];
@@ -121,6 +132,7 @@
   function setView(name) {
     views.forEach((view) => view.classList.toggle("is-active", view.dataset.view === name));
     document.body.classList.toggle("is-processing", name === "processing");
+    document.body.dataset.recognitionView = name;
     window.scrollTo(0, 0);
   }
 
@@ -139,33 +151,98 @@
     }
   }
 
+  const mobilePhotoArtworkByStep = {
+    guide: "assets/design/mobile/photo-guide.svg",
+    upload: "assets/design/mobile/photo-upload.svg",
+    source: "assets/design/mobile/photo-source.svg"
+  };
+
+  function setMobilePhotoStep(step) {
+    if (!mobilePhotoFlow || !mobilePhotoArtwork || !mobilePhotoArtworkByStep[step]) return;
+    mobilePhotoFlow.dataset.step = step;
+    mobilePhotoArtwork.src = mobilePhotoArtworkByStep[step];
+    mobilePhotoArtwork.alt = step === "guide"
+      ? "사진 입력 안내"
+      : step === "source"
+        ? "사진 올리기 방식 선택"
+        : "사진 추가";
+    window.scrollTo(0, 0);
+  }
+
+  function syncMobilePhotoConfirm() {
+    if (mobilePhotoConfirm) mobilePhotoConfirm.disabled = !selectedFile;
+  }
+
   function useFile(file) {
     uploadError.textContent = "";
     selectedFile = null;
+    syncMobilePhotoConfirm();
     if (!file) return;
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+    const allowedExtension = /\.(jpe?g|png|webp)$/i.test(file.name || "");
+    if (!allowedTypes.has(String(file.type || "").toLowerCase()) && !allowedExtension) {
       uploadError.textContent = "JPG, PNG, WEBP 형식의 사진을 선택해 주세요.";
       startButton.disabled = true;
+      syncMobilePhotoConfirm();
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
       uploadError.textContent = "10MB 이하의 사진을 선택해 주세요.";
       startButton.disabled = true;
+      syncMobilePhotoConfirm();
       return;
     }
 
     selectedFile = file;
+    // 유효한 사진을 선택한 즉시 버튼을 활성화한다.
+    // 미리보기 디코딩이 늦거나 실패해도 파일 선택 자체가 유효하면 인식 요청은 가능하다.
+    startButton.disabled = false;
+    syncMobilePhotoConfirm();
+    setMobilePhotoStep("upload");
+
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       preview.src = reader.result;
       preview.hidden = false;
       addPhoto.hidden = true;
-      startButton.disabled = false;
+    });
+    reader.addEventListener("error", () => {
+      preview.hidden = true;
+      addPhoto.hidden = false;
+      uploadError.textContent = "사진 미리보기를 불러오지 못했지만 인식은 진행할 수 있어요.";
     });
     reader.readAsDataURL(file);
   }
 
   fileInput.addEventListener("change", () => useFile(fileInput.files[0]));
+  if (cameraInput) cameraInput.addEventListener("change", () => useFile(cameraInput.files[0]));
+
+  if (mobilePhotoGuideConfirm) mobilePhotoGuideConfirm.addEventListener("click", () => setMobilePhotoStep("upload"));
+  if (mobilePhotoAdd) mobilePhotoAdd.addEventListener("click", () => setMobilePhotoStep("source"));
+  if (mobilePhotoGallery) mobilePhotoGallery.addEventListener("click", () => fileInput.click());
+  if (mobilePhotoCamera) mobilePhotoCamera.addEventListener("click", () => cameraInput && cameraInput.click());
+  if (mobilePhotoSourceConfirm) mobilePhotoSourceConfirm.addEventListener("click", () => setMobilePhotoStep("upload"));
+  if (mobilePhotoConfirm) mobilePhotoConfirm.addEventListener("click", () => {
+    if (!selectedFile) return;
+    startButton.click();
+  });
+  if (mobilePhotoBack) mobilePhotoBack.addEventListener("click", () => {
+    const step = mobilePhotoFlow ? mobilePhotoFlow.dataset.step : "guide";
+    if (step === "source") {
+      setMobilePhotoStep("upload");
+      return;
+    }
+    if (step === "upload") {
+      setMobilePhotoStep("guide");
+      return;
+    }
+    window.location.href = "menu-input.html";
+  });
+  if (mobileProcessingBack) mobileProcessingBack.addEventListener("click", () => {
+    setView("upload");
+    setMobilePhotoStep("upload");
+  });
+
   ["dragenter", "dragover"].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
     event.preventDefault();
     dropZone.classList.add("is-dragging");
@@ -206,6 +283,7 @@
       setView("upload");
     } finally {
       startButton.disabled = !selectedFile;
+      syncMobilePhotoConfirm();
     }
   });
 
@@ -229,6 +307,7 @@
     const lowCount = recognizedFoods.filter((food) => food.needsConfirmation).length;
     recognizedTab.textContent = `인식한 메뉴 (${recognizedFoods.length})`;
     lowTab.textContent = `낮은 신뢰도 메뉴(${lowCount})`;
+    document.body.dataset.resultTab = currentTab;
   }
 
   function updateConfirmState() {
@@ -244,7 +323,7 @@
       foodList.innerHTML = `<div class="empty-selection"><strong>${currentTab === "low" ? "확인이 필요한 메뉴가 없어요." : "인식된 메뉴가 없어요."}</strong><span>${currentTab === "low" ? "모든 메뉴가 확인되었습니다." : "항목을 직접 추가해주세요."}</span></div>`;
     } else {
       foodList.innerHTML = foods.map((food) => `
-        <article class="food-row">
+        <article class="food-row ${food.needsConfirmation ? "needs-confirmation" : ""}" data-food-row="${escapeHtml(food.clientId)}">
           <img src="${escapeHtml(food.image)}" alt="${escapeHtml(food.name)}" >
           <div class="food-copy"><strong>${escapeHtml(food.name)}</strong><span>${food.foodId ? `탄수화물 ${food.carb}g　·　단백질 ${food.protein}g` : "메뉴 확인이 필요해요"}</span></div>
           <span class="food-gi">${food.foodId ? `GI ${food.gi}` : "확인 필요"}</span>
@@ -281,10 +360,19 @@
   foodList.addEventListener("click", (event) => {
     const edit = event.target.closest("[data-edit-food]");
     const remove = event.target.closest("[data-delete-food]");
-    if (edit) openPicker(edit.dataset.editFood);
+    const row = event.target.closest("[data-food-row]");
+    if (edit) {
+      openPicker(edit.dataset.editFood);
+      return;
+    }
     if (remove) {
       recognizedFoods = recognizedFoods.filter((food) => food.clientId !== remove.dataset.deleteFood);
       renderFoods();
+      return;
+    }
+    if (row && window.matchMedia("(max-width: 767px)").matches) {
+      const food = findFood(row.dataset.foodRow);
+      if (food && food.needsConfirmation) openPicker(food.clientId);
     }
   });
 
@@ -323,7 +411,11 @@
       if (serial !== candidateRequestSerial) return;
       candidates = (response.items || []).map((food, index) => mapCandidate(food, food.name, index)).filter((food) => isUuid(food.foodId));
       const total = response.meta ? Number(response.meta.totalElements) : candidates.length;
-      if (pickerSummary) pickerSummary.textContent = `검색결과　 ${categoryNames[pickerCategory] || "전체"} · ${total}개`;
+      if (pickerSummary) {
+        pickerSummary.textContent = document.body.classList.contains("is-low-confidence-picker")
+          ? `검색결과　· ${categoryNames[pickerCategory] || "전체"}`
+          : `검색결과　 ${categoryNames[pickerCategory] || "전체"} · ${total}개`;
+      }
       renderCandidates();
     } catch (error) {
       if (serial !== candidateRequestSerial) return;
@@ -349,6 +441,8 @@
     });
     foodSearch.value = editingFood ? (editingFood.recognizedName || editingFood.name) : "";
     modal.hidden = false;
+    document.body.classList.add("is-food-picker-open");
+    document.body.classList.toggle("is-low-confidence-picker", Boolean(editingFood && editingFood.needsConfirmation));
     document.body.style.overflow = "hidden";
     loadCandidates();
     foodSearch.focus();
@@ -356,6 +450,7 @@
 
   function closePicker() {
     modal.hidden = true;
+    document.body.classList.remove("is-food-picker-open", "is-low-confidence-picker");
     document.body.style.overflow = "";
   }
 
@@ -425,10 +520,13 @@
   });
 
   async function init() {
+    document.body.dataset.recognitionView = "upload";
     updateTabs();
     renderFoods();
     await ensureAuthenticated();
   }
 
   init();
+
+  syncMobilePhotoConfirm();
 })();

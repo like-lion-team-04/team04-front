@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="assets/css/styles.css" >
     <link rel="stylesheet" href="assets/css/menu.css" >
     <script src="assets/js/api.js" defer></script>
-    <script src="assets/js/auth-header.js" defer></script>
-    <script src="assets/js/direct-select.js" defer></script>
+    <script src="assets/js/auth-header.js?v=20260820-profile-fix-1" defer></script>
+    <script src="assets/js/direct-select.js?v=20260820-account-name-1" defer></script>
   </head>
   <body data-page="direct-select">
     <header class="site-header">
@@ -51,7 +51,7 @@
 
       <section class="direct-stage manual-review" data-direct-stage="review" aria-labelledby="review-title">
         <h1 id="review-title">선택한 메뉴</h1>
-        <p>지원님이 선택한 메뉴예요. 확인 후 필요 시 수정할 수 있어요.</p>
+        <p><span data-direct-user-name>회원</span>님이 선택한 메뉴예요. 확인 후 필요 시 수정할 수 있어요.</p>
         <div class="manual-tab">선택한 메뉴 (<span data-selected-count>0</span>)</div>
         <div class="manual-review-list" data-review-list></div>
         <button class="add-food-button" type="button" data-review-add><span aria-hidden="true">＋</span> 항목 직접 추가</button>

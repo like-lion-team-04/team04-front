@@ -328,3 +328,785 @@ body.is-processing .site-header { display: none; }
   .confirmed-main h1 { margin-top: 42px; font-size: 23px; }
   .confirmed-button { margin-top: 65px; }
 }
+
+
+/* =========================================================
+   모바일 메뉴 입력 홈 (Figma 360x800 원본 기준)
+   - 기존 PC 화면/링크 기능 유지
+   - 767px 이하에서만 원본 배치로 변경
+   ========================================================= */
+@media (max-width: 767px) {
+  body[data-page="menu-home"] {
+    min-width: 320px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  body[data-page="menu-home"] .site-header {
+    height: 64px;
+    border-bottom: 0;
+    background: #fff;
+  }
+
+  body[data-page="menu-home"] .header-inner {
+    width: 100%;
+    height: 64px;
+    flex-wrap: nowrap;
+    align-content: normal;
+    padding: 16px 21px 0;
+  }
+
+  body[data-page="menu-home"] .brand {
+    width: 63px;
+    height: 23px;
+    flex: 0 0 63px;
+    order: initial;
+  }
+
+  body[data-page="menu-home"] .profile-button {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    order: initial;
+    margin-left: auto;
+    overflow: hidden;
+  }
+
+  body[data-page="menu-home"] .desktop-nav { display: none; }
+
+  body[data-page="menu-home"] .menu-main.menu-choice-page {
+    width: 100%;
+    min-height: calc(100svh - 120px);
+    margin: 0;
+    padding: 80px 16px 80px;
+  }
+
+  body[data-page="menu-home"] .menu-choice-page > h1 { display: none; }
+
+  body[data-page="menu-home"] .input-route-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 0;
+  }
+
+  body[data-page="menu-home"] .route-card {
+    position: relative;
+    width: 100%;
+    min-height: 248px;
+    height: 248px;
+    padding: 27px 17px 29px;
+    border: 0;
+    border-radius: 16px;
+  }
+
+  body[data-page="menu-home"] .route-card-photo { background: #eff8ff; }
+  body[data-page="menu-home"] .route-card-manual { background: #fff9f3; }
+
+  body[data-page="menu-home"] .route-card h2 {
+    margin: 0;
+    color: #3f3f3f;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -.45px;
+    white-space: nowrap;
+  }
+
+  body[data-page="menu-home"] .route-card h2 br { display: none; }
+
+  body[data-page="menu-home"] .route-card p {
+    width: 255px;
+    min-height: 0;
+    margin: 17px 0 0;
+    color: #666;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: -.25px;
+  }
+
+  body[data-page="menu-home"] .route-card-manual p br { display: none; }
+
+  body[data-page="menu-home"] .route-button {
+    position: absolute;
+    right: 15px;
+    bottom: 29px;
+    width: 135px;
+    height: 30px;
+    min-height: 30px;
+    gap: 18px;
+    padding: 0 13px 0 23px;
+    border-radius: 15px;
+    color: #3f3f3f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    touch-action: manipulation;
+  }
+
+  body[data-page="menu-home"] .route-button-blue { background: #73acd9; }
+  body[data-page="menu-home"] .route-button-dark { background: #474747; color: #fff; }
+
+  body[data-page="menu-home"] .route-button span {
+    margin-left: auto;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: .8;
+  }
+}
+
+/* 모바일 사진 입력 3단계 — 제공 디자인을 사용하되, 시스템 상태바(시간/신호/Wi-Fi/배터리) 영역 44px은 표시하지 않음.
+   실제 서비스 웹에서는 브라우저/OS 상태바를 디자인에 중복해서 그리지 않는다. */
+.mobile-photo-flow { display: none; }
+
+@media (max-width: 767px) {
+  body[data-page="photo-recognition"] {
+    min-width: 0;
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  body[data-page="photo-recognition"] .site-header {
+    display: none;
+  }
+
+  body[data-page="photo-recognition"] .recognition-app,
+  body[data-page="photo-recognition"] .recognition-view.upload-view {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  body[data-page="photo-recognition"] .upload-view > h1,
+  body[data-page="photo-recognition"] .upload-view > .upload-layout,
+  body[data-page="photo-recognition"] .upload-view > .screen-primary {
+    display: none;
+  }
+
+  .mobile-photo-flow {
+    position: relative;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    background: #fff;
+    line-height: 0;
+  }
+
+  .mobile-photo-artwork {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .mobile-photo-hit,
+  .mobile-photo-confirm {
+    position: absolute;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-photo-hit:focus-visible,
+  .mobile-photo-confirm:focus-visible {
+    outline: 2px solid #73acd9;
+    outline-offset: -2px;
+  }
+
+  /* 공통 뒤로가기: 원본 y≈52~82에서 상태바 44px을 제외한 위치 */
+  .mobile-photo-back {
+    left: 5.5%;
+    top: 0.3%;
+    width: 12%;
+    height: 6%;
+  }
+
+  /* 1단계 안내 화면의 확인 버튼 */
+  .mobile-photo-guide-confirm {
+    left: 6.9%;
+    top: 80.6%;
+    width: 87.1%;
+    height: 6.2%;
+  }
+
+  /* 2단계 사진 추가 영역 */
+  .mobile-photo-add {
+    left: 6.4%;
+    top: 14%;
+    width: 87%;
+    height: 27.2%;
+  }
+
+  /* 3단계 바텀시트 선택 영역 */
+  .mobile-photo-gallery {
+    left: 7.2%;
+    top: 65.9%;
+    width: 85.6%;
+    height: 6.1%;
+  }
+
+  .mobile-photo-camera {
+    left: 7.2%;
+    top: 71.9%;
+    width: 85.6%;
+    height: 6.1%;
+  }
+
+  .mobile-photo-source-confirm {
+    left: 6.7%;
+    top: 79.7%;
+    width: 86.9%;
+    height: 6.2%;
+  }
+
+  /* 2단계의 실제 동작 버튼. 선택 전에는 SVG의 회색 버튼 그대로 보이도록 투명 처리. */
+  .mobile-photo-confirm {
+    left: 6.9%;
+    top: 80.6%;
+    width: 87.1%;
+    height: 6.2%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #73acd9;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .mobile-photo-confirm:not(:disabled) {
+    display: flex;
+  }
+
+  .mobile-photo-flow[data-step="guide"] .mobile-photo-add,
+  .mobile-photo-flow[data-step="guide"] .mobile-photo-gallery,
+  .mobile-photo-flow[data-step="guide"] .mobile-photo-camera,
+  .mobile-photo-flow[data-step="guide"] .mobile-photo-source-confirm,
+  .mobile-photo-flow[data-step="guide"] .mobile-photo-confirm {
+    display: none;
+  }
+
+  .mobile-photo-flow[data-step="upload"] .mobile-photo-guide-confirm,
+  .mobile-photo-flow[data-step="upload"] .mobile-photo-gallery,
+  .mobile-photo-flow[data-step="upload"] .mobile-photo-camera,
+  .mobile-photo-flow[data-step="upload"] .mobile-photo-source-confirm {
+    display: none;
+  }
+
+  .mobile-photo-flow[data-step="source"] .mobile-photo-guide-confirm,
+  .mobile-photo-flow[data-step="source"] .mobile-photo-add,
+  .mobile-photo-flow[data-step="source"] .mobile-photo-confirm {
+    display: none;
+  }
+}
+
+/* =========================================================
+   모바일 사진 인식 후속 화면
+   - 제공된 360x800 시안을 기준으로 기존 동적 DOM/API를 그대로 사용한다.
+   - 시안의 iOS 상태바(시간/신호/Wi-Fi/배터리)는 실제 웹에 그리지 않는다.
+   ========================================================= */
+.mobile-recognition-header,
+.mobile-recognition-back,
+.mobile-picker-back { display: none; }
+
+@media (max-width: 767px) {
+  body[data-page="photo-recognition"] {
+    padding-bottom: 0;
+  }
+
+  /* 업로드 단계에서는 하단 네비게이션을 숨기고, 처리/결과에서만 고정 노출 */
+  body[data-page="photo-recognition"] .recognition-bottom-nav {
+    display: none;
+  }
+  body[data-page="photo-recognition"][data-recognition-view="processing"] .recognition-bottom-nav,
+  body[data-page="photo-recognition"][data-recognition-view="result"] .recognition-bottom-nav {
+    display: grid;
+  }
+  body[data-page="photo-recognition"].is-food-picker-open .recognition-bottom-nav {
+    display: none;
+  }
+
+  /* ---------- 인식 처리 중 ---------- */
+  body[data-page="photo-recognition"] .processing-view.is-active {
+    position: relative;
+    width: 100%;
+    min-height: calc(100dvh - 56px - env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 20px 80px;
+    background: #fff;
+  }
+
+  .mobile-recognition-back {
+    position: absolute;
+    z-index: 5;
+    top: 18px;
+    left: 18px;
+    width: 42px;
+    height: 42px;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .mobile-recognition-back::before,
+  .mobile-picker-back::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border-bottom: 2px solid #333;
+    border-left: 2px solid #333;
+    transform: translate(-32%, -50%) rotate(45deg);
+    content: "";
+  }
+
+  body[data-page="photo-recognition"] .processing-view h1 {
+    margin: 216px 0 13px;
+    color: #444;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.6px;
+    text-align: center;
+  }
+  body[data-page="photo-recognition"] .processing-view p {
+    margin: 0 0 70px;
+    color: #b9b9b9;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  body[data-page="photo-recognition"] .progress-ring {
+    width: 144px;
+    height: 144px;
+    flex: 0 0 auto;
+  }
+  body[data-page="photo-recognition"] .progress-ring::before {
+    width: 116px;
+    height: 116px;
+  }
+  body[data-page="photo-recognition"] .progress-ring span {
+    font-size: 30px;
+  }
+
+  /* ---------- 인식한 메뉴 ---------- */
+  body[data-page="photo-recognition"] .result-view.is-active {
+    width: 100%;
+    min-height: 100dvh;
+    padding: 0 16px calc(92px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+  }
+
+  .mobile-recognition-header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -2px;
+  }
+  .mobile-recognition-header a:first-child img {
+    width: 63px;
+    height: auto;
+    display: block;
+  }
+  .mobile-recognition-header a:last-child img {
+    width: 30px;
+    height: 30px;
+    display: block;
+    border-radius: 50%;
+  }
+
+  body[data-page="photo-recognition"] .result-view > h1 {
+    margin: 14px 0 2px;
+    color: #444;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -1.1px;
+  }
+  body[data-page="photo-recognition"] .result-description {
+    margin: 4px 0 0;
+    color: #7d7d7d;
+    font-size: 13px;
+    line-height: 1.45;
+    letter-spacing: -0.25px;
+  }
+
+  body[data-page="photo-recognition"] .result-tabs {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 34px;
+    margin-top: 25px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  body[data-page="photo-recognition"] .result-tabs::-webkit-scrollbar { display: none; }
+  body[data-page="photo-recognition"] .result-tabs button {
+    min-height: 40px;
+    padding: 0 1px 10px;
+    color: #b8b8b8;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  body[data-page="photo-recognition"] .result-tabs button.is-active {
+    color: #6cad89;
+  }
+  body[data-page="photo-recognition"] .result-tabs button.is-active::after {
+    height: 2px;
+    background: #6cad89;
+  }
+  body[data-page="photo-recognition"] .result-tabs button[data-result-tab="low"].is-active {
+    color: #73acd9;
+  }
+  body[data-page="photo-recognition"] .result-tabs button[data-result-tab="low"].is-active::after {
+    background: #73acd9;
+  }
+
+  body[data-page="photo-recognition"] .food-list {
+    gap: 17px;
+    margin-top: 8px;
+  }
+  body[data-page="photo-recognition"] .food-row {
+    position: relative;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 94px 30px;
+    grid-template-rows: 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 13px 12px 15px;
+    border: 2px solid #e2e2e2;
+    border-radius: 13px;
+    background: #fff;
+  }
+  body[data-page="photo-recognition"] .food-row.needs-confirmation {
+    cursor: pointer;
+  }
+  body[data-page="photo-recognition"] .food-row img,
+  body[data-page="photo-recognition"] .food-gi,
+  body[data-page="photo-recognition"] .food-divider,
+  body[data-page="photo-recognition"] .icon-button[data-edit-food] {
+    display: none;
+  }
+  body[data-page="photo-recognition"] .food-copy {
+    min-width: 0;
+  }
+  body[data-page="photo-recognition"] .food-copy strong {
+    margin: 0 0 9px;
+    overflow: hidden;
+    color: #5d5d5d;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body[data-page="photo-recognition"] .food-copy span {
+    display: block;
+    overflow: hidden;
+    color: #7d7d7d;
+    font-size: 12px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body[data-page="photo-recognition"] .serving-select {
+    width: 94px;
+    height: 37px;
+    padding: 0 28px 0 12px;
+    border: 1px solid #dedede;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #777;
+    font-size: 12px;
+  }
+  body[data-page="photo-recognition"] .icon-button[data-delete-food] {
+    width: 30px;
+    height: 38px;
+    color: #c9c9c9;
+  }
+  body[data-page="photo-recognition"] .icon-button[data-delete-food] svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  body[data-page="photo-recognition"] .add-food-button {
+    height: 45px;
+    margin-top: 24px;
+    padding: 0 18px;
+    border: 1.5px solid #73acd9;
+    border-radius: 8px;
+    color: #73acd9;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  body[data-page="photo-recognition"] .add-food-button span {
+    margin-right: 7px;
+    font-size: 25px;
+    font-weight: 300;
+    vertical-align: -2px;
+  }
+  body[data-page="photo-recognition"] .result-confirm {
+    width: 200px;
+    height: 54px;
+    margin: 57px auto 0;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+
+  /* ---------- 인식 결과 수정 / 직접 추가 ---------- */
+  body[data-page="photo-recognition"] .food-modal {
+    z-index: 500;
+    display: block;
+    padding: 0;
+    background: #fff;
+  }
+  body[data-page="photo-recognition"] .food-modal[hidden] { display: none; }
+  body[data-page="photo-recognition"] .modal-backdrop { display: none; }
+  body[data-page="photo-recognition"] .food-picker {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-height: none;
+    overflow-y: auto;
+    padding: 80px 16px 102px;
+    border-radius: 0;
+    background: #fff;
+    scrollbar-width: thin;
+  }
+  .mobile-picker-back {
+    position: fixed;
+    z-index: 505;
+    top: 16px;
+    left: 18px;
+    width: 42px;
+    height: 42px;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  body[data-page="photo-recognition"] .picker-search {
+    height: 48px;
+    gap: 14px;
+    padding: 0 14px;
+    border: 2px solid #dedede;
+    border-radius: 9px;
+  }
+  body[data-page="photo-recognition"] .picker-search span {
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+  }
+  body[data-page="photo-recognition"] .picker-search span::after {
+    width: 7px;
+    margin: 10px 0 0 9px;
+  }
+  body[data-page="photo-recognition"] .picker-search input {
+    font-size: 15px;
+  }
+
+  body[data-page="photo-recognition"] .picker-categories {
+    gap: 7px;
+    margin: 10px 0 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  body[data-page="photo-recognition"] .picker-categories::-webkit-scrollbar { display: none; }
+  body[data-page="photo-recognition"] .picker-categories button {
+    min-width: 50px;
+    height: 30px;
+    flex: 0 0 auto;
+    padding: 0 14px;
+    border-color: #bbb;
+    border-radius: 16px;
+    background: #fff;
+    color: #444;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  body[data-page="photo-recognition"] .picker-categories button.is-active {
+    border-color: #73acd9;
+    background: #73acd9;
+    color: #fff;
+  }
+  body[data-page="photo-recognition"] .picker-summary {
+    margin: 6px 0 13px 6px;
+    color: #777;
+    font-size: 12px;
+  }
+
+  body[data-page="photo-recognition"] .picker-list {
+    gap: 16px;
+  }
+  body[data-page="photo-recognition"] .picker-option {
+    min-height: 72px;
+    grid-template-columns: minmax(0, 1fr) 48px 28px;
+    gap: 8px;
+    padding: 13px 14px 13px 15px;
+    border: 2px solid #e2e2e2;
+    border-radius: 13px;
+    background: #fff;
+  }
+  body[data-page="photo-recognition"] .picker-option strong {
+    margin-bottom: 9px;
+    color: #5d5d5d;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  body[data-page="photo-recognition"] .picker-option small {
+    color: #7d7d7d;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+  body[data-page="photo-recognition"] .picker-option > span {
+    color: #777;
+    font-size: 12px;
+  }
+  body[data-page="photo-recognition"] .picker-option i {
+    color: #e0e0e0;
+    font-size: 27px;
+    line-height: 1;
+  }
+  body[data-page="photo-recognition"] .picker-option.is-selected {
+    border-color: #4f82aa;
+    background: #eaf6ff;
+  }
+  body[data-page="photo-recognition"] .picker-option.is-selected strong,
+  body[data-page="photo-recognition"] .picker-option.is-selected small,
+  body[data-page="photo-recognition"] .picker-option.is-selected > span,
+  body[data-page="photo-recognition"] .picker-option.is-selected i {
+    color: #73acd9;
+  }
+
+  body[data-page="photo-recognition"] .picker-complete {
+    position: fixed;
+    z-index: 510;
+    right: 16px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    left: 16px;
+    width: auto;
+    height: 50px;
+    margin: 0;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+}
+
+
+/* ===== Mobile recognition: low-confidence correction ===== */
+@media (max-width: 767px) {
+  /* The supplied mobile mockups include a phone status bar. The web UI intentionally omits it. */
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .result-tabs button[data-result-tab="low"].is-active {
+    color: #c03435;
+  }
+
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .result-tabs button[data-result-tab="low"].is-active::after {
+    background: #c03435;
+  }
+
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .result-tabs button[data-result-tab="recognized"] {
+    color: #c1c1c1;
+  }
+
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .food-list {
+    margin-top: 8px;
+  }
+
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .food-row.needs-confirmation {
+    border-color: #e3e3e3;
+    background: #fff;
+  }
+
+  /* Low-confidence items are corrected by tapping the whole card. */
+  body[data-page="photo-recognition"][data-recognition-view="result"][data-result-tab="low"] .food-row.needs-confirmation:active {
+    background: #fafafa;
+  }
+
+  /* Low-confidence correction search screen. Positions are shifted up because no iOS status bar is rendered. */
+  body[data-page="photo-recognition"].is-low-confidence-picker .food-picker {
+    padding-top: 54px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .mobile-picker-back {
+    top: 7px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-search {
+    height: 31px;
+    padding: 0 11px;
+    border-width: 1.5px;
+    border-radius: 8px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-search input {
+    font-size: 13px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-categories {
+    gap: 5px;
+    margin: 8px 0 6px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-categories button {
+    min-width: 43px;
+    height: 25px;
+    padding: 0 12px;
+    border-width: 1px;
+    font-size: 11px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-summary {
+    margin: 4px 0 10px 6px;
+    font-size: 11px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-list {
+    gap: 16px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-option {
+    min-height: 72px;
+    grid-template-columns: minmax(0, 1fr) 45px 26px;
+    padding: 13px 13px 13px 15px;
+    border-width: 2px;
+    border-radius: 13px;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-option.is-selected {
+    border-color: #4f82aa;
+    background: #eaf6ff;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-complete {
+    right: 21px;
+    bottom: calc(61px + env(safe-area-inset-bottom, 0px));
+    left: 21px;
+    height: 50px;
+    border-radius: 8px;
+    background: #73acd9;
+  }
+
+  body[data-page="photo-recognition"].is-low-confidence-picker .picker-complete:disabled {
+    background: #d6d6d6;
+    color: #fff;
+  }
+}
